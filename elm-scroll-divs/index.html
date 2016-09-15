@@ -7868,17 +7868,6 @@ var _elm_lang$html$Html_Events$Options = F2(
 	function (a, b) {
 		return {stopPropagation: a, preventDefault: b};
 	});
-var _user$project$Main$targetScrollTop = A2(
-	_elm_lang$core$Json_Decode$at,
-	_elm_lang$core$Native_List.fromArray(
-		['target', 'scrollTop']),
-	_elm_lang$core$Json_Decode$int);
-var _user$project$Main$onScrollTop = function (tagger) {
-	return A2(
-		_elm_lang$html$Html_Events$on,
-		'scroll',
-		A2(_elm_lang$core$Json_Decode$map, tagger, _user$project$Main$targetScrollTop));
-};
 var _user$project$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
@@ -7897,8 +7886,28 @@ var _user$project$Main$update = F2(
 					model);
 		}
 	});
-var _user$project$Main$ScrolledTop = function (a) {
-	return {ctor: 'ScrolledTop', _0: a};
+var _user$project$Main$Scroll = F2(
+	function (a, b) {
+		return {left: a, top: b};
+	});
+var _user$project$Main$scrollDecoder = A3(
+	_elm_lang$core$Json_Decode$object2,
+	_user$project$Main$Scroll,
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'scrollTop', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode_ops[':='], 'scrollLeft', _elm_lang$core$Json_Decode$int));
+var _user$project$Main$targetScroll = A2(
+	_elm_lang$core$Json_Decode$at,
+	_elm_lang$core$Native_List.fromArray(
+		['target']),
+	_user$project$Main$scrollDecoder);
+var _user$project$Main$onScroll = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'scroll',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _user$project$Main$targetScroll));
+};
+var _user$project$Main$Scrolled = function (a) {
+	return {ctor: 'Scrolled', _0: a};
 };
 var _user$project$Main$Decrement = {ctor: 'Decrement'};
 var _user$project$Main$Increment = {ctor: 'Increment'};
@@ -7951,7 +7960,7 @@ var _user$project$Main$view = function (model) {
 								{ctor: '_Tuple2', _0: 'height', _1: '500px'},
 								{ctor: '_Tuple2', _0: 'overflow', _1: 'auto'}
 							])),
-						_user$project$Main$onScrollTop(_user$project$Main$ScrolledTop)
+						_user$project$Main$onScroll(_user$project$Main$Scrolled)
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -7964,7 +7973,7 @@ var _user$project$Main$view = function (model) {
 								_elm_lang$core$Native_List.fromArray(
 									[
 										{ctor: '_Tuple2', _0: 'background-color', _1: '#cf9'},
-										{ctor: '_Tuple2', _0: 'width', _1: '200px'},
+										{ctor: '_Tuple2', _0: 'width', _1: '1200px'},
 										{ctor: '_Tuple2', _0: 'height', _1: '700px'}
 									]))
 							]),
