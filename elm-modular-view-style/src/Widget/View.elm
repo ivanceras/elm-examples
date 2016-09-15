@@ -8,6 +8,7 @@ import Html.Attributes exposing (style)
 import Css exposing (..)
 import Style exposing (styles)
 import Widget
+import Color
 
 
 
@@ -15,7 +16,7 @@ import Widget
 
 view: Widget.Model -> Html Widget.Msg
 view model =
-  div []
+  div [ styles [border3 (px 1) solid (hex "cf9")]]
       [
       Html.text "This is a child widget"
       ]

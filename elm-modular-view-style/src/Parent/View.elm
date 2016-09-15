@@ -27,7 +27,7 @@ view model =
                     ,backgroundColor (rgb 100 10 10)
                     ,color (rgb 200 10 100)
                 ] ]
-        [ Html.text "Whexxxxe!<button>oi!</button>" ]
+        [ Html.text "PARENT WIDGET" ]
     , android (Color.rgb 30 30 30) 50
     , App.map UpdateWidget (Widget.View.view model.widget)
     ]
