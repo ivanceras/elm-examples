@@ -13064,6 +13064,15 @@ var _user$project$Style$styles = function (_p0) {
 	return _elm_lang$html$Html_Attributes$style(
 		_rtfeldman$elm_css$Css$asPairs(_p0));
 };
+var _user$project$Style$truste_header = _user$project$Style$styles(
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A3(
+			_rtfeldman$elm_css$Css$border3,
+			_rtfeldman$elm_css$Css$px(1),
+			_rtfeldman$elm_css$Css$solid,
+			A3(_rtfeldman$elm_css$Css$rgb, 10, 10, 255))
+		]));
 var _user$project$Widget$create = {name: 'Statistics', description: 'Hello'};
 var _user$project$Widget$Model = F2(
 	function (a, b) {
@@ -13153,7 +13162,7 @@ var _user$project$Parent_View$view = function (model) {
 					[
 						_elm_lang$html$Html$text('-')
 					])),
-				A2(
+				(_elm_lang$core$Native_Utils.cmp(model.id, 5) > 0) ? A2(
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[]),
@@ -13161,7 +13170,7 @@ var _user$project$Parent_View$view = function (model) {
 					[
 						_elm_lang$html$Html$text(
 						_elm_lang$core$Basics$toString(model))
-					])),
+					])) : _elm_lang$html$Html$text('No id for you!...'),
 				A2(
 				_elm_lang$html$Html$button,
 				_elm_lang$core$Native_List.fromArray(
@@ -13187,7 +13196,13 @@ var _user$project$Parent_View$view = function (model) {
 								A3(_rtfeldman$elm_css$Css$rgb, 100, 10, 10)),
 								_rtfeldman$elm_css$Css$color(
 								A3(_rtfeldman$elm_css$Css$rgb, 200, 10, 100))
-							]))
+							])),
+						_elm_lang$html$Html_Attributes$style(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								{ctor: '_Tuple2', _0: 'color', _1: '#cf9'}
+							])),
+						_user$project$Style$truste_header
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
@@ -13197,6 +13212,10 @@ var _user$project$Parent_View$view = function (model) {
 				_jystic$elm_font_awesome$FontAwesome$android,
 				A3(_elm_lang$core$Color$rgb, 30, 30, 30),
 				50),
+				A2(
+				_jystic$elm_font_awesome$FontAwesome$check,
+				A3(_elm_lang$core$Color$rgb, 0, 255, 0),
+				80),
 				A2(
 				_elm_lang$html$Html_App$map,
 				_user$project$Parent$UpdateWidget,
