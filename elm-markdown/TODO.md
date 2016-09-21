@@ -8,3 +8,5 @@ https://stackedit.io/editor
 
 http://flowchart.js.org/
 
+## Sideby side markdown
+https://markdown-it.github.io/
