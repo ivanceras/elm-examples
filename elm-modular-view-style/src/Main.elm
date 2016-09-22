@@ -5,7 +5,6 @@ import Html.App as App
 import Html.Events exposing (..)
 import Html.Attributes
 
-import Css exposing (..)
 import Parent.View
 
 
