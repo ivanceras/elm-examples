@@ -1,42 +1,67 @@
 import Html exposing (text,div)
 
 type Words = Sky | Is | Blue | Atmosphere
-is = Is
-blue = Blue
-sky = Sky
-atmosphere = Atmosphere
-
-truth x y z = 
-    (x == Sky && y == Is && z == Blue)
-    ||(canSubstitute x Sky && y == Is && z == Blue) 
  
+inTruth words =
+    let len = List.length words
+    in
+        if len == 3 then
+            List.any (\e -> e == words) truthdb3
+        else
+            False
 
-synonym = [(Sky, [Atmosphere])]
+truthdb3 =
+   [
+    [Sky,Is,Blue]
+   ,[Sky,Is,Atmosphere]
+   ]
 
+
+
+synonym = 
+    [(Sky, [Atmosphere])
+    ,(Atmosphere, [Sky])
+    ]
+
+otherWords: Words -> Maybe (List Words)
 otherWords x = 
     List.filterMap(
         \(w,s) -> 
             if (w == x) then Just s else Nothing ) synonym 
-         |> List.head
+        |> List.head
 
-canSubstitute x y = 
-    case otherWords y of 
-        Just list -> 
-            List.any (\e -> e == x) list 
-        Nothing -> False
 
+truth x y z =
+    inTruth [x,y,z]
+
+canBeTrue x y z =
+    case otherWords x of
+        Just otherWords' ->
+            List.any (
+                \x' ->
+                   inTruth [x', y, z] 
+            ) otherWords'
+        Nothing ->
+            False
 
 
 main = 
     div []
         [
-         text "\ncanSubstitude atmosphere sky?"
-        ,text (toString <| canSubstitute atmosphere sky)
-        ,text "\nthruth sky is blue?"
-        ,text (toString <| truth sky is blue)
-        ,text "\nthruth atmoshere is blue?"
-        ,text (toString <| truth atmosphere is blue)
+         showDiv "thruth sky is blue?" ( truth Sky Is Blue)
+        ,showDiv "thruth atmoshere is blue?" (truth Atmosphere Is Blue)
+        ,showDiv "inTruth [Atmosphere,Is,Blue]?" (inTruth [Atmosphere, Is, Blue])
+        ,showDiv "canBeTrue [Atmosphere,Is,Blue]?" (canBeTrue Atmosphere Is Blue)
+        ,showDiv "otherWords Sky?" (otherWords Sky)
+        ,showDiv "otherWords Atmosphere?" (otherWords Atmosphere)
+        ,showDiv "canBeTrue [Atmosphere,Is,Sky]?" (canBeTrue Atmosphere Is Sky)
         ]
+
+showDiv question answer =
+    div [] 
+    [text question
+    ,text (toString answer)
+    ]
 
 {--|
 a very simple AI concept.

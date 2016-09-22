@@ -7380,14 +7380,45 @@ var _elm_lang$html$Html$details = _elm_lang$html$Html$node('details');
 var _elm_lang$html$Html$summary = _elm_lang$html$Html$node('summary');
 var _elm_lang$html$Html$menuitem = _elm_lang$html$Html$node('menuitem');
 var _elm_lang$html$Html$menu = _elm_lang$html$Html$node('menu');
+var _user$project$Main$showDiv = F2(
+	function (question, answer) {
+		return A2(
+			_elm_lang$html$Html$div,
+			_elm_lang$core$Native_List.fromArray(
+				[]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$html$Html$text(question),
+					_elm_lang$html$Html$text(
+					_elm_lang$core$Basics$toString(answer))
+				]));
+	});
 var _user$project$Main$Atmosphere = {ctor: 'Atmosphere'};
-var _user$project$Main$atmosphere = _user$project$Main$Atmosphere;
 var _user$project$Main$Blue = {ctor: 'Blue'};
-var _user$project$Main$blue = _user$project$Main$Blue;
 var _user$project$Main$Is = {ctor: 'Is'};
-var _user$project$Main$is = _user$project$Main$Is;
 var _user$project$Main$Sky = {ctor: 'Sky'};
-var _user$project$Main$sky = _user$project$Main$Sky;
+var _user$project$Main$truthdb3 = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_List.fromArray(
+		[_user$project$Main$Sky, _user$project$Main$Is, _user$project$Main$Blue]),
+		_elm_lang$core$Native_List.fromArray(
+		[_user$project$Main$Sky, _user$project$Main$Is, _user$project$Main$Atmosphere])
+	]);
+var _user$project$Main$inTruth = function (words) {
+	var len = _elm_lang$core$List$length(words);
+	return _elm_lang$core$Native_Utils.eq(len, 3) ? A2(
+		_elm_lang$core$List$any,
+		function (e) {
+			return _elm_lang$core$Native_Utils.eq(e, words);
+		},
+		_user$project$Main$truthdb3) : false;
+};
+var _user$project$Main$truth = F3(
+	function (x, y, z) {
+		return _user$project$Main$inTruth(
+			_elm_lang$core$Native_List.fromArray(
+				[x, y, z]));
+	});
 var _user$project$Main$synonym = _elm_lang$core$Native_List.fromArray(
 	[
 		{
@@ -7395,6 +7426,12 @@ var _user$project$Main$synonym = _elm_lang$core$Native_List.fromArray(
 		_0: _user$project$Main$Sky,
 		_1: _elm_lang$core$Native_List.fromArray(
 			[_user$project$Main$Atmosphere])
+	},
+		{
+		ctor: '_Tuple2',
+		_0: _user$project$Main$Atmosphere,
+		_1: _elm_lang$core$Native_List.fromArray(
+			[_user$project$Main$Sky])
 	}
 	]);
 var _user$project$Main$otherWords = function (x) {
@@ -7407,23 +7444,21 @@ var _user$project$Main$otherWords = function (x) {
 			},
 			_user$project$Main$synonym));
 };
-var _user$project$Main$canSubstitute = F2(
-	function (x, y) {
-		var _p2 = _user$project$Main$otherWords(y);
+var _user$project$Main$canBeTrue = F3(
+	function (x, y, z) {
+		var _p2 = _user$project$Main$otherWords(x);
 		if (_p2.ctor === 'Just') {
 			return A2(
 				_elm_lang$core$List$any,
-				function (e) {
-					return _elm_lang$core$Native_Utils.eq(e, x);
+				function (x$) {
+					return _user$project$Main$inTruth(
+						_elm_lang$core$Native_List.fromArray(
+							[x$, y, z]));
 				},
 				_p2._0);
 		} else {
 			return false;
 		}
-	});
-var _user$project$Main$truth = F3(
-	function (x, y, z) {
-		return (_elm_lang$core$Native_Utils.eq(x, _user$project$Main$Sky) && (_elm_lang$core$Native_Utils.eq(y, _user$project$Main$Is) && _elm_lang$core$Native_Utils.eq(z, _user$project$Main$Blue))) || (A2(_user$project$Main$canSubstitute, x, _user$project$Main$Sky) && (_elm_lang$core$Native_Utils.eq(y, _user$project$Main$Is) && _elm_lang$core$Native_Utils.eq(z, _user$project$Main$Blue)));
 	});
 var _user$project$Main$main = {
 	main: A2(
@@ -7432,18 +7467,36 @@ var _user$project$Main$main = {
 			[]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html$text('\ncanSubstitude atmosphere sky?'),
-				_elm_lang$html$Html$text(
-				_elm_lang$core$Basics$toString(
-					A2(_user$project$Main$canSubstitute, _user$project$Main$atmosphere, _user$project$Main$sky))),
-				_elm_lang$html$Html$text('\nthruth sky is blue?'),
-				_elm_lang$html$Html$text(
-				_elm_lang$core$Basics$toString(
-					A3(_user$project$Main$truth, _user$project$Main$sky, _user$project$Main$is, _user$project$Main$blue))),
-				_elm_lang$html$Html$text('\nthruth atmoshere is blue?'),
-				_elm_lang$html$Html$text(
-				_elm_lang$core$Basics$toString(
-					A3(_user$project$Main$truth, _user$project$Main$atmosphere, _user$project$Main$is, _user$project$Main$blue)))
+				A2(
+				_user$project$Main$showDiv,
+				'thruth sky is blue?',
+				A3(_user$project$Main$truth, _user$project$Main$Sky, _user$project$Main$Is, _user$project$Main$Blue)),
+				A2(
+				_user$project$Main$showDiv,
+				'thruth atmoshere is blue?',
+				A3(_user$project$Main$truth, _user$project$Main$Atmosphere, _user$project$Main$Is, _user$project$Main$Blue)),
+				A2(
+				_user$project$Main$showDiv,
+				'inTruth [Atmosphere,Is,Blue]?',
+				_user$project$Main$inTruth(
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Main$Atmosphere, _user$project$Main$Is, _user$project$Main$Blue]))),
+				A2(
+				_user$project$Main$showDiv,
+				'canBeTrue [Atmosphere,Is,Blue]?',
+				A3(_user$project$Main$canBeTrue, _user$project$Main$Atmosphere, _user$project$Main$Is, _user$project$Main$Blue)),
+				A2(
+				_user$project$Main$showDiv,
+				'otherWords Sky?',
+				_user$project$Main$otherWords(_user$project$Main$Sky)),
+				A2(
+				_user$project$Main$showDiv,
+				'otherWords Atmosphere?',
+				_user$project$Main$otherWords(_user$project$Main$Atmosphere)),
+				A2(
+				_user$project$Main$showDiv,
+				'canBeTrue [Atmosphere,Is,Sky]?',
+				A3(_user$project$Main$canBeTrue, _user$project$Main$Atmosphere, _user$project$Main$Is, _user$project$Main$Sky))
 			]))
 };
 var Elm = {};
