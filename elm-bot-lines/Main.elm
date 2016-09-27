@@ -56,6 +56,16 @@ arg =
 .-------------+---------+-------------.
 | Hello here and there and everywhere |
 '-------------------------------------'
+
+  User code ^            ^ OS code
+              \\          /
+               \\        /
+                \\      /
+   User code <----Mode----->OS code
+                /      \\
+               /        \\
+              /          \\
+  User code  v            v OS code
     """
 
 arg2 =
@@ -177,6 +187,7 @@ arg4 =
                           |    '------------------'   |    calls
                           '---------------------------'   
     """
+
 
 init: (Model, Cmd Msg)
 init  =

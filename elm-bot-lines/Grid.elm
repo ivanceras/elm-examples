@@ -24,6 +24,8 @@ type Element
     | ArrowDown
     | ArrowUp
     | ArrowLeft
+    | SlantRight
+    | SlantLeft
 
 verticalLines = ['|',':']
 horizontalLines = ['-','=']
@@ -33,6 +35,8 @@ arrowRight = ['>']
 arrowDown = ['V']
 arrowLeft = ['<']
 arrowUp = ['^','î']
+slantRight = ['/']
+slantLeft = ['\\']
 
 isVerticalLine char =
     List.member char verticalLines
@@ -58,6 +62,13 @@ isArrowDown char =
 isArrowUp char =
     List.member char arrowUp
 
+isSlantRight char =
+    List.member char slantRight
+
+isSlantLeft char =
+    List.member char slantLeft
+
+
 getElement: Int -> Int -> Model -> Maybe Element
 getElement x y model =
     let
@@ -81,6 +92,10 @@ getElement x y model =
                     Just ArrowLeft
                 else if isArrowUp char then
                     Just ArrowUp
+                else if isSlantRight char then
+                    Just SlantRight
+                else if isSlantLeft char then
+                    Just SlantLeft
                 else
                     Nothing
             Nothing ->
@@ -175,6 +190,12 @@ drawElement x y model =
                     ArrowLeft ->
                         [drawArrowLeft x y model]
 
+                    SlantRight ->
+                        [drawSlantRightLine x y model]
+
+                    SlantLeft ->
+                        [drawSlantLeftLine x y model]
+
             Nothing ->
                 []
 
@@ -198,6 +219,29 @@ drawVerticalLine x y model =
         endY = startY + textHeight
     in
     drawLine startX startY endX endY (Color.rgb 20 200 20)
+
+
+drawSlantRightLine: Int -> Int -> Model -> Svg a
+drawSlantRightLine x y model =
+    let
+        startX = measureX x
+        endX = startX + textWidth
+        startY = measureY y + textHeight
+        endY = measureY y
+    in
+    drawLine startX startY endX endY (Color.rgb 20 200 20)
+
+
+drawSlantLeftLine: Int -> Int -> Model -> Svg a
+drawSlantLeftLine x y model =
+    let
+        startX = measureX x
+        endX = startX + textWidth
+        startY = measureY y
+        endY = measureY y + textHeight
+    in
+    drawLine startX startY endX endY (Color.rgb 20 200 20)
+
 
 drawCorner: Int -> Int -> Model -> List (Svg a)
 drawCorner x y model =

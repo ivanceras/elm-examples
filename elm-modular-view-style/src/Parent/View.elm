@@ -35,6 +35,7 @@ view model =
         [ Html.text "PARENT WIDGET" ]
     , android (Color.rgb 30 30 30) 50
     , check (Color.rgb 0 255 0) 80
+    , calendar (Color.rgb 0 100 0) 16
     , App.map UpdateWidget (Widget.View.view model.widget)
     ]
 

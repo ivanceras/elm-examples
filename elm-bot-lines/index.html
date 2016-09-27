@@ -8605,6 +8605,34 @@ var _user$project$Grid$drawArrowRight = F3(
 			_elm_lang$core$Native_List.fromArray(
 				[]));
 	});
+var _user$project$Grid$drawSlantLeftLine = F3(
+	function (x, y, model) {
+		var endY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startY = _user$project$Grid$measureY(y);
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + _user$project$Grid$textWidth;
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
+	});
+var _user$project$Grid$drawSlantRightLine = F3(
+	function (x, y, model) {
+		var endY = _user$project$Grid$measureY(y);
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + _user$project$Grid$textWidth;
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
+	});
 var _user$project$Grid$drawVerticalLine = F3(
 	function (x, y, model) {
 		var startY = _user$project$Grid$measureY(y);
@@ -8657,6 +8685,20 @@ var _user$project$Grid$arrowMarker = A2(
 			_elm_lang$core$Native_List.fromArray(
 				[]))
 		]));
+var _user$project$Grid$slantLeft = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('\\')
+	]);
+var _user$project$Grid$isSlantLeft = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$slantLeft);
+};
+var _user$project$Grid$slantRight = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('/')
+	]);
+var _user$project$Grid$isSlantRight = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$slantRight);
+};
 var _user$project$Grid$arrowUp = _elm_lang$core$Native_List.fromArray(
 	[
 		_elm_lang$core$Native_Utils.chr('^'),
@@ -8721,6 +8763,8 @@ var _user$project$Grid$Model = F3(
 	function (a, b, c) {
 		return {rows: a, columns: b, lines: c};
 	});
+var _user$project$Grid$SlantLeft = {ctor: 'SlantLeft'};
+var _user$project$Grid$SlantRight = {ctor: 'SlantRight'};
 var _user$project$Grid$ArrowLeft = {ctor: 'ArrowLeft'};
 var _user$project$Grid$ArrowUp = {ctor: 'ArrowUp'};
 var _user$project$Grid$ArrowDown = {ctor: 'ArrowDown'};
@@ -8735,7 +8779,7 @@ var _user$project$Grid$getElement = F3(
 		var _p6 = $char;
 		if (_p6.ctor === 'Just') {
 			var _p7 = _p6._0;
-			return _user$project$Grid$isVerticalLine(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$VerticalLine) : (_user$project$Grid$isHorizontalLine(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$HorizontalLine) : (_user$project$Grid$isIntersection(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$Intersection) : (_user$project$Grid$isCorner(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$Corner) : (_user$project$Grid$isArrowRight(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowRight) : (_user$project$Grid$isArrowDown(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowDown) : (_user$project$Grid$isArrowLeft(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowLeft) : (_user$project$Grid$isArrowUp(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowUp) : _elm_lang$core$Maybe$Nothing)))))));
+			return _user$project$Grid$isVerticalLine(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$VerticalLine) : (_user$project$Grid$isHorizontalLine(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$HorizontalLine) : (_user$project$Grid$isIntersection(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$Intersection) : (_user$project$Grid$isCorner(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$Corner) : (_user$project$Grid$isArrowRight(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowRight) : (_user$project$Grid$isArrowDown(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowDown) : (_user$project$Grid$isArrowLeft(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowLeft) : (_user$project$Grid$isArrowUp(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowUp) : (_user$project$Grid$isSlantRight(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$SlantRight) : (_user$project$Grid$isSlantLeft(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$SlantLeft) : _elm_lang$core$Maybe$Nothing)))))))));
 		} else {
 			return _elm_lang$core$Maybe$Nothing;
 		}
@@ -8883,10 +8927,20 @@ var _user$project$Grid$drawElement = F3(
 						[
 							A3(_user$project$Grid$drawArrowUp, x, y, model)
 						]);
-				default:
+				case 'ArrowLeft':
 					return _elm_lang$core$Native_List.fromArray(
 						[
 							A3(_user$project$Grid$drawArrowLeft, x, y, model)
+						]);
+				case 'SlantRight':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawSlantRightLine, x, y, model)
+						]);
+				default:
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawSlantLeftLine, x, y, model)
 						]);
 			}
 		} else {
@@ -8936,7 +8990,7 @@ var _user$project$Grid$getSvg = function (model) {
 var _user$project$Main$arg4 = '\n          User code ^            ^ OS code\n                      \\          /\n                       \\        /\n                        \\      /\n           User code <----Mode----->OS code\n                        /      \\\n                       /        \\\n                      /          \\\n          User code  v            v OS code\n          \n        \n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n\n                 \n                 .---------.  .---------.\n                 | State 1 |  | State 2 |\n                 \'---------\'  \'---------\'\n                    ^   \\         ^  \\\n                   /     \\       /    \\\n                  /       \\     /      \\\n                 /         \\   /        \\\n                /           \\ /          \\\n               /             v            v\n            ******        ******        ******\n            * T1 *        * T2 *        * T3 *\n            ******        ******        ******\n               ^             ^             /\n                \\             \\           /\n                 \\             \\         /\n                  \\             \\       / stimuli\n                   \\             \\     /\n                    \\             \\   v\n                     \\         .---------.\n                      \'--------| State 3 |\n                               \'---------\'\n                               \n\n                                        .--Base::Class::Derived_A\n                                       /\n                                      .----Base::Class::Derived_B    \n      Something--------.             /         \\\n                        \\           /           \'---Base::Class::Derived::More\n      Something::else    \\         /             \\\n            \\             \\       /               \'-Base::Class::Derived::Deeper\n             \\             \\     /\n              \\             \\   .-----------Base::Class::Derived_C \n               \\             \\ /\n                \'-------Base::Class\n                       /   \\ \\ \\\n                      \'     \\ \\ \\\n                      |      \\ \\ \'---The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy\' \'        \\ \\      \'----The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff\' \'          \\ \'-I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff\' \'            \\\n                     /              \'---Last::One\n         More::Stuff\'\n\n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |------------------------------------------------------------.\n  | ooo |    |                          |                            |\n  | ooo |    |                          |                            |\n  \'_____\'    |                          |                            |\n             |                          |                            |\n             v                          v                            v\n   .-------------------.  .---------------------------.    .-------------------.\n   | Loadable module C |  |     Loadable module A     |    | Loadable module B |\n   \'-------------------\'  |---------------------------|    |   (instrumented)  |\n             |            |         .-----.           |    \'-------------------\'\n             \'--------------------->| A.o |           |              |\n                 calls    |         \'-----\'           |              |\n                          |    .------------------.   |              |\n                          |    | A.instrumented.o |<-----------------\'\n                          |    \'------------------\'   |    calls\n                          \'---------------------------\'   \n    ';
 var _user$project$Main$arg3 = '\n                        ____________\n   .--------------.     \\\\           \\\n  / a == b         \\     \\           \\   __________\n (    &&            )     ) process   )  \\         \\\n  \\ \'string\' ne \'\' /     /           /    ) process )\n   \'--------------\'     /___________/    /_________/\n    ';
 var _user$project$Main$arg2 = '\n.-------------------------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n    ';
-var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|{io}  |   |{d}  |   |{s}  |   |cBLU |\n| Foo  +-->+ Bar +---+ Baz +<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +--+--+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+---------+-------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n    ';
+var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|{io}  |   |{d}  |   |{s}  |   |cBLU |\n| Foo  +-->+ Bar +---+ Baz +<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +--+--+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+---------+-------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n  User code ^            ^ OS code\n              \\          /\n               \\        /\n                \\      /\n   User code <----Mode----->OS code\n                /      \\\n               /        \\\n              /          \\\n  User code  v            v OS code\n    ';
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
