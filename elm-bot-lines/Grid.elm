@@ -393,12 +393,21 @@ drawSlantLeftLine x y model =
     drawLine startX startY endX endY (Color.rgb 20 200 20)
 
 
+--TODO: cornerTopLeft, corderTopRight, cornerBottomLeft, cornderBottomRight
 drawRoundedCorner: Int -> Int -> Model -> List (Svg a)
 drawRoundedCorner x y model =
     let radius = textWidth / 2
     in
         [drawArc x y radius 0 270]
 
+--TODO: need to modularized
+-- center
+-- midHorizontal
+-- midVertical
+-- topLeft
+-- topRight
+-- bottomLeft
+-- bottomRight
 drawIntersection: Int -> Int -> Model -> List (Svg a)
 drawIntersection x y model =
     let
