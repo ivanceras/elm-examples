@@ -34,7 +34,7 @@ type Element
     | Text Char
 
 verticalLines = ['|',':']
-horizontalLines = ['-','=']
+horizontalLines = ['-']
 lowHorizontalLine = ['_']
 intersections = ['+']
 corners = ['.','\'']
@@ -581,6 +581,8 @@ drawArrowNorthEast x y model =
             ]
             []
 
+drawPath centerX centerY radius degreeAngle =
+    42
 
 drawLine startX startY endX endY color =
     let 
