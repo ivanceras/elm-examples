@@ -8338,14 +8338,43 @@ var _user$project$Grid$get = F3(
 		}();
 		return $char;
 	});
-var _user$project$Grid$textHeight = 40.0;
+var _user$project$Grid$textHeight = 20.0;
 var _user$project$Grid$measureY = function (y) {
 	return _elm_lang$core$Basics$toFloat(y) * _user$project$Grid$textHeight;
 };
-var _user$project$Grid$textWidth = 20.0;
+var _user$project$Grid$strokeWidth = 1.0;
+var _user$project$Grid$fontSize = 14.0;
+var _user$project$Grid$textWidth = 8.0;
 var _user$project$Grid$measureX = function (x) {
 	return _elm_lang$core$Basics$toFloat(x) * _user$project$Grid$textWidth;
 };
+var _user$project$Grid$drawText = F3(
+	function (x$, y$, $char) {
+		var y$$ = _user$project$Grid$measureY(y$) + (_user$project$Grid$textHeight / 2);
+		var x$$ = _user$project$Grid$measureX(x$) + (_user$project$Grid$textWidth / 2);
+		return A2(
+			_elm_lang$svg$Svg$text$,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x(
+					_elm_lang$core$Basics$toString(x$$)),
+					_elm_lang$svg$Svg_Attributes$y(
+					_elm_lang$core$Basics$toString(y$$)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'font-size:',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(_user$project$Grid$fontSize),
+							'px;font-family:monospace')))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg$text(
+					_elm_lang$core$String$fromChar($char))
+				]));
+	});
 var _user$project$Grid$drawLine = F5(
 	function (startX, startY, endX, endY, color) {
 		var _p1 = _elm_lang$core$Color$toRgb(color);
@@ -8388,12 +8417,18 @@ var _user$project$Grid$drawLine = F5(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						'stroke: ',
-						A2(_elm_lang$core$Basics_ops['++'], colorText, ';stroke-width:4')))
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$strokeWidth)))))
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[]));
 	});
-var _user$project$Grid$drawArrowUp = F3(
+var _user$project$Grid$drawArrowNorthEast = F3(
 	function (x, y, model) {
 		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
 		var _p2 = _elm_lang$core$Color$toRgb(color);
@@ -8401,6 +8436,124 @@ var _user$project$Grid$drawArrowUp = F3(
 		var green = _p2.green;
 		var blue = _p2.blue;
 		var alpha = _p2.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var endY = _user$project$Grid$measureY(y);
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var endX = _user$project$Grid$measureX(x);
+		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$strokeWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
+var _user$project$Grid$drawArrowNorthWest = F3(
+	function (x, y, model) {
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p3 = _elm_lang$core$Color$toRgb(color);
+		var red = _p3.red;
+		var green = _p3.green;
+		var blue = _p3.blue;
+		var alpha = _p3.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var endY = _user$project$Grid$measureY(y);
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + _user$project$Grid$textWidth;
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$strokeWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
+var _user$project$Grid$drawArrowUp = F3(
+	function (x, y, model) {
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p4 = _elm_lang$core$Color$toRgb(color);
+		var red = _p4.red;
+		var green = _p4.green;
+		var blue = _p4.blue;
+		var alpha = _p4.alpha;
 		var colorText = A2(
 			_elm_lang$core$Basics_ops['++'],
 			'rgb(',
@@ -8440,7 +8593,131 @@ var _user$project$Grid$drawArrowUp = F3(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						'stroke: ',
-						A2(_elm_lang$core$Basics_ops['++'], colorText, ';stroke-width:4'))),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$strokeWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
+var _user$project$Grid$drawArrowSouthEast = F3(
+	function (x, y, model) {
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p5 = _elm_lang$core$Color$toRgb(color);
+		var red = _p5.red;
+		var green = _p5.green;
+		var blue = _p5.blue;
+		var alpha = _p5.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var startY = _user$project$Grid$measureY(y);
+		var endY = startY + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + _user$project$Grid$textWidth;
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$strokeWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
+var _user$project$Grid$drawArrowSouthWest = F3(
+	function (x, y, model) {
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p6 = _elm_lang$core$Color$toRgb(color);
+		var red = _p6.red;
+		var green = _p6.green;
+		var blue = _p6.blue;
+		var alpha = _p6.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var startY = _user$project$Grid$measureY(y);
+		var endY = startY + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var endX = startX - _user$project$Grid$textWidth;
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$strokeWidth))))),
 					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
 				]),
 			_elm_lang$core$Native_List.fromArray(
@@ -8449,11 +8726,11 @@ var _user$project$Grid$drawArrowUp = F3(
 var _user$project$Grid$drawArrowDown = F3(
 	function (x, y, model) {
 		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p3 = _elm_lang$core$Color$toRgb(color);
-		var red = _p3.red;
-		var green = _p3.green;
-		var blue = _p3.blue;
-		var alpha = _p3.alpha;
+		var _p7 = _elm_lang$core$Color$toRgb(color);
+		var red = _p7.red;
+		var green = _p7.green;
+		var blue = _p7.blue;
+		var alpha = _p7.alpha;
 		var colorText = A2(
 			_elm_lang$core$Basics_ops['++'],
 			'rgb(',
@@ -8493,7 +8770,13 @@ var _user$project$Grid$drawArrowDown = F3(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						'stroke: ',
-						A2(_elm_lang$core$Basics_ops['++'], colorText, ';stroke-width:4'))),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$strokeWidth))))),
 					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
 				]),
 			_elm_lang$core$Native_List.fromArray(
@@ -8502,11 +8785,11 @@ var _user$project$Grid$drawArrowDown = F3(
 var _user$project$Grid$drawArrowLeft = F3(
 	function (x, y, model) {
 		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p4 = _elm_lang$core$Color$toRgb(color);
-		var red = _p4.red;
-		var green = _p4.green;
-		var blue = _p4.blue;
-		var alpha = _p4.alpha;
+		var _p8 = _elm_lang$core$Color$toRgb(color);
+		var red = _p8.red;
+		var green = _p8.green;
+		var blue = _p8.blue;
+		var alpha = _p8.alpha;
 		var colorText = A2(
 			_elm_lang$core$Basics_ops['++'],
 			'rgb(',
@@ -8546,7 +8829,13 @@ var _user$project$Grid$drawArrowLeft = F3(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						'stroke: ',
-						A2(_elm_lang$core$Basics_ops['++'], colorText, ';stroke-width:4'))),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$strokeWidth))))),
 					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
 				]),
 			_elm_lang$core$Native_List.fromArray(
@@ -8555,11 +8844,11 @@ var _user$project$Grid$drawArrowLeft = F3(
 var _user$project$Grid$drawArrowRight = F3(
 	function (x, y, model) {
 		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p5 = _elm_lang$core$Color$toRgb(color);
-		var red = _p5.red;
-		var green = _p5.green;
-		var blue = _p5.blue;
-		var alpha = _p5.alpha;
+		var _p9 = _elm_lang$core$Color$toRgb(color);
+		var red = _p9.red;
+		var green = _p9.green;
+		var blue = _p9.blue;
+		var alpha = _p9.alpha;
 		var colorText = A2(
 			_elm_lang$core$Basics_ops['++'],
 			'rgb(',
@@ -8599,7 +8888,13 @@ var _user$project$Grid$drawArrowRight = F3(
 					A2(
 						_elm_lang$core$Basics_ops['++'],
 						'stroke: ',
-						A2(_elm_lang$core$Basics_ops['++'], colorText, ';stroke-width:4'))),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$strokeWidth))))),
 					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
 				]),
 			_elm_lang$core$Native_List.fromArray(
@@ -8647,6 +8942,20 @@ var _user$project$Grid$drawVerticalLine = F3(
 			endY,
 			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
 	});
+var _user$project$Grid$drawLowHorizontalLine = F3(
+	function (x, y, model) {
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var endY = startY;
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + _user$project$Grid$textWidth;
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 200, 20, 20));
+	});
 var _user$project$Grid$drawHorizontalLine = F3(
 	function (x, y, model) {
 		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
@@ -8666,12 +8975,12 @@ var _user$project$Grid$arrowMarker = A2(
 	_elm_lang$core$Native_List.fromArray(
 		[
 			_elm_lang$svg$Svg_Attributes$id('triangle'),
-			_elm_lang$svg$Svg_Attributes$viewBox('0 0 10 10'),
+			_elm_lang$svg$Svg_Attributes$viewBox('0 0 14 14'),
 			_elm_lang$svg$Svg_Attributes$refX('0'),
 			_elm_lang$svg$Svg_Attributes$refY('5'),
 			_elm_lang$svg$Svg_Attributes$markerUnits('strokeWidth'),
-			_elm_lang$svg$Svg_Attributes$markerWidth('4'),
-			_elm_lang$svg$Svg_Attributes$markerHeight('3'),
+			_elm_lang$svg$Svg_Attributes$markerWidth('10'),
+			_elm_lang$svg$Svg_Attributes$markerHeight('10'),
 			_elm_lang$svg$Svg_Attributes$orient('auto')
 		]),
 	_elm_lang$core$Native_List.fromArray(
@@ -8692,6 +9001,26 @@ var _user$project$Grid$slantLeft = _elm_lang$core$Native_List.fromArray(
 var _user$project$Grid$isSlantLeft = function ($char) {
 	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$slantLeft);
 };
+var _user$project$Grid$isTopLeftSlantedLeft = F3(
+	function (x, y, model) {
+		var top = A3(_user$project$Grid$get, x - 1, y - 1, model);
+		var _p10 = top;
+		if (_p10.ctor === 'Just') {
+			return _user$project$Grid$isSlantLeft(_p10._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$isNeighborBottomRightSlantedLeft = F3(
+	function (x, y, model) {
+		var bottomRight = A3(_user$project$Grid$get, x + 1, y + 1, model);
+		var _p11 = bottomRight;
+		if (_p11.ctor === 'Just') {
+			return _user$project$Grid$isSlantLeft(_p11._0);
+		} else {
+			return false;
+		}
+	});
 var _user$project$Grid$slantRight = _elm_lang$core$Native_List.fromArray(
 	[
 		_elm_lang$core$Native_Utils.chr('/')
@@ -8699,6 +9028,26 @@ var _user$project$Grid$slantRight = _elm_lang$core$Native_List.fromArray(
 var _user$project$Grid$isSlantRight = function ($char) {
 	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$slantRight);
 };
+var _user$project$Grid$isTopRightSlantedRight = F3(
+	function (x, y, model) {
+		var top = A3(_user$project$Grid$get, x + 1, y - 1, model);
+		var _p12 = top;
+		if (_p12.ctor === 'Just') {
+			return _user$project$Grid$isSlantRight(_p12._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$isNeighborBottomLeftSlantedRight = F3(
+	function (x, y, model) {
+		var bottomLeft = A3(_user$project$Grid$get, x - 1, y + 1, model);
+		var _p13 = bottomLeft;
+		if (_p13.ctor === 'Just') {
+			return _user$project$Grid$isSlantRight(_p13._0);
+		} else {
+			return false;
+		}
+	});
 var _user$project$Grid$arrowUp = _elm_lang$core$Native_List.fromArray(
 	[
 		_elm_lang$core$Native_Utils.chr('^'),
@@ -8716,7 +9065,8 @@ var _user$project$Grid$isArrowLeft = function ($char) {
 };
 var _user$project$Grid$arrowDown = _elm_lang$core$Native_List.fromArray(
 	[
-		_elm_lang$core$Native_Utils.chr('V')
+		_elm_lang$core$Native_Utils.chr('V'),
+		_elm_lang$core$Native_Utils.chr('v')
 	]);
 var _user$project$Grid$isArrowDown = function ($char) {
 	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$arrowDown);
@@ -8743,6 +9093,13 @@ var _user$project$Grid$intersections = _elm_lang$core$Native_List.fromArray(
 var _user$project$Grid$isIntersection = function ($char) {
 	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$intersections);
 };
+var _user$project$Grid$lowHorizontalLine = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('_')
+	]);
+var _user$project$Grid$isLowHorizontalLine = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$lowHorizontalLine);
+};
 var _user$project$Grid$horizontalLines = _elm_lang$core$Native_List.fromArray(
 	[
 		_elm_lang$core$Native_Utils.chr('-'),
@@ -8759,27 +9116,60 @@ var _user$project$Grid$verticalLines = _elm_lang$core$Native_List.fromArray(
 var _user$project$Grid$isVerticalLine = function ($char) {
 	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$verticalLines);
 };
+var _user$project$Grid$isVerticalLineTop = F3(
+	function (x, y, model) {
+		var top = A3(_user$project$Grid$get, x, y - 1, model);
+		var _p14 = top;
+		if (_p14.ctor === 'Just') {
+			return _user$project$Grid$isVerticalLine(_p14._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$isNeighborDownVerticalLine = F3(
+	function (x, y, model) {
+		var down = A3(_user$project$Grid$get, x, y + 1, model);
+		var _p15 = down;
+		if (_p15.ctor === 'Just') {
+			return _user$project$Grid$isVerticalLine(_p15._0);
+		} else {
+			return false;
+		}
+	});
 var _user$project$Grid$Model = F3(
 	function (a, b, c) {
 		return {rows: a, columns: b, lines: c};
 	});
+var _user$project$Grid$Text = function (a) {
+	return {ctor: 'Text', _0: a};
+};
 var _user$project$Grid$SlantLeft = {ctor: 'SlantLeft'};
 var _user$project$Grid$SlantRight = {ctor: 'SlantRight'};
 var _user$project$Grid$ArrowLeft = {ctor: 'ArrowLeft'};
+var _user$project$Grid$ArrowNorthEast = {ctor: 'ArrowNorthEast'};
+var _user$project$Grid$ArrowNorthWest = {ctor: 'ArrowNorthWest'};
 var _user$project$Grid$ArrowUp = {ctor: 'ArrowUp'};
+var _user$project$Grid$ArrowSouthEast = {ctor: 'ArrowSouthEast'};
+var _user$project$Grid$ArrowSouthWest = {ctor: 'ArrowSouthWest'};
 var _user$project$Grid$ArrowDown = {ctor: 'ArrowDown'};
 var _user$project$Grid$ArrowRight = {ctor: 'ArrowRight'};
 var _user$project$Grid$Corner = {ctor: 'Corner'};
 var _user$project$Grid$VerticalLine = {ctor: 'VerticalLine'};
+var _user$project$Grid$LowHorizontalLine = {ctor: 'LowHorizontalLine'};
 var _user$project$Grid$HorizontalLine = {ctor: 'HorizontalLine'};
 var _user$project$Grid$Intersection = {ctor: 'Intersection'};
 var _user$project$Grid$getElement = F3(
 	function (x, y, model) {
 		var $char = A3(_user$project$Grid$get, x, y, model);
-		var _p6 = $char;
-		if (_p6.ctor === 'Just') {
-			var _p7 = _p6._0;
-			return _user$project$Grid$isVerticalLine(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$VerticalLine) : (_user$project$Grid$isHorizontalLine(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$HorizontalLine) : (_user$project$Grid$isIntersection(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$Intersection) : (_user$project$Grid$isCorner(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$Corner) : (_user$project$Grid$isArrowRight(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowRight) : (_user$project$Grid$isArrowDown(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowDown) : (_user$project$Grid$isArrowLeft(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowLeft) : (_user$project$Grid$isArrowUp(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowUp) : (_user$project$Grid$isSlantRight(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$SlantRight) : (_user$project$Grid$isSlantLeft(_p7) ? _elm_lang$core$Maybe$Just(_user$project$Grid$SlantLeft) : _elm_lang$core$Maybe$Nothing)))))))));
+		var _p16 = $char;
+		if (_p16.ctor === 'Just') {
+			var _p17 = _p16._0;
+			return _user$project$Grid$isVerticalLine(_p17) ? _elm_lang$core$Maybe$Just(_user$project$Grid$VerticalLine) : (_user$project$Grid$isHorizontalLine(_p17) ? _elm_lang$core$Maybe$Just(_user$project$Grid$HorizontalLine) : (_user$project$Grid$isLowHorizontalLine(_p17) ? _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalLine) : (_user$project$Grid$isIntersection(_p17) ? _elm_lang$core$Maybe$Just(_user$project$Grid$Intersection) : (_user$project$Grid$isCorner(_p17) ? _elm_lang$core$Maybe$Just(_user$project$Grid$Corner) : (_user$project$Grid$isArrowRight(_p17) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowRight) : (_user$project$Grid$isArrowDown(_p17) ? (A3(_user$project$Grid$isVerticalLineTop, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowDown) : (A3(_user$project$Grid$isTopRightSlantedRight, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouthWest) : (A3(_user$project$Grid$isTopLeftSlantedLeft, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouthEast) : _elm_lang$core$Maybe$Just(
+				_user$project$Grid$Text(_p17))))) : (_user$project$Grid$isArrowLeft(_p17) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowLeft) : (_user$project$Grid$isArrowUp(_p17) ? (A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowUp) : (A3(_user$project$Grid$isNeighborBottomLeftSlantedRight, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorthWest) : (A3(_user$project$Grid$isNeighborBottomRightSlantedLeft, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorthEast) : _elm_lang$core$Maybe$Just(
+				_user$project$Grid$Text(_p17))))) : (_user$project$Grid$isSlantRight(_p17) ? _elm_lang$core$Maybe$Just(_user$project$Grid$SlantRight) : (_user$project$Grid$isSlantLeft(_p17) ? _elm_lang$core$Maybe$Just(_user$project$Grid$SlantLeft) : ((!_elm_lang$core$Native_Utils.eq(
+				_p17,
+				_elm_lang$core$Native_Utils.chr(' '))) ? _elm_lang$core$Maybe$Just(
+				_user$project$Grid$Text(_p17)) : _elm_lang$core$Maybe$Nothing)))))))))));
 		} else {
 			return _elm_lang$core$Maybe$Nothing;
 		}
@@ -8811,7 +9201,7 @@ var _user$project$Grid$drawIntersection = F3(
 		var h1startX = _user$project$Grid$measureX(x);
 		var h1endX = h1startX + (_user$project$Grid$textWidth / 2);
 		var v2startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var v2endY = v2startY + _user$project$Grid$textHeight;
+		var v2endY = v2startY + (_user$project$Grid$textHeight / 2);
 		var v2startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		var v2endX = v2startX;
 		var v1startY = _user$project$Grid$measureY(y);
@@ -8826,8 +9216,8 @@ var _user$project$Grid$drawIntersection = F3(
 			_elm_lang$core$Native_List.fromArray(
 				[
 					function () {
-					var _p8 = A3(_user$project$Grid$topOfElement, x, y, model);
-					if (_p8.ctor === 'Just') {
+					var _p18 = A3(_user$project$Grid$topOfElement, x, y, model);
+					if (_p18.ctor === 'Just') {
 						return _elm_lang$core$Maybe$Just(
 							A5(
 								_user$project$Grid$drawLine,
@@ -8841,8 +9231,8 @@ var _user$project$Grid$drawIntersection = F3(
 					}
 				}(),
 					function () {
-					var _p9 = A3(_user$project$Grid$bottomOfElement, x, y, model);
-					if (_p9.ctor === 'Just') {
+					var _p19 = A3(_user$project$Grid$bottomOfElement, x, y, model);
+					if (_p19.ctor === 'Just') {
 						return _elm_lang$core$Maybe$Just(
 							A5(
 								_user$project$Grid$drawLine,
@@ -8856,23 +9246,28 @@ var _user$project$Grid$drawIntersection = F3(
 					}
 				}(),
 					function () {
-					var _p10 = A3(_user$project$Grid$leftOfElement, x, y, model);
-					if (_p10.ctor === 'Just') {
-						return _elm_lang$core$Maybe$Just(
-							A5(
-								_user$project$Grid$drawLine,
-								h1startX,
-								h1startY,
-								h1endX,
-								h1endY,
-								A3(_elm_lang$core$Color$rgb, 200, 200, 200)));
+					var _p20 = A3(_user$project$Grid$leftOfElement, x, y, model);
+					if (_p20.ctor === 'Just') {
+						var _p21 = _p20._0;
+						if (_p21.ctor === 'Text') {
+							return _elm_lang$core$Maybe$Nothing;
+						} else {
+							return _elm_lang$core$Maybe$Just(
+								A5(
+									_user$project$Grid$drawLine,
+									h1startX,
+									h1startY,
+									h1endX,
+									h1endY,
+									A3(_elm_lang$core$Color$rgb, 200, 200, 200)));
+						}
 					} else {
 						return _elm_lang$core$Maybe$Nothing;
 					}
 				}(),
 					function () {
-					var _p11 = A3(_user$project$Grid$rightOfElement, x, y, model);
-					if (_p11.ctor === 'Just') {
+					var _p22 = A3(_user$project$Grid$rightOfElement, x, y, model);
+					if (_p22.ctor === 'Just') {
 						return _elm_lang$core$Maybe$Just(
 							A5(
 								_user$project$Grid$drawLine,
@@ -8894,14 +9289,19 @@ var _user$project$Grid$drawCorner = F3(
 var _user$project$Grid$drawElement = F3(
 	function (x, y, model) {
 		var element = A3(_user$project$Grid$getElement, x, y, model);
-		var _p12 = element;
-		if (_p12.ctor === 'Just') {
-			var _p13 = _p12._0;
-			switch (_p13.ctor) {
+		var _p23 = element;
+		if (_p23.ctor === 'Just') {
+			var _p24 = _p23._0;
+			switch (_p24.ctor) {
 				case 'HorizontalLine':
 					return _elm_lang$core$Native_List.fromArray(
 						[
 							A3(_user$project$Grid$drawHorizontalLine, x, y, model)
+						]);
+				case 'LowHorizontalLine':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawLowHorizontalLine, x, y, model)
 						]);
 				case 'VerticalLine':
 					return _elm_lang$core$Native_List.fromArray(
@@ -8922,10 +9322,30 @@ var _user$project$Grid$drawElement = F3(
 						[
 							A3(_user$project$Grid$drawArrowDown, x, y, model)
 						]);
+				case 'ArrowSouthWest':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawArrowSouthWest, x, y, model)
+						]);
+				case 'ArrowSouthEast':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawArrowSouthEast, x, y, model)
+						]);
 				case 'ArrowUp':
 					return _elm_lang$core$Native_List.fromArray(
 						[
 							A3(_user$project$Grid$drawArrowUp, x, y, model)
+						]);
+				case 'ArrowNorthWest':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawArrowNorthWest, x, y, model)
+						]);
+				case 'ArrowNorthEast':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawArrowNorthEast, x, y, model)
 						]);
 				case 'ArrowLeft':
 					return _elm_lang$core$Native_List.fromArray(
@@ -8937,10 +9357,15 @@ var _user$project$Grid$drawElement = F3(
 						[
 							A3(_user$project$Grid$drawSlantRightLine, x, y, model)
 						]);
-				default:
+				case 'SlantLeft':
 					return _elm_lang$core$Native_List.fromArray(
 						[
 							A3(_user$project$Grid$drawSlantLeftLine, x, y, model)
+						]);
+				default:
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawText, x, y, _p24._0)
 						]);
 			}
 		} else {
@@ -8990,7 +9415,7 @@ var _user$project$Grid$getSvg = function (model) {
 var _user$project$Main$arg4 = '\n          User code ^            ^ OS code\n                      \\          /\n                       \\        /\n                        \\      /\n           User code <----Mode----->OS code\n                        /      \\\n                       /        \\\n                      /          \\\n          User code  v            v OS code\n          \n        \n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n\n                 \n                 .---------.  .---------.\n                 | State 1 |  | State 2 |\n                 \'---------\'  \'---------\'\n                    ^   \\         ^  \\\n                   /     \\       /    \\\n                  /       \\     /      \\\n                 /         \\   /        \\\n                /           \\ /          \\\n               /             v            v\n            ******        ******        ******\n            * T1 *        * T2 *        * T3 *\n            ******        ******        ******\n               ^             ^             /\n                \\             \\           /\n                 \\             \\         /\n                  \\             \\       / stimuli\n                   \\             \\     /\n                    \\             \\   v\n                     \\         .---------.\n                      \'--------| State 3 |\n                               \'---------\'\n                               \n\n                                        .--Base::Class::Derived_A\n                                       /\n                                      .----Base::Class::Derived_B    \n      Something--------.             /         \\\n                        \\           /           \'---Base::Class::Derived::More\n      Something::else    \\         /             \\\n            \\             \\       /               \'-Base::Class::Derived::Deeper\n             \\             \\     /\n              \\             \\   .-----------Base::Class::Derived_C \n               \\             \\ /\n                \'-------Base::Class\n                       /   \\ \\ \\\n                      \'     \\ \\ \\\n                      |      \\ \\ \'---The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy\' \'        \\ \\      \'----The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff\' \'          \\ \'-I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff\' \'            \\\n                     /              \'---Last::One\n         More::Stuff\'\n\n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |------------------------------------------------------------.\n  | ooo |    |                          |                            |\n  | ooo |    |                          |                            |\n  \'_____\'    |                          |                            |\n             |                          |                            |\n             v                          v                            v\n   .-------------------.  .---------------------------.    .-------------------.\n   | Loadable module C |  |     Loadable module A     |    | Loadable module B |\n   \'-------------------\'  |---------------------------|    |   (instrumented)  |\n             |            |         .-----.           |    \'-------------------\'\n             \'--------------------->| A.o |           |              |\n                 calls    |         \'-----\'           |              |\n                          |    .------------------.   |              |\n                          |    | A.instrumented.o |<-----------------\'\n                          |    \'------------------\'   |    calls\n                          \'---------------------------\'   \n    ';
 var _user$project$Main$arg3 = '\n                        ____________\n   .--------------.     \\\\           \\\n  / a == b         \\     \\           \\   __________\n (    &&            )     ) process   )  \\         \\\n  \\ \'string\' ne \'\' /     /           /    ) process )\n   \'--------------\'     /___________/    /_________/\n    ';
 var _user$project$Main$arg2 = '\n.-------------------------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n    ';
-var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|{io}  |   |{d}  |   |{s}  |   |cBLU |\n| Foo  +-->+ Bar +---+ Baz +<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +--+--+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+---------+-------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n  User code ^            ^ OS code\n              \\          /\n               \\        /\n                \\      /\n   User code <----Mode----->OS code\n                /      \\\n               /        \\\n              /          \\\n  User code  v            v OS code\n    ';
+var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|{io}  |   |{d}  |   |{s}  |   |cBLU |\n| Foo  +-->+ Bar +---+ Baz +<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +--+--+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+---------+-------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\   __________\n (    &&            )     ) process   )  \\         \\\n  \\ \'string\' ne \'\' /     /           /    ) process )\n   \'--------------\'     /___________/    /_________/\n\n  User code  ^            ^ OS code\n              \\          /\n               \\        /\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n               /        \\\n              /          \\\n             v            v \n       User code         OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n    ';
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
