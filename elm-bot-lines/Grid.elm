@@ -5,7 +5,9 @@ import Svg.Attributes exposing (
     x,y,x1,y1,x2,y2,height,
     width,d,markerHeight,
     markerWidth,orient,markerEnd,
-    markerUnits,refX,refY,viewBox,id)
+    markerUnits,refX,refY,viewBox,id,
+    stroke,strokeWidth
+    )
 
 import Color
 
@@ -20,7 +22,7 @@ type Element
     | HorizontalLine
     | LowHorizontalLine
     | VerticalLine
-    | Corner
+    | RoundedCorner
     | ArrowRight
     | ArrowDown
     | ArrowSouthWest
@@ -37,7 +39,7 @@ verticalLines = ['|',':']
 horizontalLines = ['-']
 lowHorizontalLine = ['_']
 intersections = ['+']
-corners = ['.','\'']
+roundedCorners = ['.','\'']
 arrowRight = ['>']
 arrowDown = ['V','v']
 arrowLeft = ['<']
@@ -57,8 +59,11 @@ isLowHorizontalLine char =
 isIntersection char =
     List.member char intersections
 
-isCorner char =
-    List.member char corners
+isLine char =
+    isVerticalLine char || isHorizontalLine char || isLowHorizontalLine char
+
+isRoundedCorner char =
+    List.member char roundedCorners
 
 isArrowRight char =
     List.member char arrowRight
@@ -80,7 +85,7 @@ isSlantLeft char =
 
 
 --check if top of this character is vertical line
-isVerticalLineTop x y model =
+isNeighborTopVerticalLine x y model =
     let top = get x (y - 1) model
     in
     case top of
@@ -89,7 +94,7 @@ isVerticalLineTop x y model =
         Nothing ->
             False
 
-isTopRightSlantedRight x y model =
+isNeighborTopRightSlantedRight x y model =
     let top = get (x + 1) (y - 1) model
     in
     case top of
@@ -98,7 +103,7 @@ isTopRightSlantedRight x y model =
         Nothing ->
             False
 
-isTopLeftSlantedLeft x y model =
+isNeighborTopLeftSlantedLeft x y model =
     let top = get (x - 1) (y - 1) model
     in
     case top of
@@ -113,6 +118,22 @@ isNeighborDownVerticalLine x y model =
         case down of
             Just down ->
                 isVerticalLine down
+            Nothing ->
+                False
+isNeighborLeftHorizontalLine x y model =
+    let left = get (x-1) y model
+    in
+        case left of
+            Just left ->
+                isHorizontalLine left
+            Nothing ->
+                False
+isNeighborRightHorizontalLine x y model =
+    let right = get (x+1) y model
+    in
+        case right of
+            Just right ->
+                isHorizontalLine right
             Nothing ->
                 False
 
@@ -150,16 +171,16 @@ getElement x y model =
                     Just LowHorizontalLine
                 else if isIntersection char then
                     Just Intersection
-                else if isCorner char then
-                    Just Corner
+                else if isRoundedCorner char then
+                    Just RoundedCorner
                 else if isArrowRight char then
                     Just ArrowRight
                 else if isArrowDown char then
-                    if isVerticalLineTop x y model then
+                    if isNeighborTopVerticalLine x y model then
                         Just ArrowDown
-                    else if isTopRightSlantedRight x y model then
+                    else if isNeighborTopRightSlantedRight x y model then
                         Just ArrowSouthWest
-                    else if isTopLeftSlantedLeft x y model then
+                    else if isNeighborTopLeftSlantedLeft x y model then
                         Just ArrowSouthEast
                     else
                         Just <| Text char
@@ -186,18 +207,33 @@ getElement x y model =
             Nothing ->
                 Nothing
 
-rightOfElement x y model =
-    getElement (x + 1) y model
 
-leftOfElement x y model =
-    getElement (x - 1) y model
+drawArc: Int -> Int -> Float -> Float -> Float -> Svg a
+drawArc x' y' radius startAngle endAngle =
+    let
+        startRadian = degrees startAngle
+        endRadian = degrees endAngle
+        (startX, startY) = fromPolar (radius, startRadian)
+        (endX, endY) = fromPolar (radius, endRadian)
+        largeArcFlag = 
+            if endAngle - startAngle <= 180 then
+                0
+            else
+                1
 
-topOfElement x y model =
-    getElement x (y - 1) model
+        calcStartX = measureX x' + startX + textWidth / 2
+        calcStartY = measureY y' + startY + textHeight / 2
+        calcEndX = measureX x' + endX + textWidth / 2
+        calcEndY = measureY y' + endY + textHeight / 2
 
-bottomOfElement x y model =
-    getElement x (y + 1) model    
-
+        paths = ["M", toString calcStartX, toString calcStartY
+            ,"A", toString radius, toString radius, "0"
+            ,toString largeArcFlag, "0"
+            ,toString calcEndX, toString calcEndY
+            ]
+            |> String.join " "
+    in
+       path [d paths, stroke "black", strokeWidth "2"] []
 
 arrowMarker: Svg a
 arrowMarker =
@@ -263,8 +299,8 @@ drawElement x y model =
                     Intersection ->
                        (drawIntersection x y model)
 
-                    Corner ->
-                        (drawCorner x y model)
+                    RoundedCorner ->
+                        (drawRoundedCorner x y model)
 
                     ArrowRight ->
                         [drawArrowRight x y model]
@@ -357,9 +393,11 @@ drawSlantLeftLine x y model =
     drawLine startX startY endX endY (Color.rgb 20 200 20)
 
 
-drawCorner: Int -> Int -> Model -> List (Svg a)
-drawCorner x y model =
-   drawIntersection x y model 
+drawRoundedCorner: Int -> Int -> Model -> List (Svg a)
+drawRoundedCorner x y model =
+    let radius = textWidth / 2
+    in
+        [drawArc x y radius 0 270]
 
 drawIntersection: Int -> Int -> Model -> List (Svg a)
 drawIntersection x y model =
@@ -387,33 +425,27 @@ drawIntersection x y model =
         h2endX = h2startX + textWidth
         h2startY = measureY y + textHeight / 2
         h2endY = h2startY
-
+        
     in
-        [
-         case topOfElement x y model of
-            Just element ->
-                Just <| drawLine v1startX v1startY v1endX v1endY (Color.rgb 20 20 200)
-            Nothing ->
-                Nothing
-        ,case bottomOfElement x y model of
-            Just element ->
-                Just <| drawLine v2startX v2startY v2endX v2endY (Color.rgb 20 200 200)
-            Nothing ->
-                Nothing
-        ,case leftOfElement x y model of
-            Just element ->
-                case element of
-                    Text char ->
-                        Nothing
-                    _ ->
-                    Just <| drawLine h1startX h1startY h1endX h1endY (Color.rgb 200 200 200)
-            Nothing ->
-                Nothing
-        ,case rightOfElement x y model of
-            Just element ->
-                Just <| drawLine h2startX h2startY h2endX h2endY (Color.rgb 20 200 200)
-            Nothing ->
-                Nothing
+        [if isNeighborTopVerticalLine x y model then
+             Just <| drawLine v1startX v1startY v1endX v1endY (Color.rgb 20 20 200)
+         else
+            Nothing
+
+        ,if isNeighborDownVerticalLine x y model then
+            Just <| drawLine v2startX v2startY v2endX v2endY (Color.rgb 20 200 200)
+         else
+            Nothing
+
+        ,if isNeighborLeftHorizontalLine x y model then
+            Just <| drawLine h1startX h1startY h1endX h1endY (Color.rgb 200 200 200)
+         else 
+            Nothing
+
+        ,if isNeighborRightHorizontalLine x y model then
+            Just <| drawLine h2startX h2startY h2endX h2endY (Color.rgb 20 200 200)
+         else
+            Nothing
         ]
             |> List.filterMap
                 (\ a -> a)
@@ -433,7 +465,7 @@ drawArrowRight x y model =
             ,x2 <| toString endX
             ,y1 <| toString startY
             ,y2 <| toString endY
-            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString strokeWidth)
+            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString lineWidth)
             ,markerEnd "url(#triangle)"
             ]
             []
@@ -454,7 +486,7 @@ drawArrowLeft x y model =
             ,x2 <| toString endX
             ,y1 <| toString startY
             ,y2 <| toString endY
-            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString strokeWidth)
+            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString lineWidth)
             ,markerEnd "url(#triangle)"
             ]
             []
@@ -476,7 +508,7 @@ drawArrowDown x y model =
             ,x2 <| toString endX
             ,y1 <| toString startY
             ,y2 <| toString endY
-            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString strokeWidth)
+            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString lineWidth)
             ,markerEnd "url(#triangle)"
             ]
             []
@@ -496,7 +528,7 @@ drawArrowSouthWest x y model =
             ,x2 <| toString endX
             ,y1 <| toString startY
             ,y2 <| toString endY
-            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString strokeWidth)
+            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString lineWidth)
             ,markerEnd "url(#triangle)"
             ]
             []
@@ -516,7 +548,7 @@ drawArrowSouthEast x y model =
             ,x2 <| toString endX
             ,y1 <| toString startY
             ,y2 <| toString endY
-            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString strokeWidth)
+            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString lineWidth)
             ,markerEnd "url(#triangle)"
             ]
             []
@@ -536,7 +568,7 @@ drawArrowUp x y model =
             ,x2 <| toString endX
             ,y1 <| toString startY
             ,y2 <| toString endY
-            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString strokeWidth)
+            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString lineWidth)
             ,markerEnd "url(#triangle)"
             ]
             []
@@ -556,7 +588,7 @@ drawArrowNorthWest x y model =
             ,x2 <| toString endX
             ,y1 <| toString startY
             ,y2 <| toString endY
-            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString strokeWidth)
+            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString lineWidth)
             ,markerEnd "url(#triangle)"
             ]
             []
@@ -576,7 +608,7 @@ drawArrowNorthEast x y model =
             ,x2 <| toString endX
             ,y1 <| toString startY
             ,y2 <| toString endY
-            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString strokeWidth)
+            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString lineWidth)
             ,markerEnd "url(#triangle)"
             ]
             []
@@ -594,7 +626,7 @@ drawLine startX startY endX endY color =
             ,x2 <| toString endX
             ,y1 <| toString startY
             ,y2 <| toString endY
-            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString strokeWidth)
+            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString lineWidth)
             ]
             []
 
@@ -613,7 +645,7 @@ drawText x' y' char =
 
 textWidth = 8.0
 fontSize = 14.0
-strokeWidth = 1.0
+lineWidth = 1.0
 textHeight = 20.0
 
 measureX: Int -> Float
