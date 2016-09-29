@@ -69,7 +69,7 @@ arg =
               \\          /
                \\        /
                 \\      /
-  User code  <--- Mode ----> OS code
+  User code  <--- Mode --~-> OS code
                 /      \\
                /        \\___
               /             \\
@@ -84,7 +84,7 @@ arg =
              | Filesystem | | | Scheduler | |  | MMU |
              '------------' | '-----------' |  '-----'
                     |       |      |        |
-                    v       |      |        v
+                    v       $      |        v
                  .----.     |      |    .---------.
                  | IO |<----'      |    | Network |
                  '----'            |    '---------'

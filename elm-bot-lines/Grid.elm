@@ -6,7 +6,7 @@ import Svg.Attributes exposing (
     width,d,markerHeight,
     markerWidth,orient,markerEnd,
     markerUnits,refX,refY,viewBox,id,
-    stroke,strokeWidth
+    stroke,strokeWidth,fill
     )
 
 import Color
@@ -46,6 +46,8 @@ arrowLeft = ['<']
 arrowUp = ['^','î']
 slantRight = ['/']
 slantLeft = ['\\']
+horizontalCurveMarker = ['~']--TODO: any horizontal line has this will make the horizontal line curvy
+verticalCurveMarker = ['$','S'] --TODO: any vertical line that has this will make the vertical line curvy
 
 isVerticalLine char =
     List.member char verticalLines
@@ -211,29 +213,18 @@ getElement x y model =
 drawArc: Int -> Int -> Float -> Float -> Float -> Svg a
 drawArc x' y' radius startAngle endAngle =
     let
-        startRadian = degrees startAngle
-        endRadian = degrees endAngle
-        (startX, startY) = fromPolar (radius, startRadian)
-        (endX, endY) = fromPolar (radius, endRadian)
-        largeArcFlag = 
-            if endAngle - startAngle <= 180 then
-                0
-            else
-                1
-
-        calcStartX = measureX x' + startX + textWidth / 2
-        calcStartY = measureY y' + startY + textHeight / 2
-        calcEndX = measureX x' + endX + textWidth / 2
-        calcEndY = measureY y' + endY + textHeight / 2
+        calcStartX = measureX x' + textWidth / 2
+        calcStartY = measureY y' + textHeight / 2
+        calcEndX = measureX x' + textWidth
+        calcEndY = measureY y' + textHeight
 
         paths = ["M", toString calcStartX, toString calcStartY
-            ,"A", toString radius, toString radius, "0"
-            ,toString largeArcFlag, "0"
+            ,"A", toString radius, toString radius, "0" ,"0", "0"
             ,toString calcEndX, toString calcEndY
             ]
             |> String.join " "
     in
-       path [d paths, stroke "black", strokeWidth "2"] []
+       path [d paths, stroke "black", strokeWidth "2", fill "transparent"] []
 
 arrowMarker: Svg a
 arrowMarker =
