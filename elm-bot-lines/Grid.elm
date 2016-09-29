@@ -18,7 +18,7 @@ type alias Model =
     }
 
 type Element
-    = Intersection -- also corner
+    = Intersection IntersectionType -- also corner
     | HorizontalLine
     | LowHorizontalLine
     | VerticalLine
@@ -172,7 +172,43 @@ getElement x y model =
                 else if isLowHorizontalLine char then
                     Just LowHorizontalLine
                 else if isIntersection char then
-                    Just Intersection
+                    let
+                        isMidVerticalIntersection = 
+                            isNeighborTopVerticalLine x y model && isNeighborDownVerticalLine x y model
+
+                        isMidHorizontalIntersection =
+                            isNeighborLeftHorizontalLine x y model && isNeighborRightHorizontalLine x y model
+
+                        isTopLeftIntersection =
+                            isNeighborDownVerticalLine x y model && isNeighborRightHorizontalLine x y model
+
+                        isTopRightIntersection =
+                            isNeighborDownVerticalLine x y model && isNeighborLeftHorizontalLine x y model
+
+                        isBottomRightIntersection =
+                            isNeighborTopVerticalLine x y model && isNeighborLeftHorizontalLine x y model
+
+                        isBottomLeftIntersection =
+                            isNeighborTopVerticalLine x y model && isNeighborRightHorizontalLine x y model
+                        
+                        isCrossIntersection = isMidVerticalIntersection && isMidHorizontalIntersection
+                    in 
+                    if isCrossIntersection then
+                        Just (Intersection Cross)
+                    else if isMidVerticalIntersection then
+                        Just (Intersection MidVert)
+                    else if isMidHorizontalIntersection then
+                        Just (Intersection MidHor)
+                    else if isTopRightIntersection then
+                        Just (Intersection TopRight)
+                    else if isTopLeftIntersection then
+                        Just (Intersection TopLeft)
+                    else if isBottomRightIntersection then
+                        Just (Intersection BottomRight)
+                    else if isBottomLeftIntersection then
+                        Just (Intersection BottomLeft)
+                    else
+                        Nothing
                 else if isRoundedCorner char then
                     Just RoundedCorner
                 else if isArrowRight char then
@@ -287,8 +323,8 @@ drawElement x y model =
                     VerticalLine ->
                        [drawVerticalLine x y model]
 
-                    Intersection ->
-                       (drawIntersection x y model)
+                    Intersection itype->
+                       (drawIntersection x y itype model)
 
                     RoundedCorner ->
                         (drawRoundedCorner x y model)
@@ -391,16 +427,11 @@ drawRoundedCorner x y model =
     in
         [drawArc x y radius 0 270]
 
---TODO: need to modularized
--- center
--- midHorizontal
--- midVertical
--- topLeft
--- topRight
--- bottomLeft
--- bottomRight
-drawIntersection: Int -> Int -> Model -> List (Svg a)
-drawIntersection x y model =
+--TODO: need the junction: JunctionVertLeft, JunctionVertRight, JunctionHorTop, JunctionHorBot
+type IntersectionType = Cross | MidHor | MidVert | TopLeft | TopRight | BottomLeft | BottomRight
+
+drawIntersection: Int -> Int -> IntersectionType ->  Model -> List (Svg a)
+drawIntersection x y itype model =
     let
         --vertical line
         v1startX = measureX x + textWidth / 2
@@ -425,30 +456,29 @@ drawIntersection x y model =
         h2endX = h2startX + textWidth
         h2startY = measureY y + textHeight / 2
         h2endY = h2startY
+
+        v1Line = drawLine v1startX v1startY v1endX v1endY (Color.rgb 20 20 200)
+        v2Line = drawLine v2startX v2startY v2endX v2endY (Color.rgb 20 200 200)
+        h1Line = drawLine h1startX h1startY h1endX h1endY (Color.rgb 200 200 200)
+        h2Line = drawLine h2startX h2startY h2endX h2endY (Color.rgb 20 200 200)
         
     in
-        [if isNeighborTopVerticalLine x y model then
-             Just <| drawLine v1startX v1startY v1endX v1endY (Color.rgb 20 20 200)
-         else
-            Nothing
-
-        ,if isNeighborDownVerticalLine x y model then
-            Just <| drawLine v2startX v2startY v2endX v2endY (Color.rgb 20 200 200)
-         else
-            Nothing
-
-        ,if isNeighborLeftHorizontalLine x y model then
-            Just <| drawLine h1startX h1startY h1endX h1endY (Color.rgb 200 200 200)
-         else 
-            Nothing
-
-        ,if isNeighborRightHorizontalLine x y model then
-            Just <| drawLine h2startX h2startY h2endX h2endY (Color.rgb 20 200 200)
-         else
-            Nothing
-        ]
-            |> List.filterMap
-                (\ a -> a)
+    case itype of
+        MidVert ->
+            [v1Line, v2Line]
+        MidHor ->
+            [h1Line, h2Line]
+        TopLeft ->
+            [h2Line, v2Line]
+        TopRight ->
+            [h1Line, v2Line]
+        BottomLeft ->
+            [v1Line, h2Line]
+        BottomRight ->
+            [v1Line, h1Line]
+        Cross ->
+            [v1Line, v2Line, h1Line, h2Line]
+    
 
 drawArrowRight x y model =
     let
