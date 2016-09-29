@@ -665,9 +665,9 @@ drawArrowDown x y model =
 drawArrowSouthWest x y model =
     let
         startX = measureX x + textWidth
-        endX = startX - textWidth
         startY = measureY y
-        endY = startY + textHeight 
+        endX = startX - textWidth / 2
+        endY = startY + textHeight / 2
         color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
@@ -685,9 +685,9 @@ drawArrowSouthWest x y model =
 drawArrowSouthEast x y model =
     let
         startX = measureX x
-        endX = startX + textWidth
         startY = measureY y
-        endY = startY + textHeight 
+        endX = startX + textWidth / 2
+        endY = startY + textHeight  / 2
         color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
@@ -725,9 +725,9 @@ drawArrowUp x y model =
 drawArrowNorthWest x y model =
     let
         startX = measureX x
-        endX = startX + textWidth
         startY = measureY y + textHeight
-        endY = measureY y
+        endX = startX + textWidth / 2
+        endY = measureY y + textHeight / 2
         color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
@@ -745,9 +745,9 @@ drawArrowNorthWest x y model =
 drawArrowNorthEast x y model =
     let
         startX = measureX x + textWidth
-        endX = measureX x
         startY = measureY y + textHeight
-        endY = measureY y
+        endX = measureX x + textWidth / 2
+        endY = measureY y + textHeight / 2
         color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"

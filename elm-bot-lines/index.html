@@ -8459,9 +8459,9 @@ var _user$project$Grid$drawArrowNorthEast = F3(
 								_elm_lang$core$Basics_ops['++'],
 								_elm_lang$core$Basics$toString(blue),
 								')'))))));
-		var endY = _user$project$Grid$measureY(y);
+		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
-		var endX = _user$project$Grid$measureX(x);
 		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		return A2(
 			_elm_lang$svg$Svg$line,
@@ -8518,10 +8518,10 @@ var _user$project$Grid$drawArrowNorthWest = F3(
 								_elm_lang$core$Basics_ops['++'],
 								_elm_lang$core$Basics$toString(blue),
 								')'))))));
-		var endY = _user$project$Grid$measureY(y);
+		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
 		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
 		var startX = _user$project$Grid$measureX(x);
-		var endX = startX + _user$project$Grid$textWidth;
+		var endX = startX + (_user$project$Grid$textWidth / 2);
 		return A2(
 			_elm_lang$svg$Svg$line,
 			_elm_lang$core$Native_List.fromArray(
@@ -8637,9 +8637,9 @@ var _user$project$Grid$drawArrowSouthEast = F3(
 								_elm_lang$core$Basics$toString(blue),
 								')'))))));
 		var startY = _user$project$Grid$measureY(y);
-		var endY = startY + _user$project$Grid$textHeight;
+		var endY = startY + (_user$project$Grid$textHeight / 2);
 		var startX = _user$project$Grid$measureX(x);
-		var endX = startX + _user$project$Grid$textWidth;
+		var endX = startX + (_user$project$Grid$textWidth / 2);
 		return A2(
 			_elm_lang$svg$Svg$line,
 			_elm_lang$core$Native_List.fromArray(
@@ -8696,9 +8696,9 @@ var _user$project$Grid$drawArrowSouthWest = F3(
 								_elm_lang$core$Basics$toString(blue),
 								')'))))));
 		var startY = _user$project$Grid$measureY(y);
-		var endY = startY + _user$project$Grid$textHeight;
+		var endY = startY + (_user$project$Grid$textHeight / 2);
 		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
-		var endX = startX - _user$project$Grid$textWidth;
+		var endX = startX - (_user$project$Grid$textWidth / 2);
 		return A2(
 			_elm_lang$svg$Svg$line,
 			_elm_lang$core$Native_List.fromArray(
