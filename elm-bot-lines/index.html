@@ -9417,10 +9417,10 @@ var _user$project$Grid$drawPaths = function (model) {
 				rowRange)));
 };
 var _user$project$Grid$getSvg = function (model) {
-	var gwidth = _elm_lang$core$Basics$toString(
-		_user$project$Grid$measureX(model.columns));
 	var gheight = _elm_lang$core$Basics$toString(
-		_user$project$Grid$measureY(model.rows));
+		_user$project$Grid$measureY(model.rows) + 10);
+	var gwidth = _elm_lang$core$Basics$toString(
+		_user$project$Grid$measureX(model.columns) + 10);
 	return A2(
 		_elm_lang$svg$Svg$svg,
 		_elm_lang$core$Native_List.fromArray(

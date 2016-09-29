@@ -252,8 +252,8 @@ arrowMarker =
 
 getSvg model =
     let 
-        gheight = toString <| measureY model.rows
-        gwidth = toString <| measureX model.columns
+        gwidth = toString <| (measureX model.columns) + 10
+        gheight = toString <| (measureY model.rows) + 10
     in
     svg [height gheight, width gwidth]
         (defs []
