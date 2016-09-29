@@ -17,6 +17,11 @@ type alias Model =
     ,lines: List (List Char)
     }
 
+textWidth = 8.0
+fontSize = 14.0
+lineWidth = 1.0
+textHeight = 20.0
+
 type CornerPosition = TopRightCorner | TopLeftCorner | BottomRightCorner | BottomLeftCorner
 
 type Element
@@ -548,29 +553,30 @@ type IntersectionType = Cross | HorJunctionTop | HorJunctionBot | VertJunctionLe
 drawIntersection: Int -> Int -> IntersectionType ->  Model -> List (Svg a)
 drawIntersection x y itype model =
     let
+        lw = lineWidth / 2
         --vertical line
         v1startX = measureX x + textWidth / 2
-        v1endX = v1startX
-        v1startY = measureY y
-        v1endY = v1startY + textHeight / 2
-
+        v1endX = v1startX 
+        v1startY = measureY y - lw
+        v1endY = measureY y + textHeight / 2 + lw
+ 
         -- v line part 2
-        v2startX = measureX x + textWidth / 2
-        v2endX = v2startX
-        v2startY = measureY y + textHeight / 2
-        v2endY = v2startY + textHeight / 2
+        v2startX = measureX x + textWidth / 2 
+        v2endX = v2startX 
+        v2startY = measureY y + textHeight / 2 - lw
+        v2endY = measureY y + textHeight + lw
 
         --horizontal line
-        h1startX = measureX x
-        h1endX = h1startX + textWidth / 2
-        h1startY = measureY y + textHeight / 2
+        h1startX = measureX x - lw
+        h1endX = measureX x + textWidth / 2 + lw
+        h1startY = measureY y + textHeight / 2 
         h1endY = h1startY
 
         --h line part 2
-        h2startX = measureX x + textWidth / 2
-        h2endX = h2startX + textWidth
+        h2startX = measureX x + textWidth / 2 - lw
+        h2endX = h2startX + textWidth + lw
         h2startY = measureY y + textHeight / 2
-        h2endY = h2startY
+        h2endY = h2startY 
 
         v1Line = drawLine v1startX v1startY v1endX v1endY (Color.rgb 20 20 200)
         v2Line = drawLine v2startX v2startY v2endX v2endY (Color.rgb 20 200 200)
@@ -792,10 +798,6 @@ drawText x' y' char =
         ]
         [Svg.text <| String.fromChar char]
 
-textWidth = 8.0
-fontSize = 14.0
-lineWidth = 1.0
-textHeight = 20.0
 
 measureX: Int -> Float
 measureX x =

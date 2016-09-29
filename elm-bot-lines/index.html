@@ -8338,50 +8338,239 @@ var _user$project$Grid$get = F3(
 		}();
 		return $char;
 	});
+var _user$project$Grid$drawPath = F4(
+	function (centerX, centerY, radius, degreeAngle) {
+		return 42;
+	});
+var _user$project$Grid$arrowMarker = A2(
+	_elm_lang$svg$Svg$marker,
+	_elm_lang$core$Native_List.fromArray(
+		[
+			_elm_lang$svg$Svg_Attributes$id('triangle'),
+			_elm_lang$svg$Svg_Attributes$viewBox('0 0 14 14'),
+			_elm_lang$svg$Svg_Attributes$refX('0'),
+			_elm_lang$svg$Svg_Attributes$refY('5'),
+			_elm_lang$svg$Svg_Attributes$markerUnits('strokeWidth'),
+			_elm_lang$svg$Svg_Attributes$markerWidth('10'),
+			_elm_lang$svg$Svg_Attributes$markerHeight('10'),
+			_elm_lang$svg$Svg_Attributes$orient('auto')
+		]),
+	_elm_lang$core$Native_List.fromArray(
+		[
+			A2(
+			_elm_lang$svg$Svg$path,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$d('M 0 0 L 10 5 L 0 10 z')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]))
+		]));
+var _user$project$Grid$isNeighborTop = F4(
+	function (x, y, check, model) {
+		var top = A3(_user$project$Grid$get, x, y - 1, model);
+		var _p1 = top;
+		if (_p1.ctor === 'Just') {
+			return check(_p1._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$isNeighborDown = F4(
+	function (x, y, check, model) {
+		var down = A3(_user$project$Grid$get, x, y + 1, model);
+		var _p2 = down;
+		if (_p2.ctor === 'Just') {
+			return check(_p2._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$verticalCurveMarker = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('$'),
+		_elm_lang$core$Native_Utils.chr('S')
+	]);
+var _user$project$Grid$horizontalCurveMarker = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('~')
+	]);
+var _user$project$Grid$slantLeft = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('\\')
+	]);
+var _user$project$Grid$isSlantLeft = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$slantLeft);
+};
+var _user$project$Grid$isNeighborTopLeftSlantedLeft = F3(
+	function (x, y, model) {
+		var top = A3(_user$project$Grid$get, x - 1, y - 1, model);
+		var _p3 = top;
+		if (_p3.ctor === 'Just') {
+			return _user$project$Grid$isSlantLeft(_p3._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$isNeighborBottomRightSlantedLeft = F3(
+	function (x, y, model) {
+		var bottomRight = A3(_user$project$Grid$get, x + 1, y + 1, model);
+		var _p4 = bottomRight;
+		if (_p4.ctor === 'Just') {
+			return _user$project$Grid$isSlantLeft(_p4._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$slantRight = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('/')
+	]);
+var _user$project$Grid$isSlantRight = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$slantRight);
+};
+var _user$project$Grid$isNeighborTopRightSlantedRight = F3(
+	function (x, y, model) {
+		var top = A3(_user$project$Grid$get, x + 1, y - 1, model);
+		var _p5 = top;
+		if (_p5.ctor === 'Just') {
+			return _user$project$Grid$isSlantRight(_p5._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$isNeighborBottomLeftSlantedRight = F3(
+	function (x, y, model) {
+		var bottomLeft = A3(_user$project$Grid$get, x - 1, y + 1, model);
+		var _p6 = bottomLeft;
+		if (_p6.ctor === 'Just') {
+			return _user$project$Grid$isSlantRight(_p6._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$arrowUp = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('^'),
+		_elm_lang$core$Native_Utils.chr('î')
+	]);
+var _user$project$Grid$isArrowUp = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$arrowUp);
+};
+var _user$project$Grid$arrowLeft = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('<')
+	]);
+var _user$project$Grid$isArrowLeft = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$arrowLeft);
+};
+var _user$project$Grid$arrowDown = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('V'),
+		_elm_lang$core$Native_Utils.chr('v')
+	]);
+var _user$project$Grid$isArrowDown = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$arrowDown);
+};
+var _user$project$Grid$arrowRight = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('>')
+	]);
+var _user$project$Grid$isArrowRight = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$arrowRight);
+};
+var _user$project$Grid$roundedCorners = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('.'),
+		_elm_lang$core$Native_Utils.chr('\'')
+	]);
+var _user$project$Grid$isRoundedCorner = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$roundedCorners);
+};
+var _user$project$Grid$intersections = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('+')
+	]);
+var _user$project$Grid$isIntersection = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$intersections);
+};
+var _user$project$Grid$lowHorizontalLine = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('_')
+	]);
+var _user$project$Grid$isLowHorizontalLine = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$lowHorizontalLine);
+};
+var _user$project$Grid$horizontalLines = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('-')
+	]);
+var _user$project$Grid$isHorizontalLine = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$horizontalLines);
+};
+var _user$project$Grid$isNeighborLeftHorizontalLine = F3(
+	function (x, y, model) {
+		var left = A3(_user$project$Grid$get, x - 1, y, model);
+		var _p7 = left;
+		if (_p7.ctor === 'Just') {
+			return _user$project$Grid$isHorizontalLine(_p7._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$isNeighborRightHorizontalLine = F3(
+	function (x, y, model) {
+		var right = A3(_user$project$Grid$get, x + 1, y, model);
+		var _p8 = right;
+		if (_p8.ctor === 'Just') {
+			return _user$project$Grid$isHorizontalLine(_p8._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$verticalLines = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('|'),
+		_elm_lang$core$Native_Utils.chr(':')
+	]);
+var _user$project$Grid$isVerticalLine = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$verticalLines);
+};
+var _user$project$Grid$isLine = function ($char) {
+	return _user$project$Grid$isVerticalLine($char) || (_user$project$Grid$isHorizontalLine($char) || _user$project$Grid$isLowHorizontalLine($char));
+};
+var _user$project$Grid$isNeighborTopVerticalLine = F3(
+	function (x, y, model) {
+		var top = A3(_user$project$Grid$get, x, y - 1, model);
+		var _p9 = top;
+		if (_p9.ctor === 'Just') {
+			return _user$project$Grid$isVerticalLine(_p9._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$isNeighborDownVerticalLine = F3(
+	function (x, y, model) {
+		var down = A3(_user$project$Grid$get, x, y + 1, model);
+		var _p10 = down;
+		if (_p10.ctor === 'Just') {
+			return _user$project$Grid$isVerticalLine(_p10._0);
+		} else {
+			return false;
+		}
+	});
 var _user$project$Grid$textHeight = 20.0;
 var _user$project$Grid$measureY = function (y) {
 	return _elm_lang$core$Basics$toFloat(y) * _user$project$Grid$textHeight;
 };
 var _user$project$Grid$lineWidth = 1.0;
-var _user$project$Grid$fontSize = 14.0;
-var _user$project$Grid$textWidth = 8.0;
-var _user$project$Grid$measureX = function (x) {
-	return _elm_lang$core$Basics$toFloat(x) * _user$project$Grid$textWidth;
-};
-var _user$project$Grid$drawText = F3(
-	function (x$, y$, $char) {
-		var y$$ = _user$project$Grid$measureY(y$) + (_user$project$Grid$textHeight / 2);
-		var x$$ = _user$project$Grid$measureX(x$) + (_user$project$Grid$textWidth / 2);
-		return A2(
-			_elm_lang$svg$Svg$text$,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$x(
-					_elm_lang$core$Basics$toString(x$$)),
-					_elm_lang$svg$Svg_Attributes$y(
-					_elm_lang$core$Basics$toString(y$$)),
-					_elm_lang$svg$Svg_Attributes$style(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'font-size:',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(_user$project$Grid$fontSize),
-							'px;font-family:monospace')))
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg$text(
-					_elm_lang$core$String$fromChar($char))
-				]));
-	});
 var _user$project$Grid$drawLine = F5(
 	function (startX, startY, endX, endY, color) {
-		var _p1 = _elm_lang$core$Color$toRgb(color);
-		var red = _p1.red;
-		var green = _p1.green;
-		var blue = _p1.blue;
-		var alpha = _p1.alpha;
+		var _p11 = _elm_lang$core$Color$toRgb(color);
+		var red = _p11.red;
+		var green = _p11.green;
+		var blue = _p11.blue;
+		var alpha = _p11.alpha;
 		var colorText = A2(
 			_elm_lang$core$Basics_ops['++'],
 			'rgb(',
@@ -8428,653 +8617,8 @@ var _user$project$Grid$drawLine = F5(
 			_elm_lang$core$Native_List.fromArray(
 				[]));
 	});
-var _user$project$Grid$drawPath = F4(
-	function (centerX, centerY, radius, degreeAngle) {
-		return 42;
-	});
-var _user$project$Grid$drawArrowNorthEast = F3(
-	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p2 = _elm_lang$core$Color$toRgb(color);
-		var red = _p2.red;
-		var green = _p2.green;
-		var blue = _p2.blue;
-		var alpha = _p2.alpha;
-		var colorText = A2(
-			_elm_lang$core$Basics_ops['++'],
-			'rgb(',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(red),
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					',',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(green),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							',',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(blue),
-								')'))))));
-		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
-		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
-		return A2(
-			_elm_lang$svg$Svg$line,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$x1(
-					_elm_lang$core$Basics$toString(startX)),
-					_elm_lang$svg$Svg_Attributes$x2(
-					_elm_lang$core$Basics$toString(endX)),
-					_elm_lang$svg$Svg_Attributes$y1(
-					_elm_lang$core$Basics$toString(startY)),
-					_elm_lang$svg$Svg_Attributes$y2(
-					_elm_lang$core$Basics$toString(endY)),
-					_elm_lang$svg$Svg_Attributes$style(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'stroke: ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							colorText,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								';stroke-width:',
-								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
-					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	});
-var _user$project$Grid$drawArrowNorthWest = F3(
-	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p3 = _elm_lang$core$Color$toRgb(color);
-		var red = _p3.red;
-		var green = _p3.green;
-		var blue = _p3.blue;
-		var alpha = _p3.alpha;
-		var colorText = A2(
-			_elm_lang$core$Basics_ops['++'],
-			'rgb(',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(red),
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					',',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(green),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							',',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(blue),
-								')'))))));
-		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
-		var startX = _user$project$Grid$measureX(x);
-		var endX = startX + (_user$project$Grid$textWidth / 2);
-		return A2(
-			_elm_lang$svg$Svg$line,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$x1(
-					_elm_lang$core$Basics$toString(startX)),
-					_elm_lang$svg$Svg_Attributes$x2(
-					_elm_lang$core$Basics$toString(endX)),
-					_elm_lang$svg$Svg_Attributes$y1(
-					_elm_lang$core$Basics$toString(startY)),
-					_elm_lang$svg$Svg_Attributes$y2(
-					_elm_lang$core$Basics$toString(endY)),
-					_elm_lang$svg$Svg_Attributes$style(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'stroke: ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							colorText,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								';stroke-width:',
-								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
-					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	});
-var _user$project$Grid$drawArrowUp = F3(
-	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p4 = _elm_lang$core$Color$toRgb(color);
-		var red = _p4.red;
-		var green = _p4.green;
-		var blue = _p4.blue;
-		var alpha = _p4.alpha;
-		var colorText = A2(
-			_elm_lang$core$Basics_ops['++'],
-			'rgb(',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(red),
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					',',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(green),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							',',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(blue),
-								')'))))));
-		var endY = _user$project$Grid$measureY(y);
-		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
-		var startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var endX = startX;
-		return A2(
-			_elm_lang$svg$Svg$line,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$x1(
-					_elm_lang$core$Basics$toString(startX)),
-					_elm_lang$svg$Svg_Attributes$x2(
-					_elm_lang$core$Basics$toString(endX)),
-					_elm_lang$svg$Svg_Attributes$y1(
-					_elm_lang$core$Basics$toString(startY)),
-					_elm_lang$svg$Svg_Attributes$y2(
-					_elm_lang$core$Basics$toString(endY)),
-					_elm_lang$svg$Svg_Attributes$style(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'stroke: ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							colorText,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								';stroke-width:',
-								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
-					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	});
-var _user$project$Grid$drawArrowSouthEast = F3(
-	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p5 = _elm_lang$core$Color$toRgb(color);
-		var red = _p5.red;
-		var green = _p5.green;
-		var blue = _p5.blue;
-		var alpha = _p5.alpha;
-		var colorText = A2(
-			_elm_lang$core$Basics_ops['++'],
-			'rgb(',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(red),
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					',',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(green),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							',',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(blue),
-								')'))))));
-		var startY = _user$project$Grid$measureY(y);
-		var endY = startY + (_user$project$Grid$textHeight / 2);
-		var startX = _user$project$Grid$measureX(x);
-		var endX = startX + (_user$project$Grid$textWidth / 2);
-		return A2(
-			_elm_lang$svg$Svg$line,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$x1(
-					_elm_lang$core$Basics$toString(startX)),
-					_elm_lang$svg$Svg_Attributes$x2(
-					_elm_lang$core$Basics$toString(endX)),
-					_elm_lang$svg$Svg_Attributes$y1(
-					_elm_lang$core$Basics$toString(startY)),
-					_elm_lang$svg$Svg_Attributes$y2(
-					_elm_lang$core$Basics$toString(endY)),
-					_elm_lang$svg$Svg_Attributes$style(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'stroke: ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							colorText,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								';stroke-width:',
-								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
-					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	});
-var _user$project$Grid$drawArrowSouthWest = F3(
-	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p6 = _elm_lang$core$Color$toRgb(color);
-		var red = _p6.red;
-		var green = _p6.green;
-		var blue = _p6.blue;
-		var alpha = _p6.alpha;
-		var colorText = A2(
-			_elm_lang$core$Basics_ops['++'],
-			'rgb(',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(red),
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					',',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(green),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							',',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(blue),
-								')'))))));
-		var startY = _user$project$Grid$measureY(y);
-		var endY = startY + (_user$project$Grid$textHeight / 2);
-		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
-		var endX = startX - (_user$project$Grid$textWidth / 2);
-		return A2(
-			_elm_lang$svg$Svg$line,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$x1(
-					_elm_lang$core$Basics$toString(startX)),
-					_elm_lang$svg$Svg_Attributes$x2(
-					_elm_lang$core$Basics$toString(endX)),
-					_elm_lang$svg$Svg_Attributes$y1(
-					_elm_lang$core$Basics$toString(startY)),
-					_elm_lang$svg$Svg_Attributes$y2(
-					_elm_lang$core$Basics$toString(endY)),
-					_elm_lang$svg$Svg_Attributes$style(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'stroke: ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							colorText,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								';stroke-width:',
-								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
-					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	});
-var _user$project$Grid$drawArrowDown = F3(
-	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p7 = _elm_lang$core$Color$toRgb(color);
-		var red = _p7.red;
-		var green = _p7.green;
-		var blue = _p7.blue;
-		var alpha = _p7.alpha;
-		var colorText = A2(
-			_elm_lang$core$Basics_ops['++'],
-			'rgb(',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(red),
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					',',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(green),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							',',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(blue),
-								')'))))));
-		var startY = _user$project$Grid$measureY(y);
-		var endY = startY + _user$project$Grid$textHeight;
-		var startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var endX = startX;
-		return A2(
-			_elm_lang$svg$Svg$line,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$x1(
-					_elm_lang$core$Basics$toString(startX)),
-					_elm_lang$svg$Svg_Attributes$x2(
-					_elm_lang$core$Basics$toString(endX)),
-					_elm_lang$svg$Svg_Attributes$y1(
-					_elm_lang$core$Basics$toString(startY)),
-					_elm_lang$svg$Svg_Attributes$y2(
-					_elm_lang$core$Basics$toString(endY)),
-					_elm_lang$svg$Svg_Attributes$style(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'stroke: ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							colorText,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								';stroke-width:',
-								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
-					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	});
-var _user$project$Grid$drawArrowLeft = F3(
-	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p8 = _elm_lang$core$Color$toRgb(color);
-		var red = _p8.red;
-		var green = _p8.green;
-		var blue = _p8.blue;
-		var alpha = _p8.alpha;
-		var colorText = A2(
-			_elm_lang$core$Basics_ops['++'],
-			'rgb(',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(red),
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					',',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(green),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							',',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(blue),
-								')'))))));
-		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var endY = startY;
-		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
-		return A2(
-			_elm_lang$svg$Svg$line,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$x1(
-					_elm_lang$core$Basics$toString(startX)),
-					_elm_lang$svg$Svg_Attributes$x2(
-					_elm_lang$core$Basics$toString(endX)),
-					_elm_lang$svg$Svg_Attributes$y1(
-					_elm_lang$core$Basics$toString(startY)),
-					_elm_lang$svg$Svg_Attributes$y2(
-					_elm_lang$core$Basics$toString(endY)),
-					_elm_lang$svg$Svg_Attributes$style(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'stroke: ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							colorText,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								';stroke-width:',
-								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
-					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	});
-var _user$project$Grid$drawArrowRight = F3(
-	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p9 = _elm_lang$core$Color$toRgb(color);
-		var red = _p9.red;
-		var green = _p9.green;
-		var blue = _p9.blue;
-		var alpha = _p9.alpha;
-		var colorText = A2(
-			_elm_lang$core$Basics_ops['++'],
-			'rgb(',
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				_elm_lang$core$Basics$toString(red),
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					',',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(green),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							',',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(blue),
-								')'))))));
-		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var endY = startY;
-		var startX = _user$project$Grid$measureX(x);
-		var endX = startX + (_user$project$Grid$textWidth / 2);
-		return A2(
-			_elm_lang$svg$Svg$line,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$x1(
-					_elm_lang$core$Basics$toString(startX)),
-					_elm_lang$svg$Svg_Attributes$x2(
-					_elm_lang$core$Basics$toString(endX)),
-					_elm_lang$svg$Svg_Attributes$y1(
-					_elm_lang$core$Basics$toString(startY)),
-					_elm_lang$svg$Svg_Attributes$y2(
-					_elm_lang$core$Basics$toString(endY)),
-					_elm_lang$svg$Svg_Attributes$style(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'stroke: ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							colorText,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								';stroke-width:',
-								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
-					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]));
-	});
-var _user$project$Grid$drawIntersection = F4(
-	function (x, y, itype, model) {
-		var h2startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var h2endY = h2startY;
-		var h2startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var h2endX = h2startX + _user$project$Grid$textWidth;
-		var h2Line = A5(
-			_user$project$Grid$drawLine,
-			h2startX,
-			h2startY,
-			h2endX,
-			h2endY,
-			A3(_elm_lang$core$Color$rgb, 20, 200, 200));
-		var h1startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var h1endY = h1startY;
-		var h1startX = _user$project$Grid$measureX(x);
-		var h1endX = h1startX + (_user$project$Grid$textWidth / 2);
-		var h1Line = A5(
-			_user$project$Grid$drawLine,
-			h1startX,
-			h1startY,
-			h1endX,
-			h1endY,
-			A3(_elm_lang$core$Color$rgb, 200, 200, 200));
-		var v2startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var v2endY = v2startY + (_user$project$Grid$textHeight / 2);
-		var v2startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var v2endX = v2startX;
-		var v2Line = A5(
-			_user$project$Grid$drawLine,
-			v2startX,
-			v2startY,
-			v2endX,
-			v2endY,
-			A3(_elm_lang$core$Color$rgb, 20, 200, 200));
-		var v1startY = _user$project$Grid$measureY(y);
-		var v1endY = v1startY + (_user$project$Grid$textHeight / 2);
-		var v1startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var v1endX = v1startX;
-		var v1Line = A5(
-			_user$project$Grid$drawLine,
-			v1startX,
-			v1startY,
-			v1endX,
-			v1endY,
-			A3(_elm_lang$core$Color$rgb, 20, 20, 200));
-		var _p10 = itype;
-		switch (_p10.ctor) {
-			case 'VertJunctionLeft':
-				return _elm_lang$core$Native_List.fromArray(
-					[v1Line, v2Line, h1Line]);
-			case 'VertJunctionRight':
-				return _elm_lang$core$Native_List.fromArray(
-					[v1Line, v2Line, h2Line]);
-			case 'HorJunctionTop':
-				return _elm_lang$core$Native_List.fromArray(
-					[h1Line, h2Line, v1Line]);
-			case 'HorJunctionBot':
-				return _elm_lang$core$Native_List.fromArray(
-					[h1Line, h2Line, v2Line]);
-			case 'TopLeft':
-				return _elm_lang$core$Native_List.fromArray(
-					[h2Line, v2Line]);
-			case 'TopRight':
-				return _elm_lang$core$Native_List.fromArray(
-					[h1Line, v2Line]);
-			case 'BottomLeft':
-				return _elm_lang$core$Native_List.fromArray(
-					[v1Line, h2Line]);
-			case 'BottomRight':
-				return _elm_lang$core$Native_List.fromArray(
-					[v1Line, h1Line]);
-			default:
-				return _elm_lang$core$Native_List.fromArray(
-					[v1Line, v2Line, h1Line, h2Line]);
-		}
-	});
-var _user$project$Grid$drawSlantLeftLine = F3(
-	function (x, y, model) {
-		var endY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
-		var startY = _user$project$Grid$measureY(y);
-		var startX = _user$project$Grid$measureX(x);
-		var endX = startX + _user$project$Grid$textWidth;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
-	});
-var _user$project$Grid$drawSlantRightLine = F3(
-	function (x, y, model) {
-		var endY = _user$project$Grid$measureY(y);
-		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
-		var startX = _user$project$Grid$measureX(x);
-		var endX = startX + _user$project$Grid$textWidth;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
-	});
-var _user$project$Grid$drawVerticalLine = F3(
-	function (x, y, model) {
-		var startY = _user$project$Grid$measureY(y);
-		var endY = startY + _user$project$Grid$textHeight;
-		var startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var endX = startX;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
-	});
-var _user$project$Grid$drawLowHorizontalLine = F3(
-	function (x, y, model) {
-		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
-		var endY = startY;
-		var startX = _user$project$Grid$measureX(x);
-		var endX = startX + _user$project$Grid$textWidth;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 20, 20));
-	});
-var _user$project$Grid$drawHorizontalLine = F3(
-	function (x, y, model) {
-		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var endY = startY;
-		var startX = _user$project$Grid$measureX(x);
-		var endX = startX + _user$project$Grid$textWidth;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 20, 20));
-	});
-var _user$project$Grid$arrowMarker = A2(
-	_elm_lang$svg$Svg$marker,
-	_elm_lang$core$Native_List.fromArray(
-		[
-			_elm_lang$svg$Svg_Attributes$id('triangle'),
-			_elm_lang$svg$Svg_Attributes$viewBox('0 0 14 14'),
-			_elm_lang$svg$Svg_Attributes$refX('0'),
-			_elm_lang$svg$Svg_Attributes$refY('5'),
-			_elm_lang$svg$Svg_Attributes$markerUnits('strokeWidth'),
-			_elm_lang$svg$Svg_Attributes$markerWidth('10'),
-			_elm_lang$svg$Svg_Attributes$markerHeight('10'),
-			_elm_lang$svg$Svg_Attributes$orient('auto')
-		]),
-	_elm_lang$core$Native_List.fromArray(
-		[
-			A2(
-			_elm_lang$svg$Svg$path,
-			_elm_lang$core$Native_List.fromArray(
-				[
-					_elm_lang$svg$Svg_Attributes$d('M 0 0 L 10 5 L 0 10 z')
-				]),
-			_elm_lang$core$Native_List.fromArray(
-				[]))
-		]));
+var _user$project$Grid$fontSize = 14.0;
+var _user$project$Grid$textWidth = 8.0;
 var _user$project$Grid$drawArc = F4(
 	function (startX, startY, endX, endY) {
 		var ry = _user$project$Grid$textWidth / 2;
@@ -9108,6 +8652,79 @@ var _user$project$Grid$drawArc = F4(
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[]));
+	});
+var _user$project$Grid$measureX = function (x) {
+	return _elm_lang$core$Basics$toFloat(x) * _user$project$Grid$textWidth;
+};
+var _user$project$Grid$drawHorizontalLine = F3(
+	function (x, y, model) {
+		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var endY = startY;
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + _user$project$Grid$textWidth;
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 200, 20, 20));
+	});
+var _user$project$Grid$drawLowHorizontalLine = F3(
+	function (x, y, model) {
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var endY = startY;
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + _user$project$Grid$textWidth;
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 200, 20, 20));
+	});
+var _user$project$Grid$drawVerticalLine = F3(
+	function (x, y, model) {
+		var startY = _user$project$Grid$measureY(y);
+		var endY = startY + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var endX = startX;
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
+	});
+var _user$project$Grid$drawSlantRightLine = F3(
+	function (x, y, model) {
+		var endY = _user$project$Grid$measureY(y);
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + _user$project$Grid$textWidth;
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
+	});
+var _user$project$Grid$drawSlantLeftLine = F3(
+	function (x, y, model) {
+		var endY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startY = _user$project$Grid$measureY(y);
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + _user$project$Grid$textWidth;
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
 	});
 var _user$project$Grid$drawRoundedTopLeftCorner = F2(
 	function (x, y) {
@@ -9183,8 +8800,8 @@ var _user$project$Grid$drawRoundedBottomRightCorner = F2(
 	});
 var _user$project$Grid$drawRoundedCorner = F4(
 	function (x, y, pos, model) {
-		var _p11 = pos;
-		switch (_p11.ctor) {
+		var _p12 = pos;
+		switch (_p12.ctor) {
 			case 'TopLeftCorner':
 				return A2(_user$project$Grid$drawRoundedTopLeftCorner, x, y);
 			case 'TopRightCorner':
@@ -9195,198 +8812,582 @@ var _user$project$Grid$drawRoundedCorner = F4(
 				return A2(_user$project$Grid$drawRoundedBottomRightCorner, x, y);
 		}
 	});
-var _user$project$Grid$isNeighborTop = F4(
-	function (x, y, check, model) {
-		var top = A3(_user$project$Grid$get, x, y - 1, model);
-		var _p12 = top;
-		if (_p12.ctor === 'Just') {
-			return check(_p12._0);
-		} else {
-			return false;
+var _user$project$Grid$drawIntersection = F4(
+	function (x, y, itype, model) {
+		var h2startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var h2endY = h2startY;
+		var h1startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var h1endY = h1startY;
+		var v2startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var v2endX = v2startX;
+		var v1startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var v1endX = v1startX;
+		var lw = _user$project$Grid$lineWidth / 2;
+		var v1startY = _user$project$Grid$measureY(y) - lw;
+		var v1endY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) + lw;
+		var v1Line = A5(
+			_user$project$Grid$drawLine,
+			v1startX,
+			v1startY,
+			v1endX,
+			v1endY,
+			A3(_elm_lang$core$Color$rgb, 20, 20, 200));
+		var v2startY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) - lw;
+		var v2endY = (_user$project$Grid$measureY(y) + _user$project$Grid$textHeight) + lw;
+		var v2Line = A5(
+			_user$project$Grid$drawLine,
+			v2startX,
+			v2startY,
+			v2endX,
+			v2endY,
+			A3(_elm_lang$core$Color$rgb, 20, 200, 200));
+		var h1startX = _user$project$Grid$measureX(x) - lw;
+		var h1endX = (_user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2)) + lw;
+		var h1Line = A5(
+			_user$project$Grid$drawLine,
+			h1startX,
+			h1startY,
+			h1endX,
+			h1endY,
+			A3(_elm_lang$core$Color$rgb, 200, 200, 200));
+		var h2startX = (_user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2)) - lw;
+		var h2endX = (h2startX + _user$project$Grid$textWidth) + lw;
+		var h2Line = A5(
+			_user$project$Grid$drawLine,
+			h2startX,
+			h2startY,
+			h2endX,
+			h2endY,
+			A3(_elm_lang$core$Color$rgb, 20, 200, 200));
+		var _p13 = itype;
+		switch (_p13.ctor) {
+			case 'VertJunctionLeft':
+				return _elm_lang$core$Native_List.fromArray(
+					[v1Line, v2Line, h1Line]);
+			case 'VertJunctionRight':
+				return _elm_lang$core$Native_List.fromArray(
+					[v1Line, v2Line, h2Line]);
+			case 'HorJunctionTop':
+				return _elm_lang$core$Native_List.fromArray(
+					[h1Line, h2Line, v1Line]);
+			case 'HorJunctionBot':
+				return _elm_lang$core$Native_List.fromArray(
+					[h1Line, h2Line, v2Line]);
+			case 'TopLeft':
+				return _elm_lang$core$Native_List.fromArray(
+					[h2Line, v2Line]);
+			case 'TopRight':
+				return _elm_lang$core$Native_List.fromArray(
+					[h1Line, v2Line]);
+			case 'BottomLeft':
+				return _elm_lang$core$Native_List.fromArray(
+					[v1Line, h2Line]);
+			case 'BottomRight':
+				return _elm_lang$core$Native_List.fromArray(
+					[v1Line, h1Line]);
+			default:
+				return _elm_lang$core$Native_List.fromArray(
+					[v1Line, v2Line, h1Line, h2Line]);
 		}
 	});
-var _user$project$Grid$isNeighborDown = F4(
-	function (x, y, check, model) {
-		var down = A3(_user$project$Grid$get, x, y + 1, model);
-		var _p13 = down;
-		if (_p13.ctor === 'Just') {
-			return check(_p13._0);
-		} else {
-			return false;
-		}
-	});
-var _user$project$Grid$verticalCurveMarker = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('$'),
-		_elm_lang$core$Native_Utils.chr('S')
-	]);
-var _user$project$Grid$horizontalCurveMarker = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('~')
-	]);
-var _user$project$Grid$slantLeft = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('\\')
-	]);
-var _user$project$Grid$isSlantLeft = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$slantLeft);
-};
-var _user$project$Grid$isNeighborTopLeftSlantedLeft = F3(
+var _user$project$Grid$drawArrowRight = F3(
 	function (x, y, model) {
-		var top = A3(_user$project$Grid$get, x - 1, y - 1, model);
-		var _p14 = top;
-		if (_p14.ctor === 'Just') {
-			return _user$project$Grid$isSlantLeft(_p14._0);
-		} else {
-			return false;
-		}
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p14 = _elm_lang$core$Color$toRgb(color);
+		var red = _p14.red;
+		var green = _p14.green;
+		var blue = _p14.blue;
+		var alpha = _p14.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var endY = startY;
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + (_user$project$Grid$textWidth / 2);
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
 	});
-var _user$project$Grid$isNeighborBottomRightSlantedLeft = F3(
+var _user$project$Grid$drawArrowLeft = F3(
 	function (x, y, model) {
-		var bottomRight = A3(_user$project$Grid$get, x + 1, y + 1, model);
-		var _p15 = bottomRight;
-		if (_p15.ctor === 'Just') {
-			return _user$project$Grid$isSlantLeft(_p15._0);
-		} else {
-			return false;
-		}
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p15 = _elm_lang$core$Color$toRgb(color);
+		var red = _p15.red;
+		var green = _p15.green;
+		var blue = _p15.blue;
+		var alpha = _p15.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var endY = startY;
+		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
 	});
-var _user$project$Grid$slantRight = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('/')
-	]);
-var _user$project$Grid$isSlantRight = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$slantRight);
-};
-var _user$project$Grid$isNeighborTopRightSlantedRight = F3(
+var _user$project$Grid$drawArrowDown = F3(
 	function (x, y, model) {
-		var top = A3(_user$project$Grid$get, x + 1, y - 1, model);
-		var _p16 = top;
-		if (_p16.ctor === 'Just') {
-			return _user$project$Grid$isSlantRight(_p16._0);
-		} else {
-			return false;
-		}
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p16 = _elm_lang$core$Color$toRgb(color);
+		var red = _p16.red;
+		var green = _p16.green;
+		var blue = _p16.blue;
+		var alpha = _p16.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var startY = _user$project$Grid$measureY(y);
+		var endY = startY + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var endX = startX;
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
 	});
-var _user$project$Grid$isNeighborBottomLeftSlantedRight = F3(
+var _user$project$Grid$drawArrowSouthWest = F3(
 	function (x, y, model) {
-		var bottomLeft = A3(_user$project$Grid$get, x - 1, y + 1, model);
-		var _p17 = bottomLeft;
-		if (_p17.ctor === 'Just') {
-			return _user$project$Grid$isSlantRight(_p17._0);
-		} else {
-			return false;
-		}
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p17 = _elm_lang$core$Color$toRgb(color);
+		var red = _p17.red;
+		var green = _p17.green;
+		var blue = _p17.blue;
+		var alpha = _p17.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var startY = _user$project$Grid$measureY(y);
+		var endY = startY + (_user$project$Grid$textHeight / 2);
+		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var endX = startX - (_user$project$Grid$textWidth / 2);
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
 	});
-var _user$project$Grid$arrowUp = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('^'),
-		_elm_lang$core$Native_Utils.chr('î')
-	]);
-var _user$project$Grid$isArrowUp = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$arrowUp);
-};
-var _user$project$Grid$arrowLeft = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('<')
-	]);
-var _user$project$Grid$isArrowLeft = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$arrowLeft);
-};
-var _user$project$Grid$arrowDown = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('V'),
-		_elm_lang$core$Native_Utils.chr('v')
-	]);
-var _user$project$Grid$isArrowDown = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$arrowDown);
-};
-var _user$project$Grid$arrowRight = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('>')
-	]);
-var _user$project$Grid$isArrowRight = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$arrowRight);
-};
-var _user$project$Grid$roundedCorners = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('.'),
-		_elm_lang$core$Native_Utils.chr('\'')
-	]);
-var _user$project$Grid$isRoundedCorner = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$roundedCorners);
-};
-var _user$project$Grid$intersections = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('+')
-	]);
-var _user$project$Grid$isIntersection = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$intersections);
-};
-var _user$project$Grid$lowHorizontalLine = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('_')
-	]);
-var _user$project$Grid$isLowHorizontalLine = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$lowHorizontalLine);
-};
-var _user$project$Grid$horizontalLines = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('-')
-	]);
-var _user$project$Grid$isHorizontalLine = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$horizontalLines);
-};
-var _user$project$Grid$isNeighborLeftHorizontalLine = F3(
+var _user$project$Grid$drawArrowSouthEast = F3(
 	function (x, y, model) {
-		var left = A3(_user$project$Grid$get, x - 1, y, model);
-		var _p18 = left;
-		if (_p18.ctor === 'Just') {
-			return _user$project$Grid$isHorizontalLine(_p18._0);
-		} else {
-			return false;
-		}
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p18 = _elm_lang$core$Color$toRgb(color);
+		var red = _p18.red;
+		var green = _p18.green;
+		var blue = _p18.blue;
+		var alpha = _p18.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var startY = _user$project$Grid$measureY(y);
+		var endY = startY + (_user$project$Grid$textHeight / 2);
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + (_user$project$Grid$textWidth / 2);
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
 	});
-var _user$project$Grid$isNeighborRightHorizontalLine = F3(
+var _user$project$Grid$drawArrowUp = F3(
 	function (x, y, model) {
-		var right = A3(_user$project$Grid$get, x + 1, y, model);
-		var _p19 = right;
-		if (_p19.ctor === 'Just') {
-			return _user$project$Grid$isHorizontalLine(_p19._0);
-		} else {
-			return false;
-		}
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p19 = _elm_lang$core$Color$toRgb(color);
+		var red = _p19.red;
+		var green = _p19.green;
+		var blue = _p19.blue;
+		var alpha = _p19.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var endY = _user$project$Grid$measureY(y);
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var endX = startX;
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
 	});
-var _user$project$Grid$verticalLines = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('|'),
-		_elm_lang$core$Native_Utils.chr(':')
-	]);
-var _user$project$Grid$isVerticalLine = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$verticalLines);
-};
-var _user$project$Grid$isLine = function ($char) {
-	return _user$project$Grid$isVerticalLine($char) || (_user$project$Grid$isHorizontalLine($char) || _user$project$Grid$isLowHorizontalLine($char));
-};
-var _user$project$Grid$isNeighborTopVerticalLine = F3(
+var _user$project$Grid$drawArrowNorthWest = F3(
 	function (x, y, model) {
-		var top = A3(_user$project$Grid$get, x, y - 1, model);
-		var _p20 = top;
-		if (_p20.ctor === 'Just') {
-			return _user$project$Grid$isVerticalLine(_p20._0);
-		} else {
-			return false;
-		}
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p20 = _elm_lang$core$Color$toRgb(color);
+		var red = _p20.red;
+		var green = _p20.green;
+		var blue = _p20.blue;
+		var alpha = _p20.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x);
+		var endX = startX + (_user$project$Grid$textWidth / 2);
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
 	});
-var _user$project$Grid$isNeighborDownVerticalLine = F3(
+var _user$project$Grid$drawArrowNorthEast = F3(
 	function (x, y, model) {
-		var down = A3(_user$project$Grid$get, x, y + 1, model);
-		var _p21 = down;
-		if (_p21.ctor === 'Just') {
-			return _user$project$Grid$isVerticalLine(_p21._0);
-		} else {
-			return false;
-		}
+		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
+		var _p21 = _elm_lang$core$Color$toRgb(color);
+		var red = _p21.red;
+		var green = _p21.green;
+		var blue = _p21.blue;
+		var alpha = _p21.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		return A2(
+			_elm_lang$svg$Svg$line,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x1(
+					_elm_lang$core$Basics$toString(startX)),
+					_elm_lang$svg$Svg_Attributes$x2(
+					_elm_lang$core$Basics$toString(endX)),
+					_elm_lang$svg$Svg_Attributes$y1(
+					_elm_lang$core$Basics$toString(startY)),
+					_elm_lang$svg$Svg_Attributes$y2(
+					_elm_lang$core$Basics$toString(endY)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'stroke: ',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							colorText,
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								';stroke-width:',
+								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth))))),
+					_elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)')
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
+var _user$project$Grid$drawText = F3(
+	function (x$, y$, $char) {
+		var y$$ = _user$project$Grid$measureY(y$) + (_user$project$Grid$textHeight / 2);
+		var x$$ = _user$project$Grid$measureX(x$) + (_user$project$Grid$textWidth / 2);
+		return A2(
+			_elm_lang$svg$Svg$text$,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$x(
+					_elm_lang$core$Basics$toString(x$$)),
+					_elm_lang$svg$Svg_Attributes$y(
+					_elm_lang$core$Basics$toString(y$$)),
+					_elm_lang$svg$Svg_Attributes$style(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'font-size:',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(_user$project$Grid$fontSize),
+							'px;font-family:monospace')))
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg$text(
+					_elm_lang$core$String$fromChar($char))
+				]));
 	});
 var _user$project$Grid$Model = F3(
 	function (a, b, c) {
