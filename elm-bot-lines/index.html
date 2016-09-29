@@ -9159,7 +9159,7 @@ var _user$project$Grid$drawRoundedTopRightCorner = F2(
 				startX,
 				startY,
 				startX,
-				startY + (_user$project$Grid$textHeight / 2),
+				_user$project$Grid$measureY(y) + _user$project$Grid$textHeight,
 				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
 			]);
 	});
@@ -9195,6 +9195,26 @@ var _user$project$Grid$drawRoundedCorner = F4(
 				return A2(_user$project$Grid$drawRoundedBottomRightCorner, x, y);
 		}
 	});
+var _user$project$Grid$isNeighborTop = F4(
+	function (x, y, check, model) {
+		var top = A3(_user$project$Grid$get, x, y - 1, model);
+		var _p12 = top;
+		if (_p12.ctor === 'Just') {
+			return check(_p12._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Grid$isNeighborDown = F4(
+	function (x, y, check, model) {
+		var down = A3(_user$project$Grid$get, x, y + 1, model);
+		var _p13 = down;
+		if (_p13.ctor === 'Just') {
+			return check(_p13._0);
+		} else {
+			return false;
+		}
+	});
 var _user$project$Grid$verticalCurveMarker = _elm_lang$core$Native_List.fromArray(
 	[
 		_elm_lang$core$Native_Utils.chr('$'),
@@ -9214,9 +9234,9 @@ var _user$project$Grid$isSlantLeft = function ($char) {
 var _user$project$Grid$isNeighborTopLeftSlantedLeft = F3(
 	function (x, y, model) {
 		var top = A3(_user$project$Grid$get, x - 1, y - 1, model);
-		var _p12 = top;
-		if (_p12.ctor === 'Just') {
-			return _user$project$Grid$isSlantLeft(_p12._0);
+		var _p14 = top;
+		if (_p14.ctor === 'Just') {
+			return _user$project$Grid$isSlantLeft(_p14._0);
 		} else {
 			return false;
 		}
@@ -9224,9 +9244,9 @@ var _user$project$Grid$isNeighborTopLeftSlantedLeft = F3(
 var _user$project$Grid$isNeighborBottomRightSlantedLeft = F3(
 	function (x, y, model) {
 		var bottomRight = A3(_user$project$Grid$get, x + 1, y + 1, model);
-		var _p13 = bottomRight;
-		if (_p13.ctor === 'Just') {
-			return _user$project$Grid$isSlantLeft(_p13._0);
+		var _p15 = bottomRight;
+		if (_p15.ctor === 'Just') {
+			return _user$project$Grid$isSlantLeft(_p15._0);
 		} else {
 			return false;
 		}
@@ -9241,9 +9261,9 @@ var _user$project$Grid$isSlantRight = function ($char) {
 var _user$project$Grid$isNeighborTopRightSlantedRight = F3(
 	function (x, y, model) {
 		var top = A3(_user$project$Grid$get, x + 1, y - 1, model);
-		var _p14 = top;
-		if (_p14.ctor === 'Just') {
-			return _user$project$Grid$isSlantRight(_p14._0);
+		var _p16 = top;
+		if (_p16.ctor === 'Just') {
+			return _user$project$Grid$isSlantRight(_p16._0);
 		} else {
 			return false;
 		}
@@ -9251,9 +9271,9 @@ var _user$project$Grid$isNeighborTopRightSlantedRight = F3(
 var _user$project$Grid$isNeighborBottomLeftSlantedRight = F3(
 	function (x, y, model) {
 		var bottomLeft = A3(_user$project$Grid$get, x - 1, y + 1, model);
-		var _p15 = bottomLeft;
-		if (_p15.ctor === 'Just') {
-			return _user$project$Grid$isSlantRight(_p15._0);
+		var _p17 = bottomLeft;
+		if (_p17.ctor === 'Just') {
+			return _user$project$Grid$isSlantRight(_p17._0);
 		} else {
 			return false;
 		}
@@ -9320,9 +9340,9 @@ var _user$project$Grid$isHorizontalLine = function ($char) {
 var _user$project$Grid$isNeighborLeftHorizontalLine = F3(
 	function (x, y, model) {
 		var left = A3(_user$project$Grid$get, x - 1, y, model);
-		var _p16 = left;
-		if (_p16.ctor === 'Just') {
-			return _user$project$Grid$isHorizontalLine(_p16._0);
+		var _p18 = left;
+		if (_p18.ctor === 'Just') {
+			return _user$project$Grid$isHorizontalLine(_p18._0);
 		} else {
 			return false;
 		}
@@ -9330,9 +9350,9 @@ var _user$project$Grid$isNeighborLeftHorizontalLine = F3(
 var _user$project$Grid$isNeighborRightHorizontalLine = F3(
 	function (x, y, model) {
 		var right = A3(_user$project$Grid$get, x + 1, y, model);
-		var _p17 = right;
-		if (_p17.ctor === 'Just') {
-			return _user$project$Grid$isHorizontalLine(_p17._0);
+		var _p19 = right;
+		if (_p19.ctor === 'Just') {
+			return _user$project$Grid$isHorizontalLine(_p19._0);
 		} else {
 			return false;
 		}
@@ -9351,9 +9371,9 @@ var _user$project$Grid$isLine = function ($char) {
 var _user$project$Grid$isNeighborTopVerticalLine = F3(
 	function (x, y, model) {
 		var top = A3(_user$project$Grid$get, x, y - 1, model);
-		var _p18 = top;
-		if (_p18.ctor === 'Just') {
-			return _user$project$Grid$isVerticalLine(_p18._0);
+		var _p20 = top;
+		if (_p20.ctor === 'Just') {
+			return _user$project$Grid$isVerticalLine(_p20._0);
 		} else {
 			return false;
 		}
@@ -9361,9 +9381,9 @@ var _user$project$Grid$isNeighborTopVerticalLine = F3(
 var _user$project$Grid$isNeighborDownVerticalLine = F3(
 	function (x, y, model) {
 		var down = A3(_user$project$Grid$get, x, y + 1, model);
-		var _p19 = down;
-		if (_p19.ctor === 'Just') {
-			return _user$project$Grid$isVerticalLine(_p19._0);
+		var _p21 = down;
+		if (_p21.ctor === 'Just') {
+			return _user$project$Grid$isVerticalLine(_p21._0);
 		} else {
 			return false;
 		}
@@ -9410,19 +9430,19 @@ var _user$project$Grid$Cross = {ctor: 'Cross'};
 var _user$project$Grid$getElement = F3(
 	function (x, y, model) {
 		var $char = A3(_user$project$Grid$get, x, y, model);
-		var _p20 = $char;
-		if (_p20.ctor === 'Just') {
-			var _p21 = _p20._0;
-			if (_user$project$Grid$isVerticalLine(_p21)) {
+		var _p22 = $char;
+		if (_p22.ctor === 'Just') {
+			var _p23 = _p22._0;
+			if (_user$project$Grid$isVerticalLine(_p23)) {
 				return _elm_lang$core$Maybe$Just(_user$project$Grid$VerticalLine);
 			} else {
-				if (_user$project$Grid$isHorizontalLine(_p21)) {
+				if (_user$project$Grid$isHorizontalLine(_p23)) {
 					return _elm_lang$core$Maybe$Just(_user$project$Grid$HorizontalLine);
 				} else {
-					if (_user$project$Grid$isLowHorizontalLine(_p21)) {
+					if (_user$project$Grid$isLowHorizontalLine(_p23)) {
 						return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalLine);
 					} else {
-						if (_user$project$Grid$isIntersection(_p21)) {
+						if (_user$project$Grid$isIntersection(_p23)) {
 							var isCrossIntersection = A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && (A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) && (A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model)));
 							var isBottomLeftIntersection = A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model);
 							var isBottomRightIntersection = A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model);
@@ -9443,38 +9463,42 @@ var _user$project$Grid$getElement = F3(
 								_user$project$Grid$Intersection(_user$project$Grid$BottomRight)) : (isBottomLeftIntersection ? _elm_lang$core$Maybe$Just(
 								_user$project$Grid$Intersection(_user$project$Grid$BottomLeft)) : _elm_lang$core$Maybe$Nothing))))))));
 						} else {
-							if (_user$project$Grid$isRoundedCorner(_p21)) {
+							if (_user$project$Grid$isRoundedCorner(_p23)) {
 								return (A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model)) ? _elm_lang$core$Maybe$Just(
 									_user$project$Grid$RoundedCorner(_user$project$Grid$TopLeftCorner)) : ((A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model)) ? _elm_lang$core$Maybe$Just(
 									_user$project$Grid$RoundedCorner(_user$project$Grid$TopRightCorner)) : ((A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model)) ? _elm_lang$core$Maybe$Just(
 									_user$project$Grid$RoundedCorner(_user$project$Grid$BottomLeftCorner)) : ((A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundedCorner(_user$project$Grid$BottomRightCorner)) : _elm_lang$core$Maybe$Nothing)));
+									_user$project$Grid$RoundedCorner(_user$project$Grid$BottomRightCorner)) : ((A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model) && A4(_user$project$Grid$isNeighborDown, x, y, _user$project$Grid$isRoundedCorner, model)) ? _elm_lang$core$Maybe$Just(
+									_user$project$Grid$RoundedCorner(_user$project$Grid$TopLeftCorner)) : ((A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model) && A4(_user$project$Grid$isNeighborDown, x, y, _user$project$Grid$isRoundedCorner, model)) ? _elm_lang$core$Maybe$Just(
+									_user$project$Grid$RoundedCorner(_user$project$Grid$TopRightCorner)) : ((A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model) && A4(_user$project$Grid$isNeighborTop, x, y, _user$project$Grid$isRoundedCorner, model)) ? _elm_lang$core$Maybe$Just(
+									_user$project$Grid$RoundedCorner(_user$project$Grid$BottomRightCorner)) : ((A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model) && A4(_user$project$Grid$isNeighborTop, x, y, _user$project$Grid$isRoundedCorner, model)) ? _elm_lang$core$Maybe$Just(
+									_user$project$Grid$RoundedCorner(_user$project$Grid$BottomLeftCorner)) : _elm_lang$core$Maybe$Nothing)))))));
 							} else {
-								if (_user$project$Grid$isArrowRight(_p21)) {
+								if (_user$project$Grid$isArrowRight(_p23)) {
 									return _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowRight);
 								} else {
-									if (_user$project$Grid$isArrowDown(_p21)) {
+									if (_user$project$Grid$isArrowDown(_p23)) {
 										return A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowDown) : (A3(_user$project$Grid$isNeighborTopRightSlantedRight, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouthWest) : (A3(_user$project$Grid$isNeighborTopLeftSlantedLeft, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouthEast) : _elm_lang$core$Maybe$Just(
-											_user$project$Grid$Text(_p21))));
+											_user$project$Grid$Text(_p23))));
 									} else {
-										if (_user$project$Grid$isArrowLeft(_p21)) {
+										if (_user$project$Grid$isArrowLeft(_p23)) {
 											return _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowLeft);
 										} else {
-											if (_user$project$Grid$isArrowUp(_p21)) {
+											if (_user$project$Grid$isArrowUp(_p23)) {
 												return A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowUp) : (A3(_user$project$Grid$isNeighborBottomLeftSlantedRight, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorthWest) : (A3(_user$project$Grid$isNeighborBottomRightSlantedLeft, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorthEast) : _elm_lang$core$Maybe$Just(
-													_user$project$Grid$Text(_p21))));
+													_user$project$Grid$Text(_p23))));
 											} else {
-												if (_user$project$Grid$isSlantRight(_p21)) {
+												if (_user$project$Grid$isSlantRight(_p23)) {
 													return _elm_lang$core$Maybe$Just(_user$project$Grid$SlantRight);
 												} else {
-													if (_user$project$Grid$isSlantLeft(_p21)) {
+													if (_user$project$Grid$isSlantLeft(_p23)) {
 														return _elm_lang$core$Maybe$Just(_user$project$Grid$SlantLeft);
 													} else {
 														if (!_elm_lang$core$Native_Utils.eq(
-															_p21,
+															_p23,
 															_elm_lang$core$Native_Utils.chr(' '))) {
 															return _elm_lang$core$Maybe$Just(
-																_user$project$Grid$Text(_p21));
+																_user$project$Grid$Text(_p23));
 														} else {
 															return _elm_lang$core$Maybe$Nothing;
 														}
@@ -9496,10 +9520,10 @@ var _user$project$Grid$getElement = F3(
 var _user$project$Grid$drawElement = F3(
 	function (x, y, model) {
 		var element = A3(_user$project$Grid$getElement, x, y, model);
-		var _p22 = element;
-		if (_p22.ctor === 'Just') {
-			var _p23 = _p22._0;
-			switch (_p23.ctor) {
+		var _p24 = element;
+		if (_p24.ctor === 'Just') {
+			var _p25 = _p24._0;
+			switch (_p25.ctor) {
 				case 'HorizontalLine':
 					return _elm_lang$core$Native_List.fromArray(
 						[
@@ -9516,9 +9540,9 @@ var _user$project$Grid$drawElement = F3(
 							A3(_user$project$Grid$drawVerticalLine, x, y, model)
 						]);
 				case 'Intersection':
-					return A4(_user$project$Grid$drawIntersection, x, y, _p23._0, model);
+					return A4(_user$project$Grid$drawIntersection, x, y, _p25._0, model);
 				case 'RoundedCorner':
-					return A4(_user$project$Grid$drawRoundedCorner, x, y, _p23._0, model);
+					return A4(_user$project$Grid$drawRoundedCorner, x, y, _p25._0, model);
 				case 'ArrowRight':
 					return _elm_lang$core$Native_List.fromArray(
 						[
@@ -9572,7 +9596,7 @@ var _user$project$Grid$drawElement = F3(
 				default:
 					return _elm_lang$core$Native_List.fromArray(
 						[
-							A3(_user$project$Grid$drawText, x, y, _p23._0)
+							A3(_user$project$Grid$drawText, x, y, _p25._0)
 						]);
 			}
 		} else {

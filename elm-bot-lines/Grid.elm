@@ -132,6 +132,25 @@ isNeighborLeftHorizontalLine x y model =
                 isHorizontalLine left
             Nothing ->
                 False
+
+isNeighborDown x y check model =
+    let down = get x (y+1) model
+    in
+        case down of
+            Just down ->
+                check down
+            Nothing ->
+                False
+
+isNeighborTop x y check model =
+    let top = get x (y-1) model
+    in
+        case top of
+            Just top ->
+                check top
+            Nothing ->
+                False
+
 isNeighborRightHorizontalLine x y model =
     let right = get (x+1) y model
     in
@@ -246,6 +265,19 @@ getElement x y model =
                     else if isNeighborTopVerticalLine x y model
                         && isNeighborLeftHorizontalLine x y model then
                         Just (RoundedCorner BottomRightCorner)
+                        -- no verticals, rounded corner next to it
+                    else if isNeighborRightHorizontalLine x y model
+                        && isNeighborDown x y isRoundedCorner model then
+                        Just (RoundedCorner TopLeftCorner)
+                    else if isNeighborLeftHorizontalLine x y model 
+                        && isNeighborDown x y isRoundedCorner model then
+                        Just (RoundedCorner TopRightCorner)
+                    else if isNeighborLeftHorizontalLine x y model 
+                        && isNeighborTop x y isRoundedCorner model then
+                        Just (RoundedCorner BottomRightCorner)
+                    else if isNeighborRightHorizontalLine x y model 
+                        && isNeighborTop x y isRoundedCorner model then
+                        Just (RoundedCorner BottomLeftCorner)
                     else
                         Nothing
                 else if isArrowRight char then
@@ -496,7 +528,7 @@ drawRoundedTopRightCorner x y =
         endY = measureY y + textHeight / 2
     in
     [drawArc startX startY endX endY
-    ,drawLine startX startY startX (startY + textHeight / 2) (Color.rgb 0 0 0)
+    ,drawLine startX startY startX (measureY y + textHeight) (Color.rgb 0 0 0)
     ]
 
 drawRoundedBottomRightCorner x y =
