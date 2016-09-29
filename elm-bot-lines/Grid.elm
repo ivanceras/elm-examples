@@ -17,12 +17,14 @@ type alias Model =
     ,lines: List (List Char)
     }
 
+type CornerPosition = TopRightCorner | TopLeftCorner | BottomRightCorner | BottomLeftCorner
+
 type Element
     = Intersection IntersectionType -- also corner
     | HorizontalLine
     | LowHorizontalLine
     | VerticalLine
-    | RoundedCorner
+    | RoundedCorner CornerPosition
     | ArrowRight
     | ArrowDown
     | ArrowSouthWest
@@ -173,11 +175,25 @@ getElement x y model =
                     Just LowHorizontalLine
                 else if isIntersection char then
                     let
-                        isMidVerticalIntersection = 
-                            isNeighborTopVerticalLine x y model && isNeighborDownVerticalLine x y model
+                        isVerticalJunctionLeft = 
+                            isNeighborTopVerticalLine x y model 
+                            && isNeighborDownVerticalLine x y model
+                            && isNeighborLeftHorizontalLine x y model 
 
-                        isMidHorizontalIntersection =
-                            isNeighborLeftHorizontalLine x y model && isNeighborRightHorizontalLine x y model
+                        isVerticalJunctionRight = 
+                            isNeighborTopVerticalLine x y model 
+                            && isNeighborDownVerticalLine x y model
+                            && isNeighborRightHorizontalLine x y model 
+
+                        isHorizontalJunctionTop =
+                            isNeighborLeftHorizontalLine x y model 
+                            && isNeighborRightHorizontalLine x y model
+                            && isNeighborTopVerticalLine x y model 
+
+                        isHorizontalJunctionBot =
+                            isNeighborLeftHorizontalLine x y model 
+                            && isNeighborRightHorizontalLine x y model
+                             && isNeighborDownVerticalLine x y model 
 
                         isTopLeftIntersection =
                             isNeighborDownVerticalLine x y model && isNeighborRightHorizontalLine x y model
@@ -191,14 +207,22 @@ getElement x y model =
                         isBottomLeftIntersection =
                             isNeighborTopVerticalLine x y model && isNeighborRightHorizontalLine x y model
                         
-                        isCrossIntersection = isMidVerticalIntersection && isMidHorizontalIntersection
+                        isCrossIntersection = 
+                            isNeighborTopVerticalLine x y model 
+                            && isNeighborDownVerticalLine x y model
+                            && isNeighborLeftHorizontalLine x y model 
+                            && isNeighborRightHorizontalLine x y model 
                     in 
                     if isCrossIntersection then
                         Just (Intersection Cross)
-                    else if isMidVerticalIntersection then
-                        Just (Intersection MidVert)
-                    else if isMidHorizontalIntersection then
-                        Just (Intersection MidHor)
+                    else if isVerticalJunctionLeft then
+                        Just (Intersection VertJunctionLeft)
+                    else if isVerticalJunctionRight then
+                        Just (Intersection VertJunctionRight)
+                    else if isHorizontalJunctionTop then
+                        Just (Intersection HorJunctionTop)
+                    else if isHorizontalJunctionBot then
+                        Just (Intersection HorJunctionBot)
                     else if isTopRightIntersection then
                         Just (Intersection TopRight)
                     else if isTopLeftIntersection then
@@ -210,7 +234,20 @@ getElement x y model =
                     else
                         Nothing
                 else if isRoundedCorner char then
-                    Just RoundedCorner
+                    if isNeighborDownVerticalLine x y model 
+                        && isNeighborRightHorizontalLine x y model then
+                        Just (RoundedCorner TopLeftCorner)
+                    else if isNeighborDownVerticalLine x y model
+                        && isNeighborLeftHorizontalLine x y model then
+                        Just (RoundedCorner TopRightCorner)
+                    else if isNeighborTopVerticalLine x y model
+                        && isNeighborRightHorizontalLine x y model then
+                        Just (RoundedCorner BottomLeftCorner)
+                    else if isNeighborTopVerticalLine x y model
+                        && isNeighborLeftHorizontalLine x y model then
+                        Just (RoundedCorner BottomRightCorner)
+                    else
+                        Nothing
                 else if isArrowRight char then
                     Just ArrowRight
                 else if isArrowDown char then
@@ -246,21 +283,18 @@ getElement x y model =
                 Nothing
 
 
-drawArc: Int -> Int -> Float -> Float -> Float -> Svg a
-drawArc x' y' radius startAngle endAngle =
+drawArc: Float -> Float -> Float -> Float -> Svg a
+drawArc startX startY endX endY =
     let
-        calcStartX = measureX x' + textWidth / 2
-        calcStartY = measureY y' + textHeight / 2
-        calcEndX = measureX x' + textWidth
-        calcEndY = measureY y' + textHeight
-
-        paths = ["M", toString calcStartX, toString calcStartY
-            ,"A", toString radius, toString radius, "0" ,"0", "0"
-            ,toString calcEndX, toString calcEndY
-            ]
-            |> String.join " "
+        rx = textWidth / 2
+        ry = textWidth / 2
+        paths = 
+            ["M", toString startX, toString startY
+            ,"A", toString rx, toString ry, "0" ,"0", "0"
+            ,toString endX, toString endY
+            ] |> String.join " "
     in
-       path [d paths, stroke "black", strokeWidth "2", fill "transparent"] []
+       path [d paths, stroke "black", strokeWidth <| toString lineWidth, fill "transparent"] []
 
 arrowMarker: Svg a
 arrowMarker =
@@ -326,8 +360,8 @@ drawElement x y model =
                     Intersection itype->
                        (drawIntersection x y itype model)
 
-                    RoundedCorner ->
-                        (drawRoundedCorner x y model)
+                    RoundedCorner pos ->
+                        (drawRoundedCorner x y pos model)
 
                     ArrowRight ->
                         [drawArrowRight x y model]
@@ -420,15 +454,64 @@ drawSlantLeftLine x y model =
     drawLine startX startY endX endY (Color.rgb 20 200 20)
 
 
---TODO: cornerTopLeft, corderTopRight, cornerBottomLeft, cornderBottomRight
-drawRoundedCorner: Int -> Int -> Model -> List (Svg a)
-drawRoundedCorner x y model =
-    let radius = textWidth / 2
+drawRoundedCorner: Int -> Int -> CornerPosition -> Model -> List (Svg a)
+drawRoundedCorner x y pos  model =
+    case pos of
+        TopLeftCorner ->
+            drawRoundedTopLeftCorner x y
+        TopRightCorner ->
+            drawRoundedTopRightCorner x y
+        BottomLeftCorner ->
+            drawRoundedBottomLeftCorner x y
+        BottomRightCorner ->
+            drawRoundedBottomRightCorner x y
+
+drawRoundedTopLeftCorner x y =
+    let
+        startX = measureX x + textWidth
+        startY = measureY y + textHeight / 2
+        endX = measureX x + textWidth / 2  --circular arc 
+        endY = measureY y + textHeight / 2 + textWidth / 2 --then the rest is line
     in
-        [drawArc x y radius 0 270]
+    [drawArc startX startY endX endY
+    ,drawLine endX endY endX (measureY y +  textHeight) (Color.rgb 0 0 0)
+    ]
+
+drawRoundedBottomLeftCorner x y =
+    let
+        startX = measureX x + textWidth / 2
+        startY = measureY y + textHeight/2 - textWidth / 2
+        endX = measureX x + textWidth
+        endY = measureY y + textHeight / 2
+    in
+    [drawArc startX startY endX endY
+    ,drawLine startX startY startX (measureY y) (Color.rgb 0 0 0)
+    ]
+
+drawRoundedTopRightCorner x y =
+    let
+        startX = measureX x + textWidth / 2
+        startY = measureY y + textWidth / 2 + textHeight / 2
+        endX = measureX x
+        endY = measureY y + textHeight / 2
+    in
+    [drawArc startX startY endX endY
+    ,drawLine startX startY startX (startY + textHeight / 2) (Color.rgb 0 0 0)
+    ]
+
+drawRoundedBottomRightCorner x y =
+    let
+        startX = measureX x
+        startY = measureY y + textHeight / 2
+        endX = measureX x + textWidth / 2
+        endY = measureY y + textHeight / 2 - textWidth / 2
+    in
+    [drawArc startX startY endX endY
+    ,drawLine endX endY endX (measureY y) (Color.rgb 0 0 0)
+    ]
 
 --TODO: need the junction: JunctionVertLeft, JunctionVertRight, JunctionHorTop, JunctionHorBot
-type IntersectionType = Cross | MidHor | MidVert | TopLeft | TopRight | BottomLeft | BottomRight
+type IntersectionType = Cross | HorJunctionTop | HorJunctionBot | VertJunctionLeft | VertJunctionRight| TopLeft | TopRight | BottomLeft | BottomRight
 
 drawIntersection: Int -> Int -> IntersectionType ->  Model -> List (Svg a)
 drawIntersection x y itype model =
@@ -464,10 +547,14 @@ drawIntersection x y itype model =
         
     in
     case itype of
-        MidVert ->
-            [v1Line, v2Line]
-        MidHor ->
-            [h1Line, h2Line]
+        VertJunctionLeft ->
+            [v1Line, v2Line, h1Line]
+        VertJunctionRight ->
+            [v1Line, v2Line, h2Line]
+        HorJunctionTop ->
+            [h1Line, h2Line, v1Line]
+        HorJunctionBot ->
+            [h1Line, h2Line, v2Line]
         TopLeft ->
             [h2Line, v2Line]
         TopRight ->
@@ -483,7 +570,7 @@ drawIntersection x y itype model =
 drawArrowRight x y model =
     let
         startX = measureX x
-        endX = startX + textWidth
+        endX = startX + textWidth / 2
         startY = measureY y + textHeight / 2
         endY = startY
         color = (Color.rgb 230 40 178)
@@ -504,7 +591,7 @@ drawArrowRight x y model =
 drawArrowLeft x y model =
     let
         startX = measureX x + textWidth
-        endX = startX - textWidth
+        endX = measureX x + textWidth / 2
         startY = measureY y + textHeight / 2
         endY = startY
         color = (Color.rgb 230 40 178)
@@ -585,10 +672,10 @@ drawArrowSouthEast x y model =
 
 drawArrowUp x y model =
     let
-        startX = measureX x + textWidth /2
+        startX = measureX x + textWidth / 2
         endX = startX
         startY = measureY y + textHeight
-        endY = startY - textHeight
+        endY = measureY y 
         color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"

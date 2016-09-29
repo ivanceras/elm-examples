@@ -8577,8 +8577,8 @@ var _user$project$Grid$drawArrowUp = F3(
 								_elm_lang$core$Basics_ops['++'],
 								_elm_lang$core$Basics$toString(blue),
 								')'))))));
+		var endY = _user$project$Grid$measureY(y);
 		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
-		var endY = startY - _user$project$Grid$textHeight;
 		var startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		var endX = startX;
 		return A2(
@@ -8815,8 +8815,8 @@ var _user$project$Grid$drawArrowLeft = F3(
 								')'))))));
 		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
 		var endY = startY;
+		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
-		var endX = startX - _user$project$Grid$textWidth;
 		return A2(
 			_elm_lang$svg$Svg$line,
 			_elm_lang$core$Native_List.fromArray(
@@ -8875,7 +8875,7 @@ var _user$project$Grid$drawArrowRight = F3(
 		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
 		var endY = startY;
 		var startX = _user$project$Grid$measureX(x);
-		var endX = startX + _user$project$Grid$textWidth;
+		var endX = startX + (_user$project$Grid$textWidth / 2);
 		return A2(
 			_elm_lang$svg$Svg$line,
 			_elm_lang$core$Native_List.fromArray(
@@ -8952,12 +8952,18 @@ var _user$project$Grid$drawIntersection = F4(
 			A3(_elm_lang$core$Color$rgb, 20, 20, 200));
 		var _p10 = itype;
 		switch (_p10.ctor) {
-			case 'MidVert':
+			case 'VertJunctionLeft':
 				return _elm_lang$core$Native_List.fromArray(
-					[v1Line, v2Line]);
-			case 'MidHor':
+					[v1Line, v2Line, h1Line]);
+			case 'VertJunctionRight':
 				return _elm_lang$core$Native_List.fromArray(
-					[h1Line, h2Line]);
+					[v1Line, v2Line, h2Line]);
+			case 'HorJunctionTop':
+				return _elm_lang$core$Native_List.fromArray(
+					[h1Line, h2Line, v1Line]);
+			case 'HorJunctionBot':
+				return _elm_lang$core$Native_List.fromArray(
+					[h1Line, h2Line, v2Line]);
 			case 'TopLeft':
 				return _elm_lang$core$Native_List.fromArray(
 					[h2Line, v2Line]);
@@ -9069,28 +9075,26 @@ var _user$project$Grid$arrowMarker = A2(
 			_elm_lang$core$Native_List.fromArray(
 				[]))
 		]));
-var _user$project$Grid$drawArc = F5(
-	function (x$, y$, radius, startAngle, endAngle) {
-		var calcEndY = _user$project$Grid$measureY(y$) + _user$project$Grid$textHeight;
-		var calcEndX = _user$project$Grid$measureX(x$) + _user$project$Grid$textWidth;
-		var calcStartY = _user$project$Grid$measureY(y$) + (_user$project$Grid$textHeight / 2);
-		var calcStartX = _user$project$Grid$measureX(x$) + (_user$project$Grid$textWidth / 2);
+var _user$project$Grid$drawArc = F4(
+	function (startX, startY, endX, endY) {
+		var ry = _user$project$Grid$textWidth / 2;
+		var rx = _user$project$Grid$textWidth / 2;
 		var paths = A2(
 			_elm_lang$core$String$join,
 			' ',
 			_elm_lang$core$Native_List.fromArray(
 				[
 					'M',
-					_elm_lang$core$Basics$toString(calcStartX),
-					_elm_lang$core$Basics$toString(calcStartY),
+					_elm_lang$core$Basics$toString(startX),
+					_elm_lang$core$Basics$toString(startY),
 					'A',
-					_elm_lang$core$Basics$toString(radius),
-					_elm_lang$core$Basics$toString(radius),
+					_elm_lang$core$Basics$toString(rx),
+					_elm_lang$core$Basics$toString(ry),
 					'0',
 					'0',
 					'0',
-					_elm_lang$core$Basics$toString(calcEndX),
-					_elm_lang$core$Basics$toString(calcEndY)
+					_elm_lang$core$Basics$toString(endX),
+					_elm_lang$core$Basics$toString(endY)
 				]));
 		return A2(
 			_elm_lang$svg$Svg$path,
@@ -9098,19 +9102,98 @@ var _user$project$Grid$drawArc = F5(
 				[
 					_elm_lang$svg$Svg_Attributes$d(paths),
 					_elm_lang$svg$Svg_Attributes$stroke('black'),
-					_elm_lang$svg$Svg_Attributes$strokeWidth('2'),
+					_elm_lang$svg$Svg_Attributes$strokeWidth(
+					_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth)),
 					_elm_lang$svg$Svg_Attributes$fill('transparent')
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[]));
 	});
-var _user$project$Grid$drawRoundedCorner = F3(
-	function (x, y, model) {
-		var radius = _user$project$Grid$textWidth / 2;
+var _user$project$Grid$drawRoundedTopLeftCorner = F2(
+	function (x, y) {
+		var endY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) + (_user$project$Grid$textWidth / 2);
+		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(_user$project$Grid$drawArc, x, y, radius, 0, 270)
+				A4(_user$project$Grid$drawArc, startX, startY, endX, endY),
+				A5(
+				_user$project$Grid$drawLine,
+				endX,
+				endY,
+				endX,
+				_user$project$Grid$measureY(y) + _user$project$Grid$textHeight,
+				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
 			]);
+	});
+var _user$project$Grid$drawRoundedBottomLeftCorner = F2(
+	function (x, y) {
+		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var endX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var startY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) - (_user$project$Grid$textWidth / 2);
+		var startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A4(_user$project$Grid$drawArc, startX, startY, endX, endY),
+				A5(
+				_user$project$Grid$drawLine,
+				startX,
+				startY,
+				startX,
+				_user$project$Grid$measureY(y),
+				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+			]);
+	});
+var _user$project$Grid$drawRoundedTopRightCorner = F2(
+	function (x, y) {
+		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var endX = _user$project$Grid$measureX(x);
+		var startY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textWidth / 2)) + (_user$project$Grid$textHeight / 2);
+		var startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A4(_user$project$Grid$drawArc, startX, startY, endX, endY),
+				A5(
+				_user$project$Grid$drawLine,
+				startX,
+				startY,
+				startX,
+				startY + (_user$project$Grid$textHeight / 2),
+				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+			]);
+	});
+var _user$project$Grid$drawRoundedBottomRightCorner = F2(
+	function (x, y) {
+		var endY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) - (_user$project$Grid$textWidth / 2);
+		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var startX = _user$project$Grid$measureX(x);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A4(_user$project$Grid$drawArc, startX, startY, endX, endY),
+				A5(
+				_user$project$Grid$drawLine,
+				endX,
+				endY,
+				endX,
+				_user$project$Grid$measureY(y),
+				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+			]);
+	});
+var _user$project$Grid$drawRoundedCorner = F4(
+	function (x, y, pos, model) {
+		var _p11 = pos;
+		switch (_p11.ctor) {
+			case 'TopLeftCorner':
+				return A2(_user$project$Grid$drawRoundedTopLeftCorner, x, y);
+			case 'TopRightCorner':
+				return A2(_user$project$Grid$drawRoundedTopRightCorner, x, y);
+			case 'BottomLeftCorner':
+				return A2(_user$project$Grid$drawRoundedBottomLeftCorner, x, y);
+			default:
+				return A2(_user$project$Grid$drawRoundedBottomRightCorner, x, y);
+		}
 	});
 var _user$project$Grid$verticalCurveMarker = _elm_lang$core$Native_List.fromArray(
 	[
@@ -9131,9 +9214,9 @@ var _user$project$Grid$isSlantLeft = function ($char) {
 var _user$project$Grid$isNeighborTopLeftSlantedLeft = F3(
 	function (x, y, model) {
 		var top = A3(_user$project$Grid$get, x - 1, y - 1, model);
-		var _p11 = top;
-		if (_p11.ctor === 'Just') {
-			return _user$project$Grid$isSlantLeft(_p11._0);
+		var _p12 = top;
+		if (_p12.ctor === 'Just') {
+			return _user$project$Grid$isSlantLeft(_p12._0);
 		} else {
 			return false;
 		}
@@ -9141,9 +9224,9 @@ var _user$project$Grid$isNeighborTopLeftSlantedLeft = F3(
 var _user$project$Grid$isNeighborBottomRightSlantedLeft = F3(
 	function (x, y, model) {
 		var bottomRight = A3(_user$project$Grid$get, x + 1, y + 1, model);
-		var _p12 = bottomRight;
-		if (_p12.ctor === 'Just') {
-			return _user$project$Grid$isSlantLeft(_p12._0);
+		var _p13 = bottomRight;
+		if (_p13.ctor === 'Just') {
+			return _user$project$Grid$isSlantLeft(_p13._0);
 		} else {
 			return false;
 		}
@@ -9158,9 +9241,9 @@ var _user$project$Grid$isSlantRight = function ($char) {
 var _user$project$Grid$isNeighborTopRightSlantedRight = F3(
 	function (x, y, model) {
 		var top = A3(_user$project$Grid$get, x + 1, y - 1, model);
-		var _p13 = top;
-		if (_p13.ctor === 'Just') {
-			return _user$project$Grid$isSlantRight(_p13._0);
+		var _p14 = top;
+		if (_p14.ctor === 'Just') {
+			return _user$project$Grid$isSlantRight(_p14._0);
 		} else {
 			return false;
 		}
@@ -9168,9 +9251,9 @@ var _user$project$Grid$isNeighborTopRightSlantedRight = F3(
 var _user$project$Grid$isNeighborBottomLeftSlantedRight = F3(
 	function (x, y, model) {
 		var bottomLeft = A3(_user$project$Grid$get, x - 1, y + 1, model);
-		var _p14 = bottomLeft;
-		if (_p14.ctor === 'Just') {
-			return _user$project$Grid$isSlantRight(_p14._0);
+		var _p15 = bottomLeft;
+		if (_p15.ctor === 'Just') {
+			return _user$project$Grid$isSlantRight(_p15._0);
 		} else {
 			return false;
 		}
@@ -9237,9 +9320,9 @@ var _user$project$Grid$isHorizontalLine = function ($char) {
 var _user$project$Grid$isNeighborLeftHorizontalLine = F3(
 	function (x, y, model) {
 		var left = A3(_user$project$Grid$get, x - 1, y, model);
-		var _p15 = left;
-		if (_p15.ctor === 'Just') {
-			return _user$project$Grid$isHorizontalLine(_p15._0);
+		var _p16 = left;
+		if (_p16.ctor === 'Just') {
+			return _user$project$Grid$isHorizontalLine(_p16._0);
 		} else {
 			return false;
 		}
@@ -9247,9 +9330,9 @@ var _user$project$Grid$isNeighborLeftHorizontalLine = F3(
 var _user$project$Grid$isNeighborRightHorizontalLine = F3(
 	function (x, y, model) {
 		var right = A3(_user$project$Grid$get, x + 1, y, model);
-		var _p16 = right;
-		if (_p16.ctor === 'Just') {
-			return _user$project$Grid$isHorizontalLine(_p16._0);
+		var _p17 = right;
+		if (_p17.ctor === 'Just') {
+			return _user$project$Grid$isHorizontalLine(_p17._0);
 		} else {
 			return false;
 		}
@@ -9268,9 +9351,9 @@ var _user$project$Grid$isLine = function ($char) {
 var _user$project$Grid$isNeighborTopVerticalLine = F3(
 	function (x, y, model) {
 		var top = A3(_user$project$Grid$get, x, y - 1, model);
-		var _p17 = top;
-		if (_p17.ctor === 'Just') {
-			return _user$project$Grid$isVerticalLine(_p17._0);
+		var _p18 = top;
+		if (_p18.ctor === 'Just') {
+			return _user$project$Grid$isVerticalLine(_p18._0);
 		} else {
 			return false;
 		}
@@ -9278,9 +9361,9 @@ var _user$project$Grid$isNeighborTopVerticalLine = F3(
 var _user$project$Grid$isNeighborDownVerticalLine = F3(
 	function (x, y, model) {
 		var down = A3(_user$project$Grid$get, x, y + 1, model);
-		var _p18 = down;
-		if (_p18.ctor === 'Just') {
-			return _user$project$Grid$isVerticalLine(_p18._0);
+		var _p19 = down;
+		if (_p19.ctor === 'Just') {
+			return _user$project$Grid$isVerticalLine(_p19._0);
 		} else {
 			return false;
 		}
@@ -9289,6 +9372,10 @@ var _user$project$Grid$Model = F3(
 	function (a, b, c) {
 		return {rows: a, columns: b, lines: c};
 	});
+var _user$project$Grid$BottomLeftCorner = {ctor: 'BottomLeftCorner'};
+var _user$project$Grid$BottomRightCorner = {ctor: 'BottomRightCorner'};
+var _user$project$Grid$TopLeftCorner = {ctor: 'TopLeftCorner'};
+var _user$project$Grid$TopRightCorner = {ctor: 'TopRightCorner'};
 var _user$project$Grid$Text = function (a) {
 	return {ctor: 'Text', _0: a};
 };
@@ -9302,7 +9389,9 @@ var _user$project$Grid$ArrowSouthEast = {ctor: 'ArrowSouthEast'};
 var _user$project$Grid$ArrowSouthWest = {ctor: 'ArrowSouthWest'};
 var _user$project$Grid$ArrowDown = {ctor: 'ArrowDown'};
 var _user$project$Grid$ArrowRight = {ctor: 'ArrowRight'};
-var _user$project$Grid$RoundedCorner = {ctor: 'RoundedCorner'};
+var _user$project$Grid$RoundedCorner = function (a) {
+	return {ctor: 'RoundedCorner', _0: a};
+};
 var _user$project$Grid$VerticalLine = {ctor: 'VerticalLine'};
 var _user$project$Grid$LowHorizontalLine = {ctor: 'LowHorizontalLine'};
 var _user$project$Grid$HorizontalLine = {ctor: 'HorizontalLine'};
@@ -9313,69 +9402,79 @@ var _user$project$Grid$BottomRight = {ctor: 'BottomRight'};
 var _user$project$Grid$BottomLeft = {ctor: 'BottomLeft'};
 var _user$project$Grid$TopRight = {ctor: 'TopRight'};
 var _user$project$Grid$TopLeft = {ctor: 'TopLeft'};
-var _user$project$Grid$MidVert = {ctor: 'MidVert'};
-var _user$project$Grid$MidHor = {ctor: 'MidHor'};
+var _user$project$Grid$VertJunctionRight = {ctor: 'VertJunctionRight'};
+var _user$project$Grid$VertJunctionLeft = {ctor: 'VertJunctionLeft'};
+var _user$project$Grid$HorJunctionBot = {ctor: 'HorJunctionBot'};
+var _user$project$Grid$HorJunctionTop = {ctor: 'HorJunctionTop'};
 var _user$project$Grid$Cross = {ctor: 'Cross'};
 var _user$project$Grid$getElement = F3(
 	function (x, y, model) {
 		var $char = A3(_user$project$Grid$get, x, y, model);
-		var _p19 = $char;
-		if (_p19.ctor === 'Just') {
-			var _p20 = _p19._0;
-			if (_user$project$Grid$isVerticalLine(_p20)) {
+		var _p20 = $char;
+		if (_p20.ctor === 'Just') {
+			var _p21 = _p20._0;
+			if (_user$project$Grid$isVerticalLine(_p21)) {
 				return _elm_lang$core$Maybe$Just(_user$project$Grid$VerticalLine);
 			} else {
-				if (_user$project$Grid$isHorizontalLine(_p20)) {
+				if (_user$project$Grid$isHorizontalLine(_p21)) {
 					return _elm_lang$core$Maybe$Just(_user$project$Grid$HorizontalLine);
 				} else {
-					if (_user$project$Grid$isLowHorizontalLine(_p20)) {
+					if (_user$project$Grid$isLowHorizontalLine(_p21)) {
 						return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalLine);
 					} else {
-						if (_user$project$Grid$isIntersection(_p20)) {
+						if (_user$project$Grid$isIntersection(_p21)) {
+							var isCrossIntersection = A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && (A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) && (A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model)));
 							var isBottomLeftIntersection = A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model);
 							var isBottomRightIntersection = A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model);
 							var isTopRightIntersection = A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model);
 							var isTopLeftIntersection = A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model);
-							var isMidHorizontalIntersection = A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model);
-							var isMidVerticalIntersection = A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model);
-							var isCrossIntersection = isMidVerticalIntersection && isMidHorizontalIntersection;
+							var isHorizontalJunctionBot = A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model) && (A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model) && A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model));
+							var isHorizontalJunctionTop = A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model) && (A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model) && A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model));
+							var isVerticalJunctionRight = A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && (A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model));
+							var isVerticalJunctionLeft = A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && (A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model));
 							return isCrossIntersection ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$Cross)) : (isMidVerticalIntersection ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$MidVert)) : (isMidHorizontalIntersection ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$MidHor)) : (isTopRightIntersection ? _elm_lang$core$Maybe$Just(
+								_user$project$Grid$Intersection(_user$project$Grid$Cross)) : (isVerticalJunctionLeft ? _elm_lang$core$Maybe$Just(
+								_user$project$Grid$Intersection(_user$project$Grid$VertJunctionLeft)) : (isVerticalJunctionRight ? _elm_lang$core$Maybe$Just(
+								_user$project$Grid$Intersection(_user$project$Grid$VertJunctionRight)) : (isHorizontalJunctionTop ? _elm_lang$core$Maybe$Just(
+								_user$project$Grid$Intersection(_user$project$Grid$HorJunctionTop)) : (isHorizontalJunctionBot ? _elm_lang$core$Maybe$Just(
+								_user$project$Grid$Intersection(_user$project$Grid$HorJunctionBot)) : (isTopRightIntersection ? _elm_lang$core$Maybe$Just(
 								_user$project$Grid$Intersection(_user$project$Grid$TopRight)) : (isTopLeftIntersection ? _elm_lang$core$Maybe$Just(
 								_user$project$Grid$Intersection(_user$project$Grid$TopLeft)) : (isBottomRightIntersection ? _elm_lang$core$Maybe$Just(
 								_user$project$Grid$Intersection(_user$project$Grid$BottomRight)) : (isBottomLeftIntersection ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$BottomLeft)) : _elm_lang$core$Maybe$Nothing))))));
+								_user$project$Grid$Intersection(_user$project$Grid$BottomLeft)) : _elm_lang$core$Maybe$Nothing))))))));
 						} else {
-							if (_user$project$Grid$isRoundedCorner(_p20)) {
-								return _elm_lang$core$Maybe$Just(_user$project$Grid$RoundedCorner);
+							if (_user$project$Grid$isRoundedCorner(_p21)) {
+								return (A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model)) ? _elm_lang$core$Maybe$Just(
+									_user$project$Grid$RoundedCorner(_user$project$Grid$TopLeftCorner)) : ((A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model)) ? _elm_lang$core$Maybe$Just(
+									_user$project$Grid$RoundedCorner(_user$project$Grid$TopRightCorner)) : ((A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborRightHorizontalLine, x, y, model)) ? _elm_lang$core$Maybe$Just(
+									_user$project$Grid$RoundedCorner(_user$project$Grid$BottomLeftCorner)) : ((A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) && A3(_user$project$Grid$isNeighborLeftHorizontalLine, x, y, model)) ? _elm_lang$core$Maybe$Just(
+									_user$project$Grid$RoundedCorner(_user$project$Grid$BottomRightCorner)) : _elm_lang$core$Maybe$Nothing)));
 							} else {
-								if (_user$project$Grid$isArrowRight(_p20)) {
+								if (_user$project$Grid$isArrowRight(_p21)) {
 									return _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowRight);
 								} else {
-									if (_user$project$Grid$isArrowDown(_p20)) {
+									if (_user$project$Grid$isArrowDown(_p21)) {
 										return A3(_user$project$Grid$isNeighborTopVerticalLine, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowDown) : (A3(_user$project$Grid$isNeighborTopRightSlantedRight, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouthWest) : (A3(_user$project$Grid$isNeighborTopLeftSlantedLeft, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouthEast) : _elm_lang$core$Maybe$Just(
-											_user$project$Grid$Text(_p20))));
+											_user$project$Grid$Text(_p21))));
 									} else {
-										if (_user$project$Grid$isArrowLeft(_p20)) {
+										if (_user$project$Grid$isArrowLeft(_p21)) {
 											return _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowLeft);
 										} else {
-											if (_user$project$Grid$isArrowUp(_p20)) {
+											if (_user$project$Grid$isArrowUp(_p21)) {
 												return A3(_user$project$Grid$isNeighborDownVerticalLine, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowUp) : (A3(_user$project$Grid$isNeighborBottomLeftSlantedRight, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorthWest) : (A3(_user$project$Grid$isNeighborBottomRightSlantedLeft, x, y, model) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorthEast) : _elm_lang$core$Maybe$Just(
-													_user$project$Grid$Text(_p20))));
+													_user$project$Grid$Text(_p21))));
 											} else {
-												if (_user$project$Grid$isSlantRight(_p20)) {
+												if (_user$project$Grid$isSlantRight(_p21)) {
 													return _elm_lang$core$Maybe$Just(_user$project$Grid$SlantRight);
 												} else {
-													if (_user$project$Grid$isSlantLeft(_p20)) {
+													if (_user$project$Grid$isSlantLeft(_p21)) {
 														return _elm_lang$core$Maybe$Just(_user$project$Grid$SlantLeft);
 													} else {
 														if (!_elm_lang$core$Native_Utils.eq(
-															_p20,
+															_p21,
 															_elm_lang$core$Native_Utils.chr(' '))) {
 															return _elm_lang$core$Maybe$Just(
-																_user$project$Grid$Text(_p20));
+																_user$project$Grid$Text(_p21));
 														} else {
 															return _elm_lang$core$Maybe$Nothing;
 														}
@@ -9397,10 +9496,10 @@ var _user$project$Grid$getElement = F3(
 var _user$project$Grid$drawElement = F3(
 	function (x, y, model) {
 		var element = A3(_user$project$Grid$getElement, x, y, model);
-		var _p21 = element;
-		if (_p21.ctor === 'Just') {
-			var _p22 = _p21._0;
-			switch (_p22.ctor) {
+		var _p22 = element;
+		if (_p22.ctor === 'Just') {
+			var _p23 = _p22._0;
+			switch (_p23.ctor) {
 				case 'HorizontalLine':
 					return _elm_lang$core$Native_List.fromArray(
 						[
@@ -9417,9 +9516,9 @@ var _user$project$Grid$drawElement = F3(
 							A3(_user$project$Grid$drawVerticalLine, x, y, model)
 						]);
 				case 'Intersection':
-					return A4(_user$project$Grid$drawIntersection, x, y, _p22._0, model);
+					return A4(_user$project$Grid$drawIntersection, x, y, _p23._0, model);
 				case 'RoundedCorner':
-					return A3(_user$project$Grid$drawRoundedCorner, x, y, model);
+					return A4(_user$project$Grid$drawRoundedCorner, x, y, _p23._0, model);
 				case 'ArrowRight':
 					return _elm_lang$core$Native_List.fromArray(
 						[
@@ -9473,7 +9572,7 @@ var _user$project$Grid$drawElement = F3(
 				default:
 					return _elm_lang$core$Native_List.fromArray(
 						[
-							A3(_user$project$Grid$drawText, x, y, _p22._0)
+							A3(_user$project$Grid$drawText, x, y, _p23._0)
 						]);
 			}
 		} else {
@@ -9523,7 +9622,7 @@ var _user$project$Grid$getSvg = function (model) {
 var _user$project$Main$arg4 = '\n          User code ^            ^ OS code\n                      \\          /\n                       \\        /\n                        \\      /\n           User code <----Mode----->OS code\n                        /      \\\n                       /        \\\n                      /          \\\n          User code  v            v OS code\n          \n        \n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n\n                 \n                 .---------.  .---------.\n                 | State 1 |  | State 2 |\n                 \'---------\'  \'---------\'\n                    ^   \\         ^  \\\n                   /     \\       /    \\\n                  /       \\     /      \\\n                 /         \\   /        \\\n                /           \\ /          \\\n               /             v            v\n            ******        ******        ******\n            * T1 *        * T2 *        * T3 *\n            ******        ******        ******\n               ^             ^             /\n                \\             \\           /\n                 \\             \\         /\n                  \\             \\       / stimuli\n                   \\             \\     /\n                    \\             \\   v\n                     \\         .---------.\n                      \'--------| State 3 |\n                               \'---------\'\n                               \n\n                                        .--Base::Class::Derived_A\n                                       /\n                                      .----Base::Class::Derived_B    \n      Something--------.             /         \\\n                        \\           /           \'---Base::Class::Derived::More\n      Something::else    \\         /             \\\n            \\             \\       /               \'-Base::Class::Derived::Deeper\n             \\             \\     /\n              \\             \\   .-----------Base::Class::Derived_C \n               \\             \\ /\n                \'-------Base::Class\n                       /   \\ \\ \\\n                      \'     \\ \\ \\\n                      |      \\ \\ \'---The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy\' \'        \\ \\      \'----The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff\' \'          \\ \'-I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff\' \'            \\\n                     /              \'---Last::One\n         More::Stuff\'\n\n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |------------------------------------------------------------.\n  | ooo |    |                          |                            |\n  | ooo |    |                          |                            |\n  \'_____\'    |                          |                            |\n             |                          |                            |\n             v                          v                            v\n   .-------------------.  .---------------------------.    .-------------------.\n   | Loadable module C |  |     Loadable module A     |    | Loadable module B |\n   \'-------------------\'  |---------------------------|    |   (instrumented)  |\n             |            |         .-----.           |    \'-------------------\'\n             \'--------------------->| A.o |           |              |\n                 calls    |         \'-----\'           |              |\n                          |    .------------------.   |              |\n                          |    | A.instrumented.o |<-----------------\'\n                          |    \'------------------\'   |    calls\n                          \'---------------------------\'   \n    ';
 var _user$project$Main$arg3 = '\n                        ____________\n   .--------------.     \\\\           \\\n  / a == b         \\     \\           \\   __________\n (    &&            )     ) process   )  \\         \\\n  \\ \'string\' ne \'\' /     /           /    ) process )\n   \'--------------\'     /___________/    /_________/\n    ';
 var _user$project$Main$arg2 = '\n.-------------------------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n    ';
-var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->+ Bar +---+ Baz +<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +--+--+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+---------+-------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\    __________\n (    &&            )     ) process   )   \\         \\\n  \\ \'string\' ne \'\' /     /           /     ) process )\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^            ^ OS code\n              \\          /\n               \\        /\n                \\      /\n  User code  <--- Mode --~-> OS code\n                /      \\\n               /        \\___\n              /             \\\n             v               v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       $      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n  Safety\n    î\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\n    ';
+var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\    __________\n (    &&            )     ) process   )   \\         \\\n  \\ \'string\' ne \'\' /     /           /     ) process )\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^            ^ OS code\n              \\          /\n               \\        /\n                \\      /\n  User code  <--- Mode --~-> OS code\n                /      \\\n               /        \\___\n              /             \\\n             v               v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       $      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n  Safety\n    î\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\n    ';
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
