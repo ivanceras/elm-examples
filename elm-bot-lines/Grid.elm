@@ -8,7 +8,7 @@ import Svg.Attributes exposing (
     markerUnits,refX,refY,viewBox,id,
     stroke,strokeWidth,fill
     )
-
+import Char
 import Color
 
 type alias Model =
@@ -17,12 +17,19 @@ type alias Model =
     ,lines: List (List Char)
     }
 
-textWidth = 8.0
 fontSize = 14.0
 lineWidth = 1.0
-textHeight = 20.0
+textWidth = 8.0
+textHeight = 16.0
+arcRadius = textWidth / 2
 
-type CornerPosition = TopRightCorner | TopLeftCorner | BottomRightCorner | BottomLeftCorner
+type CornerPosition 
+    = TopRightCorner 
+    | TopLeftCorner 
+    | BottomRightCorner 
+    | BottomLeftCorner
+    | TopLeftSlantedDown
+    | TopRightSlantedDown
 
 type Element
     = Intersection IntersectionType -- also corner
@@ -40,6 +47,8 @@ type Element
     | ArrowLeft
     | SlantRight
     | SlantLeft
+    | OpenCurve
+    | CloseCurve
     | Text Char
 
 verticalLines = ['|',':']
@@ -53,11 +62,22 @@ arrowLeft = ['<']
 arrowUp = ['^','î']
 slantRight = ['/']
 slantLeft = ['\\']
+openCurve = ['(']
+closeCurve = [')']
 horizontalCurveMarker = ['~']--TODO: any horizontal line has this will make the horizontal line curvy
 verticalCurveMarker = ['$','S'] --TODO: any vertical line that has this will make the vertical line curvy
 
+isOpenCurve char = 
+    List.member char openCurve
+
+isCloseCurve char =
+    List.member char closeCurve
+
 isVerticalLine char =
     List.member char verticalLines
+
+isAlphaNumeric char =
+    Char.isDigit char || Char.isUpper char || Char.isLower char
 
 isHorizontalLine char =
     List.member char horizontalLines
@@ -137,6 +157,18 @@ isNeighborLeftHorizontalLine x y model =
                 isHorizontalLine left
             Nothing ->
                 False
+leftOf x y model = 
+    get (x-1) y model
+
+rightOf x y model =
+    get (x+1) y model
+
+isNeighbor neighbor check =
+    case neighbor of
+        Just neighbor ->
+            check neighbor
+        Nothing ->
+            False
 
 isNeighborDown x y check model =
     let down = get x (y+1) model
@@ -191,11 +223,17 @@ getElement x y model =
     in
         case char of
             Just char ->
-                if isVerticalLine char then
+                if isVerticalLine char 
+                    && not (isNeighbor (leftOf x y model) isAlphaNumeric) 
+                    && not (isNeighbor (rightOf x y model) isAlphaNumeric) then
                     Just VerticalLine
-                else if isHorizontalLine char then
+                else if isHorizontalLine char
+                    && not (isNeighbor (leftOf x y model) isAlphaNumeric) 
+                    && not (isNeighbor (rightOf x y model) isAlphaNumeric) then
                     Just HorizontalLine
-                else if isLowHorizontalLine char then
+                else if isLowHorizontalLine char
+                    && not (isNeighbor (leftOf x y model) isAlphaNumeric) 
+                    && not (isNeighbor (rightOf x y model) isAlphaNumeric) then
                     Just LowHorizontalLine
                 else if isIntersection char then
                     let
@@ -283,8 +321,14 @@ getElement x y model =
                     else if isNeighborRightHorizontalLine x y model 
                         && isNeighborTop x y isRoundedCorner model then
                         Just (RoundedCorner BottomLeftCorner)
+                    else if isNeighborRightHorizontalLine x y model
+                        && isNeighborBottomLeftSlantedRight x y model then
+                        Just (RoundedCorner TopLeftSlantedDown)
+                    else if isNeighborLeftHorizontalLine x y model
+                        && isNeighborBottomRightSlantedLeft x y model then
+                        Just (RoundedCorner TopRightSlantedDown)
                     else
-                        Nothing
+                        Just (Text char)
                 else if isArrowRight char then
                     Just ArrowRight
                 else if isArrowDown char then
@@ -312,6 +356,14 @@ getElement x y model =
                     Just SlantRight
                 else if isSlantLeft char then
                     Just SlantLeft
+                else if isOpenCurve char 
+                    && isNeighborTopRightSlantedRight x y model 
+                    && isNeighborBottomRightSlantedLeft x y model then
+                    Just OpenCurve
+                else if isCloseCurve char
+                    && isNeighborTopLeftSlantedLeft x y model
+                    && isNeighborBottomLeftSlantedRight x y model then
+                    Just CloseCurve
                 else if char /= ' ' then
                     Just <| Text char 
                 else
@@ -320,11 +372,11 @@ getElement x y model =
                 Nothing
 
 
-drawArc: Float -> Float -> Float -> Float -> Svg a
-drawArc startX startY endX endY =
+drawArc: Float -> Float -> Float -> Float -> Float -> Svg a
+drawArc startX startY endX endY radius =
     let
-        rx = textWidth / 2
-        ry = textWidth / 2
+        rx = radius
+        ry = radius
         paths = 
             ["M", toString startX, toString startY
             ,"A", toString rx, toString ry, "0" ,"0", "0"
@@ -430,6 +482,12 @@ drawElement x y model =
                     SlantLeft ->
                         [drawSlantLeftLine x y model]
 
+                    OpenCurve ->
+                        drawOpenCurve x y model
+
+                    CloseCurve ->
+                        drawCloseCurve x y model
+
                     Text char ->
                         [drawText x y char]
 
@@ -490,6 +548,30 @@ drawSlantLeftLine x y model =
     in
     drawLine startX startY endX endY (Color.rgb 20 200 20)
 
+drawOpenCurve: Int -> Int -> Model -> List (Svg a)
+drawOpenCurve x y model =
+    let
+        startX = measureX x + textWidth
+        startY = measureY y
+        endX = measureX x + textWidth
+        endY = measureY y + textHeight
+        radius = textHeight
+    in
+    [drawArc startX startY endX endY radius
+    ]
+
+
+drawCloseCurve: Int -> Int -> Model -> List (Svg a)
+drawCloseCurve x y model =
+    let
+        startX = measureX x
+        startY = measureY y + textHeight
+        endX = measureX x
+        endY = measureY y
+        radius = textHeight
+    in
+    [drawArc startX startY endX endY radius
+    ]
 
 drawRoundedCorner: Int -> Int -> CornerPosition -> Model -> List (Svg a)
 drawRoundedCorner x y pos  model =
@@ -502,6 +584,10 @@ drawRoundedCorner x y pos  model =
             drawRoundedBottomLeftCorner x y
         BottomRightCorner ->
             drawRoundedBottomRightCorner x y
+        TopLeftSlantedDown ->
+            drawRoundedTopLeftSlantedDownCorner x y
+        TopRightSlantedDown ->
+            drawRoundedTopRightSlantedDownCorner x y
 
 drawRoundedTopLeftCorner x y =
     let
@@ -510,8 +596,34 @@ drawRoundedTopLeftCorner x y =
         endX = measureX x + textWidth / 2  --circular arc 
         endY = measureY y + textHeight / 2 + textWidth / 2 --then the rest is line
     in
-    [drawArc startX startY endX endY
+    [drawArc startX startY endX endY arcRadius
     ,drawLine endX endY endX (measureY y +  textHeight) (Color.rgb 0 0 0)
+    ]
+
+drawRoundedTopRightSlantedDownCorner x y =
+    let
+        startX = measureX x
+        startY = measureY y + textHeight / 2
+        lstartX = measureX x + textWidth
+        lstartY = measureY y + textHeight
+        lendX = measureX x + textWidth * 3 /4
+        lendY = measureY y + textHeight * 3 /4 
+    in
+    [drawArc lendX lendY startX startY (arcRadius * 2)
+    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ]
+
+drawRoundedTopLeftSlantedDownCorner x y =
+    let
+        startX = measureX x + textWidth
+        startY = measureY y + textHeight / 2
+        lstartX = measureX x
+        lstartY = measureY y + textHeight
+        lendX = measureX x + textWidth * 1 /4
+        lendY = measureY y + textHeight * 3 /4 
+    in
+    [drawArc startX startY lendX lendY (arcRadius * 2)
+    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
     ]
 
 drawRoundedBottomLeftCorner x y =
@@ -521,7 +633,7 @@ drawRoundedBottomLeftCorner x y =
         endX = measureX x + textWidth
         endY = measureY y + textHeight / 2
     in
-    [drawArc startX startY endX endY
+    [drawArc startX startY endX endY arcRadius
     ,drawLine startX startY startX (measureY y) (Color.rgb 0 0 0)
     ]
 
@@ -532,7 +644,7 @@ drawRoundedTopRightCorner x y =
         endX = measureX x
         endY = measureY y + textHeight / 2
     in
-    [drawArc startX startY endX endY
+    [drawArc startX startY endX endY arcRadius 
     ,drawLine startX startY startX (measureY y + textHeight) (Color.rgb 0 0 0)
     ]
 
@@ -543,7 +655,7 @@ drawRoundedBottomRightCorner x y =
         endX = measureX x + textWidth / 2
         endY = measureY y + textHeight / 2 - textWidth / 2
     in
-    [drawArc startX startY endX endY
+    [drawArc startX startY endX endY arcRadius 
     ,drawLine endX endY endX (measureY y) (Color.rgb 0 0 0)
     ]
 
@@ -788,7 +900,7 @@ drawLine startX startY endX endY color =
 
 drawText: Int -> Int -> Char -> Svg a
 drawText x' y' char =
-    let x'' = measureX x' + textWidth / 2
+    let x'' = measureX x'
         y'' = measureY y' + textHeight / 2
     in
     Svg.text'

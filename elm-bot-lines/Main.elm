@@ -1,5 +1,5 @@
 import Html exposing (text,pre,div)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (class, style)
 import String
 import Grid
 import Html.App as App
@@ -20,8 +20,8 @@ view model =
     let _ = Debug.log "model" model
         _ = Debug.log "get 0 0 " <| Grid.getElement 0 2 model.grid
     in
-    div []
-        [pre []
+    div [style [("display", "flex")]]
+        [pre [style [("font-size", "14px")]]
             [text arg]
         ,Grid.getSvg model.grid
         ]
@@ -94,6 +94,51 @@ arg =
              |                  HAL                  |
              '---------------------------------------'
              
+
+   ____[]
+  | ___ |
+  ||   ||  device
+  ||___||  loads
+  | ooo |------------------------------------------------------------.
+  | ooo |    |                          |                            |
+  | ooo |    |                          |                            |
+  '_____'    |                          |                            |
+             |                          |                            |
+             v                          v                            v
+   .-------------------.  .---------------------------.    .-------------------.
+   | Loadable module C |  |     Loadable module A     |    | Loadable module B |
+   '-------------------'  |---------------------------|    |   (instrumented)  |
+             |            |         .-----.           |    '-------------------'
+             '------------+-------->| A.o |           |              |
+                 calls    |         '-----'           |              |
+                          |    .------------------.   |              |
+                          |   / A.instrumented.o /<---+--------------'
+                          |  '------------------'     |    calls
+                          '---------------------------'   
+
+
+                                        .--> Base::Class::Derived_A
+                                       /
+                                      .----> Base::Class::Derived_B    
+      Something -------.             /         \\
+                        \\           /           '---> Base::Class::Derived::More
+      Something::else    \\         /             \\
+            \\             \\       /               '--> Base::Class::Derived::Deeper
+             \\             \\     /
+              \\             \\   .-----------> Base::Class::Derived_C 
+               \\             \\ /
+                '-------Base::Class
+                       /   \\ \\ \\
+                      '     \\ \\ \\
+                      |      \\ \\ '--- The::Latest
+                     /|       \\ \\      \\
+ With::Some::fantasy' '        \\ \\      '---- The::Latest::Greatest
+                     /|         \\ \\
+         More::Stuff' '          \\ '- I::Am::Running::Out::Of::Ideas
+                     /|           \\
+         More::Stuff' '            \\
+                     /              '--- Last::One
+         More::Stuff'
 
   Safety
     î
