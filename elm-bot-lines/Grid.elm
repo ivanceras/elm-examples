@@ -880,8 +880,6 @@ drawArrowNorthEast x y model =
             ]
             []
 
-drawPath centerX centerY radius degreeAngle =
-    42
 
 drawLine startX startY endX endY color =
     let 
@@ -900,8 +898,8 @@ drawLine startX startY endX endY color =
 
 drawText: Int -> Int -> Char -> Svg a
 drawText x' y' char =
-    let x'' = measureX x'
-        y'' = measureY y' + textHeight / 2
+    let x'' = measureX x' - textWidth / 4
+        y'' = measureY y' + textHeight * 3 / 4
     in
     Svg.text'
         [x <| toString x''

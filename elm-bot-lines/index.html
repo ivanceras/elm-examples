@@ -8338,10 +8338,6 @@ var _user$project$Grid$get = F3(
 		}();
 		return $char;
 	});
-var _user$project$Grid$drawPath = F4(
-	function (centerX, centerY, radius, degreeAngle) {
-		return 42;
-	});
 var _user$project$Grid$arrowMarker = A2(
 	_elm_lang$svg$Svg$marker,
 	_elm_lang$core$Native_List.fromArray(
@@ -9467,8 +9463,8 @@ var _user$project$Grid$drawIntersection = F4(
 var _user$project$Grid$fontSize = 14.0;
 var _user$project$Grid$drawText = F3(
 	function (x$, y$, $char) {
-		var y$$ = _user$project$Grid$measureY(y$) + (_user$project$Grid$textHeight / 2);
-		var x$$ = _user$project$Grid$measureX(x$);
+		var y$$ = _user$project$Grid$measureY(y$) + ((_user$project$Grid$textHeight * 3) / 4);
+		var x$$ = _user$project$Grid$measureX(x$) - (_user$project$Grid$textWidth / 4);
 		return A2(
 			_elm_lang$svg$Svg$text$,
 			_elm_lang$core$Native_List.fromArray(
