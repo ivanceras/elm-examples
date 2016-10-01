@@ -8406,15 +8406,6 @@ var _user$project$Grid$leftOf = F3(
 var _user$project$Grid$isAlphaNumeric = function ($char) {
 	return _elm_lang$core$Char$isDigit($char) || (_elm_lang$core$Char$isUpper($char) || _elm_lang$core$Char$isLower($char));
 };
-var _user$project$Grid$verticalCurve = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('$'),
-		_elm_lang$core$Native_Utils.chr('S')
-	]);
-var _user$project$Grid$horizontalCurve = _elm_lang$core$Native_List.fromArray(
-	[
-		_elm_lang$core$Native_Utils.chr('~')
-	]);
 var _user$project$Grid$closeCurve = _elm_lang$core$Native_List.fromArray(
 	[
 		_elm_lang$core$Native_Utils.chr(')')
@@ -9204,7 +9195,91 @@ var _user$project$Grid$drawLowHorizontalLine = F3(
 			startY,
 			endX,
 			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 20, 20));
+			A3(_elm_lang$core$Color$rgb, 200, 200, 20));
+	});
+var _user$project$Grid$drawLowHorizontalExtendLeft = F3(
+	function (x, y, model) {
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var endY = startY;
+		var endX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var startX = _user$project$Grid$measureX(x) - _user$project$Grid$textWidth;
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+	});
+var _user$project$Grid$drawLowHorizontalExtendVerticalLeft = F3(
+	function (x, y, model) {
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var endY = startY;
+		var endX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var startX = _user$project$Grid$measureX(x) - (_user$project$Grid$textWidth / 2);
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+	});
+var _user$project$Grid$drawLowHorizontalExtendVerticalBottomLeft = F3(
+	function (x, y, model) {
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var endY = startY;
+		var endX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var startX = _user$project$Grid$measureX(x) - (_user$project$Grid$textWidth / 2);
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+	});
+var _user$project$Grid$drawLowHorizontalExtendVerticalBottomRight = F3(
+	function (x, y, model) {
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var endY = startY;
+		var endX = (_user$project$Grid$measureX(x) + _user$project$Grid$textWidth) + (_user$project$Grid$textWidth / 2);
+		var startX = _user$project$Grid$measureX(x);
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+	});
+var _user$project$Grid$drawLowHorizontalExtendRight = F3(
+	function (x, y, model) {
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var endY = startY;
+		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth * 2);
+		var startX = _user$project$Grid$measureX(x);
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+	});
+var _user$project$Grid$drawLowHorizontalExtendVerticalRight = F3(
+	function (x, y, model) {
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var endY = startY;
+		var endX = (_user$project$Grid$measureX(x) + _user$project$Grid$textWidth) + (_user$project$Grid$textWidth / 2);
+		var startX = _user$project$Grid$measureX(x);
+		return A5(
+			_user$project$Grid$drawLine,
+			startX,
+			startY,
+			endX,
+			endY,
+			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
 	});
 var _user$project$Grid$drawVerticalLine = F3(
 	function (x, y, model) {
@@ -9419,6 +9494,46 @@ var _user$project$Grid$drawRoundBottomLeftSlantedTopRightCorner = F2(
 				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
 			]);
 	});
+var _user$project$Grid$drawRoundBottomLeftSlantedTopRightLowHorizontal = F2(
+	function (x, y) {
+		var lendY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var lstartY = _user$project$Grid$measureY(y);
+		var lstartX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, _user$project$Grid$arcRadius * 2),
+				A5(
+				_user$project$Grid$drawLine,
+				lstartX,
+				lstartY,
+				lendX,
+				lendY,
+				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+			]);
+	});
+var _user$project$Grid$drawRoundBottomRightSlantedTopLeftLowHorizontal = F2(
+	function (x, y) {
+		var lendY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var lstartY = _user$project$Grid$measureY(y);
+		var lstartX = _user$project$Grid$measureX(x);
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, _user$project$Grid$arcRadius * 2),
+				A5(
+				_user$project$Grid$drawLine,
+				lstartX,
+				lstartY,
+				lendX,
+				lendY,
+				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+			]);
+	});
 var _user$project$Grid$drawRoundSlantedRightJunctionRight = F2(
 	function (x, y) {
 		var lendY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
@@ -9438,7 +9553,73 @@ var _user$project$Grid$drawRoundSlantedRightJunctionRight = F2(
 				lstartY,
 				lendX,
 				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A3(_elm_lang$core$Color$rgb, 100, 100, 0))
+			]);
+	});
+var _user$project$Grid$drawRoundSlantedRightJunctionLeft = F2(
+	function (x, y) {
+		var lendY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var lendX = _user$project$Grid$measureX(x);
+		var lstartY = _user$project$Grid$measureY(y);
+		var lstartX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var endY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 1) / 4);
+		var endX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 3) / 4);
+		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var startX = _user$project$Grid$measureX(x);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(_user$project$Grid$drawArc, startX, startY, endX, endY, _user$project$Grid$arcRadius * 2),
+				A5(
+				_user$project$Grid$drawLine,
+				lstartX,
+				lstartY,
+				lendX,
+				lendY,
+				A3(_elm_lang$core$Color$rgb, 100, 100, 0))
+			]);
+	});
+var _user$project$Grid$drawRoundSlantedLeftJunctionLeft = F2(
+	function (x, y) {
+		var lendY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var lendX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var lstartY = _user$project$Grid$measureY(y);
+		var lstartX = _user$project$Grid$measureX(x);
+		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var endX = _user$project$Grid$measureX(x);
+		var startY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 3) / 4);
+		var startX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 3) / 4);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(_user$project$Grid$drawArc, startX, startY, endX, endY, _user$project$Grid$arcRadius * 2),
+				A5(
+				_user$project$Grid$drawLine,
+				lstartX,
+				lstartY,
+				lendX,
+				lendY,
+				A3(_elm_lang$core$Color$rgb, 100, 100, 0))
+			]);
+	});
+var _user$project$Grid$drawRoundSlantedLeftJunctionRight = F2(
+	function (x, y) {
+		var lendY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var lendX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var lstartY = _user$project$Grid$measureY(y);
+		var lstartX = _user$project$Grid$measureX(x);
+		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var endX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var startY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 1) / 4);
+		var startX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 1) / 4);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(_user$project$Grid$drawArc, startX, startY, endX, endY, _user$project$Grid$arcRadius * 2),
+				A5(
+				_user$project$Grid$drawLine,
+				lstartX,
+				lstartY,
+				lendX,
+				lendY,
+				A3(_elm_lang$core$Color$rgb, 100, 100, 0))
 			]);
 	});
 var _user$project$Grid$drawRoundBottomRightSlantedTopRightCorner = F2(
@@ -9481,6 +9662,37 @@ var _user$project$Grid$drawRoundBottomRightSlantedTopLeftCorner = F2(
 				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
 			]);
 	});
+var _user$project$Grid$drawRoundBottomRightSlantedBottomLeft = F2(
+	function (x, y) {
+		var l2endY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 3) / 4);
+		var l2endX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 1) / 4);
+		var l2startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l2startX = _user$project$Grid$measureX(x);
+		var lendY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 1) / 4);
+		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var lstartY = _user$project$Grid$measureY(y);
+		var lstartX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var startX = _user$project$Grid$measureX(x);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(_user$project$Grid$drawArc, l2endX, l2endY, lendX, lendY, _user$project$Grid$arcRadius * 4),
+				A5(
+				_user$project$Grid$drawLine,
+				lstartX,
+				lstartY,
+				lendX,
+				lendY,
+				A3(_elm_lang$core$Color$rgb, 0, 0, 0)),
+				A5(
+				_user$project$Grid$drawLine,
+				l2startX,
+				l2startY,
+				l2endX,
+				l2endY,
+				A3(_elm_lang$core$Color$rgb, 200, 0, 200))
+			]);
+	});
 var _user$project$Grid$drawRoundVerticalJunctionSlantedBottomLeft = F2(
 	function (x, y) {
 		var lendY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
@@ -9500,6 +9712,34 @@ var _user$project$Grid$drawRoundVerticalJunctionSlantedBottomLeft = F2(
 				endX,
 				endY,
 				A3(_elm_lang$core$Color$rgb, 0, 0, 0)),
+				A5(
+				_user$project$Grid$drawLine,
+				lstartX,
+				lstartY,
+				lendX,
+				lendY,
+				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+			]);
+	});
+var _user$project$Grid$drawRoundVerticalJunctionSlantedBottomRight = F2(
+	function (x, y) {
+		var lendY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var lstartY = _user$project$Grid$measureY(y);
+		var lstartX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(
+				_user$project$Grid$drawLine,
+				startX,
+				startY,
+				endX,
+				endY,
+				A3(_elm_lang$core$Color$rgb, 0, 0, 200)),
 				A5(
 				_user$project$Grid$drawLine,
 				lstartX,
@@ -9621,6 +9861,12 @@ var _user$project$Grid$drawRoundCorner = F4(
 				return A2(_user$project$Grid$drawRoundTopRightSlantedBottomLeft, x, y);
 			case 'SlantedRightJunctionRight':
 				return A2(_user$project$Grid$drawRoundSlantedRightJunctionRight, x, y);
+			case 'SlantedLeftJunctionLeft':
+				return A2(_user$project$Grid$drawRoundSlantedLeftJunctionLeft, x, y);
+			case 'SlantedRightJunctionLeft':
+				return A2(_user$project$Grid$drawRoundSlantedRightJunctionLeft, x, y);
+			case 'SlantedLeftJunctionRight':
+				return A2(_user$project$Grid$drawRoundSlantedLeftJunctionRight, x, y);
 			case 'BottomLeftLowHorizontal':
 				return A2(_user$project$Grid$drawRoundBottomLeftLowHorizontalCorner, x, y);
 			case 'BottomRightLowHorizontal':
@@ -9629,12 +9875,20 @@ var _user$project$Grid$drawRoundCorner = F4(
 				return A2(_user$project$Grid$drawRoundBottomLeftSlantedTopLeftCorner, x, y);
 			case 'BottomLeftSlantedTopRight':
 				return A2(_user$project$Grid$drawRoundBottomLeftSlantedTopRightCorner, x, y);
+			case 'BottomLeftSlantedTopRightLowHorizontal':
+				return A2(_user$project$Grid$drawRoundBottomLeftSlantedTopRightLowHorizontal, x, y);
 			case 'BottomRightSlantedTopRight':
 				return A2(_user$project$Grid$drawRoundBottomRightSlantedTopRightCorner, x, y);
+			case 'BottomRightSlantedTopLeftLowHorizontal':
+				return A2(_user$project$Grid$drawRoundBottomRightSlantedTopLeftLowHorizontal, x, y);
 			case 'BottomRightSlantedTopLeft':
 				return A2(_user$project$Grid$drawRoundBottomRightSlantedTopLeftCorner, x, y);
+			case 'BottomRightSlantedBottomLeft':
+				return A2(_user$project$Grid$drawRoundBottomRightSlantedBottomLeft, x, y);
 			case 'VerticalJunctionSlantedBottomLeft':
 				return A2(_user$project$Grid$drawRoundVerticalJunctionSlantedBottomLeft, x, y);
+			case 'VerticalJunctionSlantedBottomRight':
+				return A2(_user$project$Grid$drawRoundVerticalJunctionSlantedBottomRight, x, y);
 			case 'TopLeftSlantedTopRight':
 				return A2(_user$project$Grid$drawRoundTopLeftSlantedTopRightCorner, x, y);
 			case 'TopLeftBigCurve':
@@ -9762,14 +10016,21 @@ var _user$project$Grid$BottomLeftBigCurve = {ctor: 'BottomLeftBigCurve'};
 var _user$project$Grid$TopRightBigCurve = {ctor: 'TopRightBigCurve'};
 var _user$project$Grid$TopLeftBigCurve = {ctor: 'TopLeftBigCurve'};
 var _user$project$Grid$TopLeftSlantedTopRight = {ctor: 'TopLeftSlantedTopRight'};
+var _user$project$Grid$VerticalJunctionSlantedBottomRight = {ctor: 'VerticalJunctionSlantedBottomRight'};
 var _user$project$Grid$VerticalJunctionSlantedBottomLeft = {ctor: 'VerticalJunctionSlantedBottomLeft'};
+var _user$project$Grid$SlantedLeftJunctionRight = {ctor: 'SlantedLeftJunctionRight'};
+var _user$project$Grid$SlantedRightJunctionLeft = {ctor: 'SlantedRightJunctionLeft'};
+var _user$project$Grid$SlantedLeftJunctionLeft = {ctor: 'SlantedLeftJunctionLeft'};
 var _user$project$Grid$SlantedRightJunctionRight = {ctor: 'SlantedRightJunctionRight'};
 var _user$project$Grid$TopRightSlantedBottomLeft = {ctor: 'TopRightSlantedBottomLeft'};
 var _user$project$Grid$TopRightSlantedBottomRight = {ctor: 'TopRightSlantedBottomRight'};
 var _user$project$Grid$TopLeftSlantedBottomRight = {ctor: 'TopLeftSlantedBottomRight'};
 var _user$project$Grid$TopLeftSlantedBottomLeft = {ctor: 'TopLeftSlantedBottomLeft'};
+var _user$project$Grid$BottomRightSlantedBottomLeft = {ctor: 'BottomRightSlantedBottomLeft'};
 var _user$project$Grid$BottomRightSlantedTopLeft = {ctor: 'BottomRightSlantedTopLeft'};
+var _user$project$Grid$BottomRightSlantedTopLeftLowHorizontal = {ctor: 'BottomRightSlantedTopLeftLowHorizontal'};
 var _user$project$Grid$BottomRightSlantedTopRight = {ctor: 'BottomRightSlantedTopRight'};
+var _user$project$Grid$BottomLeftSlantedTopRightLowHorizontal = {ctor: 'BottomLeftSlantedTopRightLowHorizontal'};
 var _user$project$Grid$BottomLeftSlantedTopRight = {ctor: 'BottomLeftSlantedTopRight'};
 var _user$project$Grid$BottomLeftSlantedTopLeft = {ctor: 'BottomLeftSlantedTopLeft'};
 var _user$project$Grid$BottomRightLowHorizontal = {ctor: 'BottomRightLowHorizontal'};
@@ -9799,6 +10060,12 @@ var _user$project$Grid$RoundCorner = function (a) {
 	return {ctor: 'RoundCorner', _0: a};
 };
 var _user$project$Grid$Vertical = {ctor: 'Vertical'};
+var _user$project$Grid$LowHorizontalExtendVerticalBottomRight = {ctor: 'LowHorizontalExtendVerticalBottomRight'};
+var _user$project$Grid$LowHorizontalExtendVerticalBottomLeft = {ctor: 'LowHorizontalExtendVerticalBottomLeft'};
+var _user$project$Grid$LowHorizontalExtendVerticalRight = {ctor: 'LowHorizontalExtendVerticalRight'};
+var _user$project$Grid$LowHorizontalExtendRight = {ctor: 'LowHorizontalExtendRight'};
+var _user$project$Grid$LowHorizontalExtendVerticalLeft = {ctor: 'LowHorizontalExtendVerticalLeft'};
+var _user$project$Grid$LowHorizontalExtendLeft = {ctor: 'LowHorizontalExtendLeft'};
 var _user$project$Grid$LowHorizontal = {ctor: 'LowHorizontal'};
 var _user$project$Grid$Horizontal = {ctor: 'Horizontal'};
 var _user$project$Grid$Intersection = function (a) {
@@ -9841,404 +10108,507 @@ var _user$project$Grid$getElement = F3(
 						_user$project$Grid$isAlphaNumeric)))) {
 					return _elm_lang$core$Maybe$Just(_user$project$Grid$Horizontal);
 				} else {
-					if (_user$project$Grid$isLowHorizontal(_p14) && (_elm_lang$core$Basics$not(
-						A2(
+					if (_user$project$Grid$isLowHorizontal(_p14) && A2(
+						_user$project$Grid$isNeighbor,
+						A3(_user$project$Grid$leftOf, x, y, model),
+						_user$project$Grid$isSlantRight)) {
+						return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalExtendLeft);
+					} else {
+						if (_user$project$Grid$isLowHorizontal(_p14) && A2(
 							_user$project$Grid$isNeighbor,
 							A3(_user$project$Grid$leftOf, x, y, model),
-							_user$project$Grid$isAlphaNumeric)) && _elm_lang$core$Basics$not(
-						A2(
-							_user$project$Grid$isNeighbor,
-							A3(_user$project$Grid$rightOf, x, y, model),
-							_user$project$Grid$isAlphaNumeric)))) {
-						return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontal);
-					} else {
-						if (_user$project$Grid$isIntersection(_p14)) {
-							var isCrossIntersection = A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$topOf, x, y, model),
-								_user$project$Grid$isVertical) && (A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$bottomOf, x, y, model),
-								_user$project$Grid$isVertical) && (A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$leftOf, x, y, model),
-								_user$project$Grid$isHorizontal) && A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$rightOf, x, y, model),
-								_user$project$Grid$isHorizontal)));
-							var isBottomLeftIntersection = A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$topOf, x, y, model),
-								_user$project$Grid$isVertical) && A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$rightOf, x, y, model),
-								_user$project$Grid$isHorizontal);
-							var isBottomRightIntersection = A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$topOf, x, y, model),
-								_user$project$Grid$isVertical) && A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$leftOf, x, y, model),
-								_user$project$Grid$isHorizontal);
-							var isTopRightIntersection = A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$bottomOf, x, y, model),
-								_user$project$Grid$isVertical) && A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$leftOf, x, y, model),
-								_user$project$Grid$isHorizontal);
-							var isTopLeftIntersection = A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$bottomOf, x, y, model),
-								_user$project$Grid$isVertical) && A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$rightOf, x, y, model),
-								_user$project$Grid$isHorizontal);
-							var isHorizontalJunctionBot = A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$leftOf, x, y, model),
-								_user$project$Grid$isHorizontal) && (A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$rightOf, x, y, model),
-								_user$project$Grid$isHorizontal) && A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$bottomOf, x, y, model),
-								_user$project$Grid$isVertical));
-							var isHorizontalJunctionTop = A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$leftOf, x, y, model),
-								_user$project$Grid$isHorizontal) && (A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$rightOf, x, y, model),
-								_user$project$Grid$isHorizontal) && A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$topOf, x, y, model),
-								_user$project$Grid$isVertical));
-							var isVerticalJunctionRight = A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$topOf, x, y, model),
-								_user$project$Grid$isVertical) && (A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$bottomOf, x, y, model),
-								_user$project$Grid$isVertical) && A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$rightOf, x, y, model),
-								_user$project$Grid$isHorizontal));
-							var isVerticalJunctionLeft = A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$topOf, x, y, model),
-								_user$project$Grid$isVertical) && (A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$bottomOf, x, y, model),
-								_user$project$Grid$isVertical) && A2(
-								_user$project$Grid$isNeighbor,
-								A3(_user$project$Grid$leftOf, x, y, model),
-								_user$project$Grid$isHorizontal));
-							return isCrossIntersection ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$Cross)) : (isVerticalJunctionLeft ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$VertJunctionLeft)) : (isVerticalJunctionRight ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$VertJunctionRight)) : (isHorizontalJunctionTop ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$HorJunctionTop)) : (isHorizontalJunctionBot ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$HorJunctionBot)) : (isTopRightIntersection ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$TopRight)) : (isTopLeftIntersection ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$TopLeft)) : (isBottomRightIntersection ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$BottomRight)) : (isBottomLeftIntersection ? _elm_lang$core$Maybe$Just(
-								_user$project$Grid$Intersection(_user$project$Grid$BottomLeft)) : _elm_lang$core$Maybe$Nothing))))))));
+							_user$project$Grid$isVertical)) {
+							return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalExtendVerticalLeft);
 						} else {
-							if (_user$project$Grid$isRoundCorner(_p14)) {
-								return (A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topRightOf, x, y, model),
-									_user$project$Grid$isSlantRight) && (A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomLeftOf, x, y, model),
-									_user$project$Grid$isSlantRight) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal))) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$SlantedRightJunctionRight)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topOf, x, y, model),
-									_user$project$Grid$isVertical) && (A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomOf, x, y, model),
-									_user$project$Grid$isVertical) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomLeftOf, x, y, model),
-									_user$project$Grid$isSlantRight))) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$VerticalJunctionSlantedBottomLeft)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomOf, x, y, model),
-									_user$project$Grid$isVertical) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftCorner)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomOf, x, y, model),
-									_user$project$Grid$isVertical) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopRightCorner)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomOf, x, y, model),
-									_user$project$Grid$isVertical) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topRightOf, x, y, model),
-									_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftSlantedTopRight)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomLeftOf, x, y, model),
-									_user$project$Grid$isOpenCurve)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftBigCurve)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isRoundCorner) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomLeftOf, x, y, model),
-									_user$project$Grid$isOpenCurve)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftBigCurve)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomRightOf, x, y, model),
-									_user$project$Grid$isCloseCurve)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopRightBigCurve)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isRoundCorner) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomRightOf, x, y, model),
-									_user$project$Grid$isCloseCurve)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopRightBigCurve)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topLeftOf, x, y, model),
-									_user$project$Grid$isOpenCurve)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftBigCurve)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topRightOf, x, y, model),
-									_user$project$Grid$isCloseCurve)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightBigCurve)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isRoundCorner) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topLeftOf, x, y, model),
-									_user$project$Grid$isOpenCurve)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftBigCurve)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isRoundCorner) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topRightOf, x, y, model),
-									_user$project$Grid$isCloseCurve)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightBigCurve)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topOf, x, y, model),
-									_user$project$Grid$isVertical) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftCorner)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topOf, x, y, model),
-									_user$project$Grid$isVertical) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isLowHorizontal)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftLowHorizontal)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topOf, x, y, model),
-									_user$project$Grid$isVertical) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isLowHorizontal)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightLowHorizontal)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topLeftOf, x, y, model),
-									_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftSlantedTopLeft)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topRightOf, x, y, model),
-									_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftSlantedTopRight)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topRightOf, x, y, model),
-									_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightSlantedTopRight)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topLeftOf, x, y, model),
-									_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightSlantedTopLeft)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topOf, x, y, model),
-									_user$project$Grid$isVertical) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightCorner)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomOf, x, y, model),
-									_user$project$Grid$isRoundCorner)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftCorner)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomOf, x, y, model),
-									_user$project$Grid$isRoundCorner)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopRightCorner)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topOf, x, y, model),
-									_user$project$Grid$isRoundCorner)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightCorner)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$topOf, x, y, model),
-									_user$project$Grid$isRoundCorner)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftCorner)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomLeftOf, x, y, model),
-									_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftSlantedBottomLeft)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$rightOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomRightOf, x, y, model),
-									_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftSlantedBottomRight)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomRightOf, x, y, model),
-									_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopRightSlantedBottomRight)) : ((A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$leftOf, x, y, model),
-									_user$project$Grid$isHorizontal) && A2(
-									_user$project$Grid$isNeighbor,
-									A3(_user$project$Grid$bottomLeftOf, x, y, model),
-									_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
-									_user$project$Grid$RoundCorner(_user$project$Grid$TopRightSlantedBottomLeft)) : _elm_lang$core$Maybe$Just(
-									_user$project$Grid$Text(_p14))))))))))))))))))))))))))))));
+							if (_user$project$Grid$isLowHorizontal(_p14) && A2(
+								_user$project$Grid$isNeighbor,
+								A3(_user$project$Grid$rightOf, x, y, model),
+								_user$project$Grid$isSlantLeft)) {
+								return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalExtendRight);
 							} else {
-								if (_user$project$Grid$isArrowRight(_p14)) {
-									return _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowEast);
+								if (_user$project$Grid$isLowHorizontal(_p14) && A2(
+									_user$project$Grid$isNeighbor,
+									A3(_user$project$Grid$rightOf, x, y, model),
+									_user$project$Grid$isVertical)) {
+									return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalExtendVerticalRight);
 								} else {
-									if (_user$project$Grid$isArrowDown(_p14)) {
-										return A2(
-											_user$project$Grid$isNeighbor,
-											A3(_user$project$Grid$topOf, x, y, model),
-											_user$project$Grid$isVertical) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouth) : (A2(
-											_user$project$Grid$isNeighbor,
-											A3(_user$project$Grid$topRightOf, x, y, model),
-											_user$project$Grid$isSlantRight) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouthWest) : (A2(
-											_user$project$Grid$isNeighbor,
-											A3(_user$project$Grid$topLeftOf, x, y, model),
-											_user$project$Grid$isSlantLeft) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouthEast) : _elm_lang$core$Maybe$Just(
-											_user$project$Grid$Text(_p14))));
+									if (_user$project$Grid$isLowHorizontal(_p14) && A2(
+										_user$project$Grid$isNeighbor,
+										A3(_user$project$Grid$bottomLeftOf, x, y, model),
+										_user$project$Grid$isVertical)) {
+										return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalExtendVerticalBottomLeft);
 									} else {
-										if (_user$project$Grid$isArrowLeft(_p14)) {
-											return _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowWest);
+										if (_user$project$Grid$isLowHorizontal(_p14) && A2(
+											_user$project$Grid$isNeighbor,
+											A3(_user$project$Grid$bottomRightOf, x, y, model),
+											_user$project$Grid$isVertical)) {
+											return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalExtendVerticalBottomRight);
 										} else {
-											if (_user$project$Grid$isArrowUp(_p14)) {
-												return A2(
+											if (_user$project$Grid$isLowHorizontal(_p14) && (_elm_lang$core$Basics$not(
+												A2(
 													_user$project$Grid$isNeighbor,
-													A3(_user$project$Grid$bottomOf, x, y, model),
-													_user$project$Grid$isVertical) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorth) : (A2(
+													A3(_user$project$Grid$leftOf, x, y, model),
+													_user$project$Grid$isAlphaNumeric)) && _elm_lang$core$Basics$not(
+												A2(
 													_user$project$Grid$isNeighbor,
-													A3(_user$project$Grid$bottomLeftOf, x, y, model),
-													_user$project$Grid$isSlantRight) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorthWest) : (A2(
-													_user$project$Grid$isNeighbor,
-													A3(_user$project$Grid$bottomRightOf, x, y, model),
-													_user$project$Grid$isSlantLeft) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorthEast) : _elm_lang$core$Maybe$Just(
-													_user$project$Grid$Text(_p14))));
+													A3(_user$project$Grid$rightOf, x, y, model),
+													_user$project$Grid$isAlphaNumeric)))) {
+												return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontal);
 											} else {
-												if (_user$project$Grid$isSlantRight(_p14)) {
-													return _elm_lang$core$Maybe$Just(_user$project$Grid$SlantRight);
+												if (_user$project$Grid$isIntersection(_p14)) {
+													var isCrossIntersection = A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$topOf, x, y, model),
+														_user$project$Grid$isVertical) && (A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$bottomOf, x, y, model),
+														_user$project$Grid$isVertical) && (A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$leftOf, x, y, model),
+														_user$project$Grid$isHorizontal) && A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$rightOf, x, y, model),
+														_user$project$Grid$isHorizontal)));
+													var isBottomLeftIntersection = A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$topOf, x, y, model),
+														_user$project$Grid$isVertical) && A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$rightOf, x, y, model),
+														_user$project$Grid$isHorizontal);
+													var isBottomRightIntersection = A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$topOf, x, y, model),
+														_user$project$Grid$isVertical) && A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$leftOf, x, y, model),
+														_user$project$Grid$isHorizontal);
+													var isTopRightIntersection = A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$bottomOf, x, y, model),
+														_user$project$Grid$isVertical) && A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$leftOf, x, y, model),
+														_user$project$Grid$isHorizontal);
+													var isTopLeftIntersection = A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$bottomOf, x, y, model),
+														_user$project$Grid$isVertical) && A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$rightOf, x, y, model),
+														_user$project$Grid$isHorizontal);
+													var isHorizontalJunctionBot = A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$leftOf, x, y, model),
+														_user$project$Grid$isHorizontal) && (A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$rightOf, x, y, model),
+														_user$project$Grid$isHorizontal) && A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$bottomOf, x, y, model),
+														_user$project$Grid$isVertical));
+													var isHorizontalJunctionTop = A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$leftOf, x, y, model),
+														_user$project$Grid$isHorizontal) && (A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$rightOf, x, y, model),
+														_user$project$Grid$isHorizontal) && A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$topOf, x, y, model),
+														_user$project$Grid$isVertical));
+													var isVerticalJunctionRight = A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$topOf, x, y, model),
+														_user$project$Grid$isVertical) && (A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$bottomOf, x, y, model),
+														_user$project$Grid$isVertical) && A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$rightOf, x, y, model),
+														_user$project$Grid$isHorizontal));
+													var isVerticalJunctionLeft = A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$topOf, x, y, model),
+														_user$project$Grid$isVertical) && (A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$bottomOf, x, y, model),
+														_user$project$Grid$isVertical) && A2(
+														_user$project$Grid$isNeighbor,
+														A3(_user$project$Grid$leftOf, x, y, model),
+														_user$project$Grid$isHorizontal));
+													return isCrossIntersection ? _elm_lang$core$Maybe$Just(
+														_user$project$Grid$Intersection(_user$project$Grid$Cross)) : (isVerticalJunctionLeft ? _elm_lang$core$Maybe$Just(
+														_user$project$Grid$Intersection(_user$project$Grid$VertJunctionLeft)) : (isVerticalJunctionRight ? _elm_lang$core$Maybe$Just(
+														_user$project$Grid$Intersection(_user$project$Grid$VertJunctionRight)) : (isHorizontalJunctionTop ? _elm_lang$core$Maybe$Just(
+														_user$project$Grid$Intersection(_user$project$Grid$HorJunctionTop)) : (isHorizontalJunctionBot ? _elm_lang$core$Maybe$Just(
+														_user$project$Grid$Intersection(_user$project$Grid$HorJunctionBot)) : (isTopRightIntersection ? _elm_lang$core$Maybe$Just(
+														_user$project$Grid$Intersection(_user$project$Grid$TopRight)) : (isTopLeftIntersection ? _elm_lang$core$Maybe$Just(
+														_user$project$Grid$Intersection(_user$project$Grid$TopLeft)) : (isBottomRightIntersection ? _elm_lang$core$Maybe$Just(
+														_user$project$Grid$Intersection(_user$project$Grid$BottomRight)) : (isBottomLeftIntersection ? _elm_lang$core$Maybe$Just(
+														_user$project$Grid$Intersection(_user$project$Grid$BottomLeft)) : _elm_lang$core$Maybe$Nothing))))))));
 												} else {
-													if (_user$project$Grid$isSlantLeft(_p14)) {
-														return _elm_lang$core$Maybe$Just(_user$project$Grid$SlantLeft);
-													} else {
-														if (_user$project$Grid$isOpenCurve(_p14) && (A2(
+													if (_user$project$Grid$isRoundCorner(_p14)) {
+														return (A2(
 															_user$project$Grid$isNeighbor,
 															A3(_user$project$Grid$topRightOf, x, y, model),
+															_user$project$Grid$isSlantRight) && (A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomLeftOf, x, y, model),
 															_user$project$Grid$isSlantRight) && A2(
 															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal))) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$SlantedRightJunctionRight)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topLeftOf, x, y, model),
+															_user$project$Grid$isSlantLeft) && (A2(
+															_user$project$Grid$isNeighbor,
 															A3(_user$project$Grid$bottomRightOf, x, y, model),
-															_user$project$Grid$isSlantLeft))) {
-															return _elm_lang$core$Maybe$Just(_user$project$Grid$OpenCurve);
+															_user$project$Grid$isSlantLeft) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal))) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$SlantedLeftJunctionLeft)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topRightOf, x, y, model),
+															_user$project$Grid$isSlantRight) && (A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomLeftOf, x, y, model),
+															_user$project$Grid$isSlantRight) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal))) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$SlantedRightJunctionLeft)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topLeftOf, x, y, model),
+															_user$project$Grid$isSlantLeft) && (A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomRightOf, x, y, model),
+															_user$project$Grid$isSlantLeft) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal))) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$SlantedLeftJunctionRight)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topOf, x, y, model),
+															_user$project$Grid$isVertical) && (A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomLeftOf, x, y, model),
+															_user$project$Grid$isSlantRight))) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$VerticalJunctionSlantedBottomLeft)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topOf, x, y, model),
+															_user$project$Grid$isVertical) && (A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomRightOf, x, y, model),
+															_user$project$Grid$isSlantLeft))) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$VerticalJunctionSlantedBottomRight)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftCorner)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightCorner)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topRightOf, x, y, model),
+															_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftSlantedTopRight)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomLeftOf, x, y, model),
+															_user$project$Grid$isOpenCurve)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftBigCurve)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isRoundCorner) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomLeftOf, x, y, model),
+															_user$project$Grid$isOpenCurve)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftBigCurve)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomRightOf, x, y, model),
+															_user$project$Grid$isCloseCurve)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightBigCurve)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isRoundCorner) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomRightOf, x, y, model),
+															_user$project$Grid$isCloseCurve)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightBigCurve)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topLeftOf, x, y, model),
+															_user$project$Grid$isOpenCurve)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftBigCurve)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topRightOf, x, y, model),
+															_user$project$Grid$isCloseCurve)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightBigCurve)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isRoundCorner) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topLeftOf, x, y, model),
+															_user$project$Grid$isOpenCurve)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftBigCurve)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isRoundCorner) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topRightOf, x, y, model),
+															_user$project$Grid$isCloseCurve)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightBigCurve)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftCorner)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isLowHorizontal)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftLowHorizontal)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isLowHorizontal)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightLowHorizontal)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topLeftOf, x, y, model),
+															_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftSlantedTopLeft)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topRightOf, x, y, model),
+															_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftSlantedTopRight)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topRightOf, x, y, model),
+															_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightSlantedTopRight)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isLowHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topRightOf, x, y, model),
+															_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftSlantedTopRightLowHorizontal)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isLowHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topLeftOf, x, y, model),
+															_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightSlantedTopLeftLowHorizontal)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topLeftOf, x, y, model),
+															_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightSlantedTopLeft)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomLeftOf, x, y, model),
+															_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightSlantedBottomLeft)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightCorner)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomOf, x, y, model),
+															_user$project$Grid$isRoundCorner)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftCorner)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomOf, x, y, model),
+															_user$project$Grid$isRoundCorner)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightCorner)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topOf, x, y, model),
+															_user$project$Grid$isRoundCorner)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomRightCorner)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topOf, x, y, model),
+															_user$project$Grid$isRoundCorner)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftCorner)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomLeftOf, x, y, model),
+															_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftSlantedBottomLeft)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$rightOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomRightOf, x, y, model),
+															_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftSlantedBottomRight)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomRightOf, x, y, model),
+															_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightSlantedBottomRight)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$leftOf, x, y, model),
+															_user$project$Grid$isHorizontal) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomLeftOf, x, y, model),
+															_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightSlantedBottomLeft)) : _elm_lang$core$Maybe$Just(
+															_user$project$Grid$Text(_p14)))))))))))))))))))))))))))))))))))));
+													} else {
+														if (_user$project$Grid$isArrowRight(_p14)) {
+															return _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowEast);
 														} else {
-															if (_user$project$Grid$isOpenCurve(_p14) && (A2(
-																_user$project$Grid$isNeighbor,
-																A3(_user$project$Grid$topRightOf, x, y, model),
-																_user$project$Grid$isRoundCorner) && A2(
-																_user$project$Grid$isNeighbor,
-																A3(_user$project$Grid$bottomRightOf, x, y, model),
-																_user$project$Grid$isRoundCorner))) {
-																return _elm_lang$core$Maybe$Just(_user$project$Grid$BigOpenCurve);
-															} else {
-																if (_user$project$Grid$isCloseCurve(_p14) && (A2(
+															if (_user$project$Grid$isArrowDown(_p14)) {
+																return A2(
+																	_user$project$Grid$isNeighbor,
+																	A3(_user$project$Grid$topOf, x, y, model),
+																	_user$project$Grid$isVertical) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouth) : (A2(
+																	_user$project$Grid$isNeighbor,
+																	A3(_user$project$Grid$topRightOf, x, y, model),
+																	_user$project$Grid$isSlantRight) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouthWest) : (A2(
 																	_user$project$Grid$isNeighbor,
 																	A3(_user$project$Grid$topLeftOf, x, y, model),
-																	_user$project$Grid$isRoundCorner) && A2(
-																	_user$project$Grid$isNeighbor,
-																	A3(_user$project$Grid$bottomLeftOf, x, y, model),
-																	_user$project$Grid$isRoundCorner))) {
-																	return _elm_lang$core$Maybe$Just(_user$project$Grid$BigCloseCurve);
+																	_user$project$Grid$isSlantLeft) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowSouthEast) : _elm_lang$core$Maybe$Just(
+																	_user$project$Grid$Text(_p14))));
+															} else {
+																if (_user$project$Grid$isArrowLeft(_p14)) {
+																	return _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowWest);
 																} else {
-																	if (_user$project$Grid$isCloseCurve(_p14) && (A2(
-																		_user$project$Grid$isNeighbor,
-																		A3(_user$project$Grid$topLeftOf, x, y, model),
-																		_user$project$Grid$isSlantLeft) && A2(
-																		_user$project$Grid$isNeighbor,
-																		A3(_user$project$Grid$bottomLeftOf, x, y, model),
-																		_user$project$Grid$isSlantRight))) {
-																		return _elm_lang$core$Maybe$Just(_user$project$Grid$CloseCurve);
+																	if (_user$project$Grid$isArrowUp(_p14)) {
+																		return A2(
+																			_user$project$Grid$isNeighbor,
+																			A3(_user$project$Grid$bottomOf, x, y, model),
+																			_user$project$Grid$isVertical) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorth) : (A2(
+																			_user$project$Grid$isNeighbor,
+																			A3(_user$project$Grid$bottomLeftOf, x, y, model),
+																			_user$project$Grid$isSlantRight) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorthWest) : (A2(
+																			_user$project$Grid$isNeighbor,
+																			A3(_user$project$Grid$bottomRightOf, x, y, model),
+																			_user$project$Grid$isSlantLeft) ? _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowNorthEast) : _elm_lang$core$Maybe$Just(
+																			_user$project$Grid$Text(_p14))));
 																	} else {
-																		if (!_elm_lang$core$Native_Utils.eq(
-																			_p14,
-																			_elm_lang$core$Native_Utils.chr(' '))) {
-																			return _elm_lang$core$Maybe$Just(
-																				_user$project$Grid$Text(_p14));
+																		if (_user$project$Grid$isSlantRight(_p14)) {
+																			return _elm_lang$core$Maybe$Just(_user$project$Grid$SlantRight);
 																		} else {
-																			return _elm_lang$core$Maybe$Nothing;
+																			if (_user$project$Grid$isSlantLeft(_p14)) {
+																				return _elm_lang$core$Maybe$Just(_user$project$Grid$SlantLeft);
+																			} else {
+																				if (_user$project$Grid$isOpenCurve(_p14) && (A2(
+																					_user$project$Grid$isNeighbor,
+																					A3(_user$project$Grid$topRightOf, x, y, model),
+																					_user$project$Grid$isSlantRight) && A2(
+																					_user$project$Grid$isNeighbor,
+																					A3(_user$project$Grid$bottomRightOf, x, y, model),
+																					_user$project$Grid$isSlantLeft))) {
+																					return _elm_lang$core$Maybe$Just(_user$project$Grid$OpenCurve);
+																				} else {
+																					if (_user$project$Grid$isOpenCurve(_p14) && (A2(
+																						_user$project$Grid$isNeighbor,
+																						A3(_user$project$Grid$topRightOf, x, y, model),
+																						_user$project$Grid$isRoundCorner) && A2(
+																						_user$project$Grid$isNeighbor,
+																						A3(_user$project$Grid$bottomRightOf, x, y, model),
+																						_user$project$Grid$isRoundCorner))) {
+																						return _elm_lang$core$Maybe$Just(_user$project$Grid$BigOpenCurve);
+																					} else {
+																						if (_user$project$Grid$isCloseCurve(_p14) && (A2(
+																							_user$project$Grid$isNeighbor,
+																							A3(_user$project$Grid$topLeftOf, x, y, model),
+																							_user$project$Grid$isRoundCorner) && A2(
+																							_user$project$Grid$isNeighbor,
+																							A3(_user$project$Grid$bottomLeftOf, x, y, model),
+																							_user$project$Grid$isRoundCorner))) {
+																							return _elm_lang$core$Maybe$Just(_user$project$Grid$BigCloseCurve);
+																						} else {
+																							if (_user$project$Grid$isCloseCurve(_p14) && (A2(
+																								_user$project$Grid$isNeighbor,
+																								A3(_user$project$Grid$topLeftOf, x, y, model),
+																								_user$project$Grid$isSlantLeft) && A2(
+																								_user$project$Grid$isNeighbor,
+																								A3(_user$project$Grid$bottomLeftOf, x, y, model),
+																								_user$project$Grid$isSlantRight))) {
+																								return _elm_lang$core$Maybe$Just(_user$project$Grid$CloseCurve);
+																							} else {
+																								if (!_elm_lang$core$Native_Utils.eq(
+																									_p14,
+																									_elm_lang$core$Native_Utils.chr(' '))) {
+																									return _elm_lang$core$Maybe$Just(
+																										_user$project$Grid$Text(_p14));
+																								} else {
+																									return _elm_lang$core$Maybe$Nothing;
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
 																		}
 																	}
 																}
@@ -10275,6 +10645,36 @@ var _user$project$Grid$drawElement = F3(
 					return _elm_lang$core$Native_List.fromArray(
 						[
 							A3(_user$project$Grid$drawLowHorizontalLine, x, y, model)
+						]);
+				case 'LowHorizontalExtendLeft':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawLowHorizontalExtendLeft, x, y, model)
+						]);
+				case 'LowHorizontalExtendVerticalLeft':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawLowHorizontalExtendVerticalLeft, x, y, model)
+						]);
+				case 'LowHorizontalExtendRight':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawLowHorizontalExtendRight, x, y, model)
+						]);
+				case 'LowHorizontalExtendVerticalRight':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawLowHorizontalExtendVerticalRight, x, y, model)
+						]);
+				case 'LowHorizontalExtendVerticalBottomLeft':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawLowHorizontalExtendVerticalBottomLeft, x, y, model)
+						]);
+				case 'LowHorizontalExtendVerticalBottomRight':
+					return _elm_lang$core$Native_List.fromArray(
+						[
+							A3(_user$project$Grid$drawLowHorizontalExtendVerticalBottomRight, x, y, model)
 						]);
 				case 'Vertical':
 					return _elm_lang$core$Native_List.fromArray(
@@ -10393,10 +10793,7 @@ var _user$project$Grid$getSvg = function (model) {
 					[_user$project$Grid$arrowMarker])),
 			_user$project$Grid$drawPaths(model)));
 };
-var _user$project$Main$arg4 = '\n          User code ^            ^ OS code\n                      \\          /\n                       \\        /\n                        \\      /\n           User code <----Mode----->OS code\n                        /      \\\n                       /        \\\n                      /          \\\n          User code  v            v OS code\n          \n        \n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n\n                 \n                 .---------.  .---------.\n                 | State 1 |  | State 2 |\n                 \'---------\'  \'---------\'\n                    ^   \\         ^  \\\n                   /     \\       /    \\\n                  /       \\     /      \\\n                 /         \\   /        \\\n                /           \\ /          \\\n               /             v            v\n            ******        ******        ******\n            * T1 *        * T2 *        * T3 *\n            ******        ******        ******\n               ^             ^             /\n                \\             \\           /\n                 \\             \\         /\n                  \\             \\       / stimuli\n                   \\             \\     /\n                    \\             \\   v\n                     \\         .---------.\n                      \'--------| State 3 |\n                               \'---------\'\n                               \n\n                                        .--Base::Class::Derived_A\n                                       /\n                                      .----Base::Class::Derived_B    \n      Something--------.             /         \\\n                        \\           /           \'---Base::Class::Derived::More\n      Something::else    \\         /             \\\n            \\             \\       /               \'-Base::Class::Derived::Deeper\n             \\             \\     /\n              \\             \\   .-----------Base::Class::Derived_C \n               \\             \\ /\n                \'-------Base::Class\n                       /   \\ \\ \\\n                      \'     \\ \\ \\\n                      |      \\ \\ \'---The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy\' \'        \\ \\      \'----The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff\' \'          \\ \'-I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff\' \'            \\\n                     /              \'---Last::One\n         More::Stuff\'\n\n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |------------------------------------------------------------.\n  | ooo |    |                          |                            |\n  | ooo |    |                          |                            |\n  \'_____\'    |                          |                            |\n             |                          |                            |\n             v                          v                            v\n   .-------------------.  .---------------------------.    .-------------------.\n   | Loadable module C |  |     Loadable module A     |    | Loadable module B |\n   \'-------------------\'  |---------------------------|    |   (instrumented)  |\n             |            |         .-----.           |    \'-------------------\'\n             \'--------------------->| A.o |           |              |\n                 calls    |         \'-----\'           |              |\n                          |    .------------------.   |              |\n                          |    | A.instrumented.o |<-----------------\'\n                          |    \'------------------\'   |    calls\n                          \'---------------------------\'   \n    ';
-var _user$project$Main$arg3 = '\n                        ____________\n   .--------------.     \\\\           \\\n  / a == b         \\     \\           \\   __________\n (    &&            )     ) process   )  \\         \\\n  \\ \'string\' ne \'\' /     /           /    ) process )\n   \'--------------\'     /___________/    /_________/\n    ';
-var _user$project$Main$arg2 = '\n.-------------------------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n    ';
-var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\    __________\n (    &&            )     ) process   )   \\         \\\n  \\ \'string\' ne \'\' /     /           /     ) process )\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^            ^ OS code\n              \\          /\n               \\        /\n                \\      /\n  User code  <--- Mode --~-> OS code\n                /      \\\n               /        \\___\n              /             \\\n             v               v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       $      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |------------------------------------------------------------.\n  | ooo |    |                          |                            |\n  | ooo |    |                          |                            |\n  \'_____\'    |                          |                            |\n             |                          |                            |\n             v                          v                            v\n   .-------------------.  .---------------------------.    .-------------------.\n   | Loadable module C |  |     Loadable module A     |    | Loadable module B |\n   \'-------------------\'  |---------------------------|    |   (instrumented)  |\n             |            |         .-----.           |    \'-------------------\'\n             \'------------+-------->| A.o |           |              |\n                 calls    |         \'-----\'           |              |\n                          |    .------------------.   |              |\n                          |   / A.instrumented.o /<---+--------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived::More\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived::Deeper\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /   \\ \\ \\\n                      \'     \\ \\ \\\n                      |      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    î\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\nJunctions\n\n   \n\n    |    \\ /\n   -+-    *\n    |    / \\\n\n                 |    |  |     |\n         .- -.   .-  -.  ._   _.\n         |   |\n\n    .-   -.  .-.       \n    \'-   -\'  | |  | |  \n                  \'-\'\n\n    |    /  |\n    \'   \'   .\n   /    |    \\ \n\n   \\\n    .\n   /\n   \n   /      \\\n  \'--    --\'\n /          \\\n\n   /   \\\n--\'     \'--\n /       \\\n\n\n   /\n  .\n   \\\n\n\n    \\\n     .\n     |\n\n   -.  -.\n   /     \\\n\n    .-  .-\n   /     \\\n\n  \n   /  /     \\    \\\n  \'-  ._    _.   -\'\n   \n\nShapes\n\ncircle\n   .-.\n  (   )\n   \'-\'\n\n   ..\n  (  )\n   \'\'\n\n   .------.\n  (        )\n   \'------\'\n\n   /\\\n  /  \\\n /    \\\n ------\n\n   /\\\n  /  \\\n /    \\\n\'------\'\n\n    ';
+var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |------------------------------------------------------------.\n  | ooo |    |                          |                            |\n  | ooo |    |                          |                            |\n  \'_____\'    |                          |                            |\n             |                          |                            |\n             v                          v                            v\n   .-------------------.  .---------------------------.    .-------------------.\n   | Loadable module C |  |     Loadable module A     |    | Loadable module B |\n   \'-------------------\'  |---------------------------|    |   (instrumented)  |\n             |            |         .-----.           |    \'-------------------\'\n             \'------------+-------->| A.o |           |              |\n                 calls    |         \'-----\'           |              |\n                          |    .------------------.   |              |\n                          |   / A.instrumented.o /<---+--------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived::More\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived::Deeper\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    î\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\nJunctions\n\n   \n\n    |   \\/   \n   -+-  /\\      \n    |   \n    \n\n                 |    |  |     |\n         .- -.   .-  -.  ._   _.\n         |   |\n\n    .-   -.  .-.       \n    \'-   -\'  | |  | |  \n                  \'-\'\n\n  \\      |    /  |\n   .     \'   \'   .\n   |    /    |    \\ \n\n   \\\n   /\n\n   /\n   \\\n\n\n    \\\n     .\n     |\n   \n   /      \\\n  \'--    --\'\n /          \\\n\n   /   \\\n--\'     \'--\n /       \\\n\n\n\n    |   |\n    .   .\n   /|   |\\ \n\n   -.  -.\n   /     \\\n\n    .-  .-\n   /     \\\n\n  \n   /   /     \\    \\\n  \'-  \'_     _\'   -\'\n   \n\nShapes\n\ncircle\n   .-.\n  (   )\n   \'-\'\n\n   ..\n  (  )\n   \'\'\n\n   .------.\n  (        )\n   \'------\'\n\n    ________  \n   /       /\n  /       /\n /_______/\n\n\n    ________  \n    \\       \\\n     \\       \\\n      \\_______\\\n\n   ________ \n  |________|\n\n\n   ________ \n  |        |\n  |________|\n\n  .-.\n  \'-\'\n\n    ________  \n    \\_______\\\n\n   /\\\n  /  \\\n /____\\\n\n   /\\\n  /  \\\n /    \\\n\'------\'\n\n    ';
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
@@ -10438,14 +10835,30 @@ var _user$project$Main$view = function (model) {
 						_elm_lang$html$Html_Attributes$style(
 						_elm_lang$core$Native_List.fromArray(
 							[
-								{ctor: '_Tuple2', _0: 'font-size', _1: '14px'}
-							]))
+								{ctor: '_Tuple2', _0: 'font-size', _1: '13px'},
+								{ctor: '_Tuple2', _0: 'word-wrap', _1: 'nowrap'},
+								{ctor: '_Tuple2', _0: 'overflow', _1: 'auto'}
+							])),
+						_elm_lang$html$Html_Attributes$contenteditable(true)
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
 						_elm_lang$html$Html$text(_user$project$Main$arg)
 					])),
-				_user$project$Grid$getSvg(model.grid)
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$style(
+						_elm_lang$core$Native_List.fromArray(
+							[
+								{ctor: '_Tuple2', _0: 'padding-left', _1: '10px'}
+							]))
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Grid$getSvg(model.grid)
+					]))
 			]));
 };
 var _user$project$Main$main = {

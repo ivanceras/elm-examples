@@ -32,14 +32,21 @@ type Position
     | BottomRightLowHorizontal
     | BottomLeftSlantedTopLeft
     | BottomLeftSlantedTopRight
+    | BottomLeftSlantedTopRightLowHorizontal
     | BottomRightSlantedTopRight
+    | BottomRightSlantedTopLeftLowHorizontal
     | BottomRightSlantedTopLeft
+    | BottomRightSlantedBottomLeft
     | TopLeftSlantedBottomLeft
     | TopLeftSlantedBottomRight
     | TopRightSlantedBottomRight
     | TopRightSlantedBottomLeft
     | SlantedRightJunctionRight
+    | SlantedLeftJunctionLeft
+    | SlantedRightJunctionLeft
+    | SlantedLeftJunctionRight
     | VerticalJunctionSlantedBottomLeft
+    | VerticalJunctionSlantedBottomRight
     | TopLeftSlantedTopRight
     | TopLeftBigCurve
     | TopRightBigCurve
@@ -50,6 +57,12 @@ type Element
     = Intersection Type -- also corner
     | Horizontal
     | LowHorizontal
+    | LowHorizontalExtendLeft
+    | LowHorizontalExtendVerticalLeft
+    | LowHorizontalExtendRight
+    | LowHorizontalExtendVerticalRight
+    | LowHorizontalExtendVerticalBottomLeft
+    | LowHorizontalExtendVerticalBottomRight
     | Vertical
     | RoundCorner Position
     | ArrowEast
@@ -87,8 +100,6 @@ slantRight = ['/']
 slantLeft = ['\\']
 openCurve = ['(']
 closeCurve = [')']
-horizontalCurve = ['~']--TODO: any horizontal line has this will make the horizontal line curvy
-verticalCurve = ['$','S'] --TODO: any vertical line that has this will make the vertical line curvy
 
 isOpenCurve char = 
     List.member char openCurve
@@ -137,54 +148,6 @@ isSlantLeft char =
     List.member char slantLeft
 
 
---check if top of this character is vertical line
-{--
-isNeighbor (topOf x y model) isVertical =
-    let top = get x (y - 1) model
-    in
-    case top of
-        Just top ->
-            isVertical top
-        Nothing ->
-            False
-
-isNeighbor (topRightOf x y model) isSlantRight =
-    let top = get (x + 1) (y - 1) model
-    in
-    case top of
-        Just top ->
-            isSlantRight top
-        Nothing ->
-            False
-
-isNeighbor (topLeftOf x y model) isSlantLeft =
-    let top = get (x - 1) (y - 1) model
-    in
-    case top of
-        Just top ->
-            isSlantLeft top
-        Nothing ->
-            False
-
-isNeighbor (bottomOf x y model) isVertical =
-    let down = get x (y+1) model
-    in
-        case down of
-            Just down ->
-                isVertical down
-            Nothing ->
-                False
-isNeighbor (leftOf x y model) isHorizontal =
-    let left = get (x-1) y model
-    in
-        case left of
-            Just left ->
-                isHorizontal left
-            Nothing ->
-                False
- 
---}
-
 leftOf x y model = 
     get (x-1) y model
 
@@ -217,52 +180,6 @@ isNeighbor neighbor check =
         Nothing ->
             False
 
-{--
-isNeighborDown x y check model =
-    let down = get x (y+1) model
-    in
-        case down of
-            Just down ->
-                check down
-            Nothing ->
-                False
-
-isNeighborTop x y check model =
-    let top = get x (y-1) model
-    in
-        case top of
-            Just top ->
-                check top
-            Nothing ->
-                False
-
-isNeighbor (rightOf x y model) isHorizontal =
-    let right = get (x+1) y model
-    in
-        case right of
-            Just right ->
-                isHorizontal right
-            Nothing ->
-                False
-
-isNeighbor (bottomLeftOf x y model) isSlantRight =
-    let bottomLeft = get (x-1) (y+1) model
-    in
-        case bottomLeft of
-            Just bottomLeft ->
-                isSlantRight bottomLeft
-            Nothing ->
-                False
-
-isNeighbor (bottomRightOf x y model) isSlantLeft =
-    let bottomRightOf = get (x+1) (y+1) model
-    in
-        case bottomRightOf of
-            Just bottomRightOf ->
-                isSlantLeft bottomRightOf
-            Nothing ->
-                False
---}
 
 getElement: Int -> Int -> Model -> Maybe Element
 getElement x y model =
@@ -279,6 +196,24 @@ getElement x y model =
                     && not (isNeighbor (leftOf x y model) isAlphaNumeric) 
                     && not (isNeighbor (rightOf x y model) isAlphaNumeric) then
                     Just Horizontal
+                else if isLowHorizontal char
+                    && isNeighbor (leftOf x y model) isSlantRight then
+                    Just LowHorizontalExtendLeft
+                else if isLowHorizontal char
+                    && isNeighbor (leftOf x y model) isVertical then
+                    Just LowHorizontalExtendVerticalLeft
+                else if isLowHorizontal char
+                    && isNeighbor (rightOf x y model) isSlantLeft then
+                    Just LowHorizontalExtendRight
+                else if isLowHorizontal char
+                    && isNeighbor (rightOf x y model) isVertical then
+                    Just LowHorizontalExtendVerticalRight
+                else if isLowHorizontal char
+                    && isNeighbor (bottomLeftOf x y model) isVertical then
+                    Just LowHorizontalExtendVerticalBottomLeft
+                else if isLowHorizontal char
+                    && isNeighbor (bottomRightOf x y model) isVertical then
+                    Just LowHorizontalExtendVerticalBottomRight
                 else if isLowHorizontal char
                     && not (isNeighbor (leftOf x y model) isAlphaNumeric) 
                     && not (isNeighbor (rightOf x y model) isAlphaNumeric) then
@@ -322,6 +257,7 @@ getElement x y model =
                             && isNeighbor (bottomOf x y model) isVertical
                             && isNeighbor (leftOf x y model) isHorizontal 
                             && isNeighbor (rightOf x y model) isHorizontal 
+
                     in 
                     if isCrossIntersection then
                         Just (Intersection Cross)
@@ -348,10 +284,26 @@ getElement x y model =
                         && isNeighbor (bottomLeftOf x y model) isSlantRight
                         && isNeighbor (rightOf x y model) isHorizontal then
                         Just (RoundCorner SlantedRightJunctionRight)
+                    else if isNeighbor (topLeftOf x y model) isSlantLeft
+                        && isNeighbor (bottomRightOf x y model) isSlantLeft
+                        && isNeighbor (leftOf x y model) isHorizontal then
+                        Just (RoundCorner SlantedLeftJunctionLeft)
+                    else if isNeighbor (topRightOf x y model) isSlantRight
+                        && isNeighbor (bottomLeftOf x y model) isSlantRight
+                        && isNeighbor (leftOf x y model) isHorizontal then
+                        Just (RoundCorner SlantedRightJunctionLeft)
+                    else if isNeighbor (topLeftOf x y model) isSlantLeft
+                        && isNeighbor (bottomRightOf x y model) isSlantLeft
+                        && isNeighbor (rightOf x y model) isHorizontal then
+                        Just (RoundCorner SlantedLeftJunctionRight)
                     else if isNeighbor (topOf x y model) isVertical
                         && isNeighbor (bottomOf x y model) isVertical
                         && isNeighbor (bottomLeftOf x y model) isSlantRight then
                         Just (RoundCorner VerticalJunctionSlantedBottomLeft)
+                    else if isNeighbor (topOf x y model) isVertical
+                        && isNeighbor (bottomOf x y model) isVertical
+                        && isNeighbor (bottomRightOf x y model) isSlantLeft then
+                        Just (RoundCorner VerticalJunctionSlantedBottomRight)
                     else if isNeighbor (bottomOf x y model) isVertical 
                         && isNeighbor (rightOf x y model) isHorizontal then
                         Just (RoundCorner TopLeftCorner)
@@ -403,9 +355,18 @@ getElement x y model =
                     else if isNeighbor (leftOf x y model) isHorizontal 
                             && isNeighbor (topRightOf x y model) isSlantRight then
                         Just (RoundCorner BottomRightSlantedTopRight)
+                    else if isNeighbor (rightOf x y model) isLowHorizontal 
+                            && isNeighbor (topRightOf x y model) isSlantRight then
+                        Just (RoundCorner BottomLeftSlantedTopRightLowHorizontal)
+                    else if isNeighbor (leftOf x y model) isLowHorizontal 
+                            && isNeighbor (topLeftOf x y model) isSlantLeft then
+                        Just (RoundCorner BottomRightSlantedTopLeftLowHorizontal)
                     else if isNeighbor (leftOf x y model) isHorizontal
                             && isNeighbor (topLeftOf x y model) isSlantLeft then
                         Just (RoundCorner BottomRightSlantedTopLeft)
+                    else if isNeighbor (topOf x y model) isVertical
+                            && isNeighbor (bottomLeftOf x y model) isSlantRight then
+                        Just (RoundCorner BottomRightSlantedBottomLeft)
                     else if isNeighbor (topOf x y model) isVertical
                         && isNeighbor (leftOf x y model) isHorizontal then
                         Just (RoundCorner BottomRightCorner)
@@ -558,6 +519,24 @@ drawElement x y model =
                     LowHorizontal ->
                         [drawLowHorizontalLine x y model]
 
+                    LowHorizontalExtendLeft ->
+                        [drawLowHorizontalExtendLeft x y model]
+
+                    LowHorizontalExtendVerticalLeft ->
+                        [drawLowHorizontalExtendVerticalLeft x y model]
+
+                    LowHorizontalExtendRight ->
+                        [drawLowHorizontalExtendRight x y model]
+
+                    LowHorizontalExtendVerticalRight ->
+                        [drawLowHorizontalExtendVerticalRight x y model]
+
+                    LowHorizontalExtendVerticalBottomLeft ->
+                        [drawLowHorizontalExtendVerticalBottomLeft x y model]
+
+                    LowHorizontalExtendVerticalBottomRight ->
+                        [drawLowHorizontalExtendVerticalBottomRight x y model]
+
                     Vertical ->
                        [drawVerticalLine x y model]
 
@@ -634,8 +613,67 @@ drawLowHorizontalLine x y model =
         startY = measureY y + textHeight
         endY = startY
     in
-    drawLine startX startY endX endY (Color.rgb 200 20 20)
+    drawLine startX startY endX endY (Color.rgb 200 200 20)
 
+drawLowHorizontalExtendLeft: Int -> Int -> Model -> Svg a
+drawLowHorizontalExtendLeft x y model =
+    let
+        startX = measureX x - textWidth
+        endX = measureX x + textWidth
+        startY = measureY y + textHeight
+        endY = startY
+    in
+    drawLine startX startY endX endY (Color.rgb 200 20 200)
+
+drawLowHorizontalExtendVerticalLeft: Int -> Int -> Model -> Svg a
+drawLowHorizontalExtendVerticalLeft x y model =
+    let
+        startX = measureX x - textWidth / 2
+        endX = measureX x + textWidth
+        startY = measureY y + textHeight
+        endY = startY
+    in
+    drawLine startX startY endX endY (Color.rgb 200 20 200)
+
+drawLowHorizontalExtendVerticalBottomLeft: Int -> Int -> Model -> Svg a
+drawLowHorizontalExtendVerticalBottomLeft x y model =
+    let
+        startX = measureX x - textWidth / 2
+        endX = measureX x + textWidth
+        startY = measureY y + textHeight
+        endY = startY
+    in
+    drawLine startX startY endX endY (Color.rgb 200 20 200)
+
+drawLowHorizontalExtendVerticalBottomRight: Int -> Int -> Model -> Svg a
+drawLowHorizontalExtendVerticalBottomRight x y model =
+    let
+        startX = measureX x
+        endX = measureX x + textWidth + textWidth / 2
+        startY = measureY y + textHeight
+        endY = startY
+    in
+    drawLine startX startY endX endY (Color.rgb 200 20 200)
+
+drawLowHorizontalExtendRight: Int -> Int -> Model -> Svg a
+drawLowHorizontalExtendRight x y model =
+    let
+        startX = measureX x
+        endX = measureX x + textWidth * 2
+        startY = measureY y + textHeight
+        endY = startY
+    in
+    drawLine startX startY endX endY (Color.rgb 200 20 200)
+
+drawLowHorizontalExtendVerticalRight: Int -> Int -> Model -> Svg a
+drawLowHorizontalExtendVerticalRight x y model =
+    let
+        startX = measureX x
+        endX = measureX x + textWidth + textWidth / 2
+        startY = measureY y + textHeight
+        endY = startY
+    in
+    drawLine startX startY endX endY (Color.rgb 200 20 200)
 
 drawVerticalLine: Int -> Int -> Model -> Svg a
 drawVerticalLine x y model =
@@ -735,6 +773,12 @@ drawRoundCorner x y pos  model =
             drawRoundTopRightSlantedBottomLeft x y
         SlantedRightJunctionRight ->
             drawRoundSlantedRightJunctionRight x y
+        SlantedLeftJunctionLeft ->
+            drawRoundSlantedLeftJunctionLeft x y
+        SlantedRightJunctionLeft ->
+            drawRoundSlantedRightJunctionLeft x y
+        SlantedLeftJunctionRight ->
+            drawRoundSlantedLeftJunctionRight x y
         BottomLeftLowHorizontal ->
             drawRoundBottomLeftLowHorizontalCorner x y
         BottomRightLowHorizontal ->
@@ -743,12 +787,20 @@ drawRoundCorner x y pos  model =
             drawRoundBottomLeftSlantedTopLeftCorner x y
         BottomLeftSlantedTopRight ->
             drawRoundBottomLeftSlantedTopRightCorner x y
+        BottomLeftSlantedTopRightLowHorizontal ->
+            drawRoundBottomLeftSlantedTopRightLowHorizontal x y
         BottomRightSlantedTopRight ->
             drawRoundBottomRightSlantedTopRightCorner x y
+        BottomRightSlantedTopLeftLowHorizontal ->
+            drawRoundBottomRightSlantedTopLeftLowHorizontal x y
         BottomRightSlantedTopLeft ->
             drawRoundBottomRightSlantedTopLeftCorner x y
+        BottomRightSlantedBottomLeft ->
+            drawRoundBottomRightSlantedBottomLeft x y
         VerticalJunctionSlantedBottomLeft ->
             drawRoundVerticalJunctionSlantedBottomLeft x y
+        VerticalJunctionSlantedBottomRight ->
+            drawRoundVerticalJunctionSlantedBottomRight x y
         TopLeftSlantedTopRight ->
             drawRoundTopLeftSlantedTopRightCorner x y
         TopLeftBigCurve ->
@@ -906,6 +958,32 @@ drawRoundBottomLeftSlantedTopRightCorner x y =
     ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
     ]
 
+drawRoundBottomLeftSlantedTopRightLowHorizontal x y =
+    let
+        startX = measureX x + textWidth
+        startY = measureY y + textHeight
+        lstartX = measureX x + textWidth
+        lstartY = measureY y
+        lendX = measureX x + textWidth / 2
+        lendY = measureY y + textHeight / 2
+    in
+    [drawArc lendX lendY startX startY (arcRadius * 2)
+    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ]
+
+drawRoundBottomRightSlantedTopLeftLowHorizontal x y =
+    let
+        startX = measureX x
+        startY = measureY y + textHeight
+        lstartX = measureX x
+        lstartY = measureY y
+        lendX = measureX x + textWidth / 2
+        lendY = measureY y + textHeight / 2
+    in
+    [drawArc startX startY lendX lendY (arcRadius * 2)
+    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ]
+
 drawRoundSlantedRightJunctionRight x y =
     let
         startX = measureX x + textWidth
@@ -918,7 +996,53 @@ drawRoundSlantedRightJunctionRight x y =
         lendY = measureY y + textHeight
     in
     [drawArc startX startY endX endY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY (Color.rgb 100 100 0)
+    ]
+
+
+drawRoundSlantedRightJunctionLeft x y =
+    let
+        startX = measureX x
+        startY = measureY y + textHeight / 2
+        endX = measureX x + textWidth * 3 / 4
+        endY = measureY y + textHeight * 1 / 4
+        lstartX = measureX x + textWidth
+        lstartY = measureY y
+        lendX = measureX x
+        lendY = measureY y + textHeight
+    in
+    [drawArc startX startY endX endY (arcRadius * 2)
+    ,drawLine lstartX lstartY lendX lendY (Color.rgb 100 100 0)
+    ]
+
+drawRoundSlantedLeftJunctionLeft x y =
+    let
+        startX = measureX x + textWidth * 3 / 4
+        startY = measureY y + textHeight * 3 / 4
+        endX = measureX x
+        endY = measureY y + textHeight / 2
+        lstartX = measureX x
+        lstartY = measureY y
+        lendX = measureX x + textWidth
+        lendY = measureY y + textHeight
+    in
+    [drawArc startX startY endX endY (arcRadius * 2)
+    ,drawLine lstartX lstartY lendX lendY (Color.rgb 100 100 0)
+    ]
+
+drawRoundSlantedLeftJunctionRight x y =
+    let
+        startX = measureX x + textWidth * 1 /4
+        startY = measureY y + textHeight * 1 / 4
+        endX = measureX x + textWidth 
+        endY = measureY y + textHeight / 2
+        lstartX = measureX x
+        lstartY = measureY y
+        lendX = measureX x + textWidth
+        lendY = measureY y + textHeight
+    in
+    [drawArc startX startY endX endY (arcRadius * 2)
+    ,drawLine lstartX lstartY lendX lendY (Color.rgb 100 100 0)
     ]
 
 drawRoundBottomRightSlantedTopRightCorner x y =
@@ -947,6 +1071,24 @@ drawRoundBottomRightSlantedTopLeftCorner x y =
     ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
     ]
 
+drawRoundBottomRightSlantedBottomLeft x y =
+    let
+        startX = measureX x
+        startY = measureY y + textHeight / 2
+        lstartX = measureX x + textWidth / 2
+        lstartY = measureY y
+        lendX = measureX x + textWidth / 2
+        lendY = measureY y + textHeight * 1 / 4
+        l2startX = measureX x
+        l2startY = measureY y + textHeight
+        l2endX = measureX x + textWidth * 1 / 4
+        l2endY = measureY y + textHeight * 3 / 4
+    in
+    [drawArc l2endX l2endY lendX lendY (arcRadius * 4)
+    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine l2startX l2startY l2endX l2endY (Color.rgb 200 0 200)
+    ]
+
 drawRoundVerticalJunctionSlantedBottomLeft x y =
     let
         startX = measureX x
@@ -959,6 +1101,21 @@ drawRoundVerticalJunctionSlantedBottomLeft x y =
         lendY = measureY y + textHeight
     in
     [drawLine startX startY endX endY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ]
+
+drawRoundVerticalJunctionSlantedBottomRight x y =
+    let
+        startX = measureX x + textWidth
+        startY = measureY y + textHeight
+        endX = measureX x + textWidth / 2
+        endY = measureY y + textHeight / 2
+        lstartX = measureX x + textWidth / 2
+        lstartY = measureY y
+        lendX = measureX x + textWidth / 2
+        lendY = measureY y + textHeight
+    in
+    [drawLine startX startY endX endY (Color.rgb 0 0 200)
     ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
     ]
 

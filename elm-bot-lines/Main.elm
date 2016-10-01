@@ -1,5 +1,5 @@
 import Html exposing (text,pre,div)
-import Html.Attributes exposing (class, style)
+import Html.Attributes exposing (class, style,contenteditable)
 import String
 import Grid
 import Html.App as App
@@ -21,9 +21,18 @@ view model =
         _ = Debug.log "get 0 0 " <| Grid.getElement 0 2 model.grid
     in
     div [style [("display", "flex")]]
-        [pre [style [("font-size", "14px")]]
+        [pre 
+            [style 
+                [("font-size", "13px")
+                ,("word-wrap","nowrap")
+                ,("overflow", "auto")
+                ]
+              ,contenteditable True
+             ]
             [text arg]
-        ,Grid.getSvg model.grid
+        ,div [style [("padding-left", "10px")]]
+            [Grid.getSvg model.grid
+            ]
         ]
         
 update msg model =
@@ -60,20 +69,20 @@ arg =
 
                         ____________
    .--------------.     \\           \\
-  / a == b         \\     \\           \\    __________
- (    &&            )     ) process   )   \\         \\
-  \\ 'string' ne '' /     /           /     ) process )
+  / a == b         \\     \\           \\     __________
+ (    &&            )     ) process   )    \\         \\
+  \\ 'string' ne '' /     /           /     / process /
    '--------------'     /___________/     /_________/
 
-  User code  ^            ^ OS code
-              \\          /
-               \\        /
+  User code  ^               ^ OS code
+              \\             /
+               \\        .--'
                 \\      /
-  User code  <--- Mode --~-> OS code
+  User code  <--- Mode ----> OS code
                 /      \\
-               /        \\___
-              /             \\
-             v               v 
+            .--'        \\___
+           /                \\
+          v                  v 
        User code            OS code
 
              .---.  .---. .---.  .---.    .---.  .---.
@@ -84,7 +93,7 @@ arg =
              | Filesystem | | | Scheduler | |  | MMU |
              '------------' | '-----------' |  '-----'
                     |       |      |        |
-                    v       $      |        v
+                    v       |      |        v
                  .----.     |      |    .---------.
                  | IO |<----'      |    | Network |
                  '----'            |    '---------'
@@ -128,9 +137,10 @@ arg =
               \\             \\   .-----------> Base::Class::Derived_C 
                \\             \\ /
                 '------ Base::Class
-                       /   \\ \\ \\
-                      '     \\ \\ \\
-                      |      \\ \\ '--- The::Latest
+                       /  \\ \\ \\
+                      '    \\ \\ \\  
+                      |     \\ \\ \\
+                      .      \\ \\ '--- The::Latest
                      /|       \\ \\      \\
  With::Some::fantasy  '        \\ \\      '---- The::Latest::Greatest
                      /|         \\ \\
@@ -152,9 +162,10 @@ Junctions
 
    
 
-    |    \\ /
-   -+-    *
-    |    / \\
+    |   \\/   
+   -+-  /\\      
+    |   
+    
 
                  |    |  |     |
          .- -.   .-  -.  ._   _.
@@ -164,13 +175,20 @@ Junctions
     '-   -'  | |  | |  
                   '-'
 
-    |    /  |
-    '   '   .
-   /    |    \\ 
+  \\      |    /  |
+   .     '   '   .
+   |    /    |    \\ 
 
    \\
-    .
    /
+
+   /
+   \\
+
+
+    \\
+     .
+     |
    
    /      \\
   '--    --'
@@ -181,14 +199,10 @@ Junctions
  /       \\
 
 
-   /
-  .
-   \\
 
-
-    \\
-     .
-     |
+    |   |
+    .   .
+   /|   |\\ 
 
    -.  -.
    /     \\
@@ -197,8 +211,8 @@ Junctions
    /     \\
 
   
-   /  /     \\    \\
-  '-  ._    _.   -'
+   /   /     \\    \\
+  '-  '_     _'   -'
    
 
 Shapes
@@ -216,10 +230,34 @@ circle
   (        )
    '------'
 
+    ________  
+   /       /
+  /       /
+ /_______/
+
+
+    ________  
+    \\       \\
+     \\       \\
+      \\_______\\
+
+   ________ 
+  |________|
+
+
+   ________ 
+  |        |
+  |________|
+
+  .-.
+  '-'
+
+    ________  
+    \\_______\\
+
    /\\
   /  \\
- /    \\
- ------
+ /____\\
 
    /\\
   /  \\
@@ -227,127 +265,6 @@ circle
 '------'
 
     """
-
-arg2 =
-    """
-.-------------------------------------.
-| Hello here and there and everywhere |
-'-------------------------------------'
-    """
-
-arg3 =
-    """
-                        ____________
-   .--------------.     \\\\           \\
-  / a == b         \\     \\           \\   __________
- (    &&            )     ) process   )  \\         \\
-  \\ 'string' ne '' /     /           /    ) process )
-   '--------------'     /___________/    /_________/
-    """
-
-arg4 = 
-    """
-          User code ^            ^ OS code
-                      \\          /
-                       \\        /
-                        \\      /
-           User code <----Mode----->OS code
-                        /      \\
-                       /        \\
-                      /          \\
-          User code  v            v OS code
-          
-        
-             .---.  .---. .---.  .---.    .---.  .---.
-    OS API   '---'  '---' '---'  '---'    '---'  '---'
-               |      |     |      |        |      |
-               v      v     |      v        |      v
-             .------------. | .-----------. |  .-----.
-             | Filesystem | | | Scheduler | |  | MMU |
-             '------------' | '-----------' |  '-----'
-                    |       |      |        |
-                    v       |      |        v
-                 .----.     |      |    .---------.
-                 | IO |<----'      |    | Network |
-                 '----'            |    '---------'
-                    |              |         |
-                    v              v         v
-             .---------------------------------------.
-             |                  HAL                  |
-             '---------------------------------------'
-             
-
-
-                 
-                 .---------.  .---------.
-                 | State 1 |  | State 2 |
-                 '---------'  '---------'
-                    ^   \\         ^  \\
-                   /     \\       /    \\
-                  /       \\     /      \\
-                 /         \\   /        \\
-                /           \\ /          \\
-               /             v            v
-            ******        ******        ******
-            * T1 *        * T2 *        * T3 *
-            ******        ******        ******
-               ^             ^             /
-                \\             \\           /
-                 \\             \\         /
-                  \\             \\       / stimuli
-                   \\             \\     /
-                    \\             \\   v
-                     \\         .---------.
-                      '--------| State 3 |
-                               '---------'
-                               
-
-                                        .--Base::Class::Derived_A
-                                       /
-                                      .----Base::Class::Derived_B    
-      Something--------.             /         \\
-                        \\           /           '---Base::Class::Derived::More
-      Something::else    \\         /             \\
-            \\             \\       /               '-Base::Class::Derived::Deeper
-             \\             \\     /
-              \\             \\   .-----------Base::Class::Derived_C 
-               \\             \\ /
-                '-------Base::Class
-                       /   \\ \\ \\
-                      '     \\ \\ \\
-                      |      \\ \\ '---The::Latest
-                     /|       \\ \\      \\
- With::Some::fantasy' '        \\ \\      '----The::Latest::Greatest
-                     /|         \\ \\
-         More::Stuff' '          \\ '-I::Am::Running::Out::Of::Ideas
-                     /|           \\
-         More::Stuff' '            \\
-                     /              '---Last::One
-         More::Stuff'
-
-
-   ____[]
-  | ___ |
-  ||   ||  device
-  ||___||  loads
-  | ooo |------------------------------------------------------------.
-  | ooo |    |                          |                            |
-  | ooo |    |                          |                            |
-  '_____'    |                          |                            |
-             |                          |                            |
-             v                          v                            v
-   .-------------------.  .---------------------------.    .-------------------.
-   | Loadable module C |  |     Loadable module A     |    | Loadable module B |
-   '-------------------'  |---------------------------|    |   (instrumented)  |
-             |            |         .-----.           |    '-------------------'
-             '--------------------->| A.o |           |              |
-                 calls    |         '-----'           |              |
-                          |    .------------------.   |              |
-                          |    | A.instrumented.o |<-----------------'
-                          |    '------------------'   |    calls
-                          '---------------------------'   
-    """
-
 
 init: (Model, Cmd Msg)
 init  =
