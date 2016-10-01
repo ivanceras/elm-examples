@@ -32,18 +32,16 @@ view model =
         ,div [style [("display", "flex")]]
             [pre 
                 [style 
-                    [--("font-size", "15.4px")
-                    --,("font-family","monospace")
-                     ("word-wrap","nowrap")
+                    [("font-size", "15.4px")
+                    ,("font-family","monospace")
+                    ,("word-wrap","nowrap")
                     ,("overflow", "auto")
                     ,("border", "1px solid #ddd")
                     ]
                   ,contenteditable True
                   ,id "ascii_text" 
                  ]
-                 --[textarea [id "ascii_text"]
-                    [text arg]
-                 --]
+                 [text arg]
             ,div [style [("padding-left", "10px")]]
                 [Grid.getSvg model.grid
                 ]
@@ -296,6 +294,13 @@ Junctions
 \\        /
  \\______/
     
+
+ vncviewer         .-,(  ),-.    
+   __  _         .-(          )-.           gateway           vncserver 
+  [__]|=|  ---->(    internet    )-------> __________ ------> ____   __ 
+  /::/|_|        '-(          ).-'        [_...__... ]       |    | |==|
+                     '-.( ).-'                               |____| |  |
+                                                             /::::/ |__|
 
     """
 

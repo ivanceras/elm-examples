@@ -86,13 +86,22 @@ type Element
 
 {-- intersection types
 --}
-type Type = Cross | HorJunctionTop | HorJunctionBot | VertJunctionLeft | VertJunctionRight| TopLeft | TopRight | BottomLeft | BottomRight
+type Type 
+    = Cross 
+    | HorJunctionTop
+    | HorJunctionBot
+    | VertJunctionLeft 
+    | VertJunctionRight
+    | TopLeft 
+    | TopRight 
+    | BottomLeft 
+    | BottomRight
 
 vertical = ['|']
 verticalDashed = [':']
 horizontal = ['-']
 horizontalDouble = ['=']
-lowHorizontalLine = ['_']
+lowHorizontal = ['_']
 intersections = ['+']
 roundedCorners = ['.','\'']
 arrowRight = ['>']
@@ -121,7 +130,7 @@ isHorizontal char =
     List.member char horizontal
 
 isLowHorizontal char =
-    List.member char lowHorizontalLine
+    List.member char lowHorizontal
 
 isIntersection char =
     List.member char intersections
@@ -188,78 +197,87 @@ getElement: Int -> Int -> Model -> Maybe Element
 getElement x y model =
     let
         char = get x y model
+        top = topOf x y model
+        bottom = bottomOf x y model
+        left = leftOf x y model
+        right = rightOf x y model
+        topLeft = topLeftOf x y model
+        topRight = topRightOf x y model
+        bottomLeft = bottomLeftOf x y model
+        bottomRight = bottomRightOf x y model
+
     in
         case char of
             Just char ->
-                if isVertical char 
-                    && not (isNeighbor (leftOf x y model) isAlphaNumeric) 
-                    && not (isNeighbor (rightOf x y model) isAlphaNumeric) then
+                if isVertical char then
+                    --&& not (isNeighbor left isAlphaNumeric) 
+                    --&& not (isNeighbor right isAlphaNumeric) then
                     Just Vertical
-                else if isHorizontal char
-                    && not (isNeighbor (leftOf x y model) isAlphaNumeric) 
-                    && not (isNeighbor (rightOf x y model) isAlphaNumeric) then
+                else if isHorizontal char then
+                   -- && not (isNeighbor left isAlphaNumeric) 
+                   -- && not (isNeighbor right isAlphaNumeric) then
                     Just Horizontal
                 else if isLowHorizontal char
-                    && isNeighbor (leftOf x y model) isSlantRight then
+                    && isNeighbor left isSlantRight then
                     Just LowHorizontalExtendLeft
                 else if isLowHorizontal char
-                    && isNeighbor (leftOf x y model) isVertical then
+                    && isNeighbor left isVertical then
                     Just LowHorizontalExtendVerticalLeft
                 else if isLowHorizontal char
-                    && isNeighbor (rightOf x y model) isSlantLeft then
+                    && isNeighbor right isSlantLeft then
                     Just LowHorizontalExtendRight
                 else if isLowHorizontal char
-                    && isNeighbor (rightOf x y model) isVertical then
+                    && isNeighbor right isVertical then
                     Just LowHorizontalExtendVerticalRight
                 else if isLowHorizontal char
-                    && isNeighbor (bottomLeftOf x y model) isVertical then
+                    && isNeighbor bottomLeft isVertical then
                     Just LowHorizontalExtendVerticalBottomLeft
                 else if isLowHorizontal char
-                    && isNeighbor (bottomRightOf x y model) isVertical then
+                    && isNeighbor bottomRight isVertical then
                     Just LowHorizontalExtendVerticalBottomRight
-                else if isLowHorizontal char
-                    && not (isNeighbor (leftOf x y model) isAlphaNumeric) 
-                    && not (isNeighbor (rightOf x y model) isAlphaNumeric) then
+                else if isLowHorizontal char then
+                    --&& not (isNeighbor left isAlphaNumeric) 
+                   -- && not (isNeighbor right isAlphaNumeric) then
                     Just LowHorizontal
                 else if isIntersection char then
                     let
                         isVerticalJunctionLeft = 
-                            isNeighbor (topOf x y model) isVertical
+                            isNeighbor top isVertical
                             && isNeighbor(bottomOf  x y model) isVertical
                             && isNeighbor(leftOf  x y model) isHorizontal 
 
                         isVerticalJunctionRight = 
-                            isNeighbor (topOf x y model) isVertical 
-                            && isNeighbor (bottomOf x y model) isVertical
-                            && isNeighbor (rightOf x y model) isHorizontal 
+                            isNeighbor top isVertical 
+                            && isNeighbor bottom isVertical
+                            && isNeighbor right isHorizontal 
 
                         isHorizontalJunctionTop =
-                            isNeighbor (leftOf x y model) isHorizontal 
-                            && isNeighbor (rightOf x y model) isHorizontal
-                            && isNeighbor (topOf x y model) isVertical 
+                            isNeighbor left isHorizontal 
+                            && isNeighbor right isHorizontal
+                            && isNeighbor top isVertical 
 
                         isHorizontalJunctionBot =
-                            isNeighbor (leftOf x y model) isHorizontal 
-                            && isNeighbor (rightOf x y model) isHorizontal
-                             && isNeighbor (bottomOf x y model) isVertical 
+                            isNeighbor left isHorizontal 
+                            && isNeighbor right isHorizontal
+                             && isNeighbor bottom isVertical 
 
                         isTopLeftIntersection =
-                            isNeighbor (bottomOf x y model) isVertical && isNeighbor (rightOf x y model) isHorizontal
+                            isNeighbor bottom isVertical && isNeighbor right isHorizontal
 
                         isTopRightIntersection =
-                            isNeighbor (bottomOf x y model) isVertical && isNeighbor (leftOf x y model) isHorizontal
+                            isNeighbor bottom isVertical && isNeighbor left isHorizontal
 
                         isBottomRightIntersection =
-                            isNeighbor (topOf x y model) isVertical && isNeighbor (leftOf x y model) isHorizontal
+                            isNeighbor top isVertical && isNeighbor left isHorizontal
 
                         isBottomLeftIntersection =
-                            isNeighbor (topOf x y model) isVertical && isNeighbor (rightOf x y model) isHorizontal
+                            isNeighbor top isVertical && isNeighbor right isHorizontal
                         
                         isCrossIntersection = 
-                            isNeighbor (topOf x y model) isVertical 
-                            && isNeighbor (bottomOf x y model) isVertical
-                            && isNeighbor (leftOf x y model) isHorizontal 
-                            && isNeighbor (rightOf x y model) isHorizontal 
+                            isNeighbor top isVertical 
+                            && isNeighbor bottom isVertical
+                            && isNeighbor left isHorizontal 
+                            && isNeighbor right isHorizontal 
 
                     in 
                     if isCrossIntersection then
@@ -283,137 +301,136 @@ getElement x y model =
                     else
                         Nothing
                 else if isRoundCorner char then
-                    if isNeighbor (topRightOf x y model) isSlantRight
-                        && isNeighbor (bottomLeftOf x y model) isSlantRight
-                        && isNeighbor (rightOf x y model) isHorizontal then
+                    if isNeighbor topRight isSlantRight
+                        && isNeighbor bottomLeft isSlantRight
+                        && isNeighbor right isHorizontal then
                         Just (RoundCorner SlantedRightJunctionRight)
-                    else if isNeighbor (topLeftOf x y model) isSlantLeft
-                        && isNeighbor (bottomRightOf x y model) isSlantLeft
-                        && isNeighbor (leftOf x y model) isHorizontal then
+                    else if isNeighbor topLeft isSlantLeft
+                        && isNeighbor bottomRight isSlantLeft
+                        && isNeighbor left isHorizontal then
                         Just (RoundCorner SlantedLeftJunctionLeft)
-                    else if isNeighbor (topRightOf x y model) isSlantRight
-                        && isNeighbor (bottomLeftOf x y model) isSlantRight
-                        && isNeighbor (leftOf x y model) isHorizontal then
+                    else if isNeighbor topRight isSlantRight
+                        && isNeighbor bottomLeft isSlantRight
+                        && isNeighbor left isHorizontal then
                         Just (RoundCorner SlantedRightJunctionLeft)
-                    else if isNeighbor (topLeftOf x y model) isSlantLeft
-                        && isNeighbor (bottomRightOf x y model) isSlantLeft
-                        && isNeighbor (rightOf x y model) isHorizontal then
+                    else if isNeighbor topLeft isSlantLeft
+                        && isNeighbor bottomRight isSlantLeft
+                        && isNeighbor right isHorizontal then
                         Just (RoundCorner SlantedLeftJunctionRight)
-                    else if isNeighbor (topOf x y model) isVertical
-                        && isNeighbor (bottomOf x y model) isVertical
-                        && isNeighbor (bottomLeftOf x y model) isSlantRight then
+                    else if isNeighbor top isVertical
+                        && isNeighbor bottom isVertical
+                        && isNeighbor bottomLeft isSlantRight then
                         Just (RoundCorner TriJunctionVerticalVerticalBottomLeft)
-                    else if isNeighbor (topOf x y model) isVertical
-                        && isNeighbor (bottomOf x y model) isVertical
-                        && isNeighbor (bottomRightOf x y model) isSlantLeft then
+                    else if isNeighbor top isVertical
+                        && isNeighbor bottom isVertical
+                        && isNeighbor bottomRight isSlantLeft then
                         Just (RoundCorner TriJunctionVerticalVerticalBottomRight)
-                    else if isNeighbor (bottomOf x y model) isVertical 
-                        && isNeighbor (rightOf x y model) isHorizontal then
+                    else if isNeighbor bottom isVertical 
+                        && isNeighbor right isHorizontal then
                         Just (RoundCorner TopLeftCorner)
-                    else if isNeighbor (bottomOf x y model) isVertical
-                        && isNeighbor (leftOf x y model) isHorizontal then
+                    else if isNeighbor bottom isVertical
+                        && isNeighbor left isHorizontal then
                         Just (RoundCorner TopRightCorner)
-                    else if isNeighbor (bottomOf x y model) isVertical
-                        && isNeighbor (topRightOf x y model) isSlantRight then
+                    else if isNeighbor bottom isVertical
+                        && isNeighbor topRight isSlantRight then
                         Just (RoundCorner TopLeftSlantedTopRight)
-                    else if isNeighbor (rightOf x y model) isHorizontal
-                        && isNeighbor (bottomLeftOf x y model) isOpenCurve then
+                    else if isNeighbor right isHorizontal
+                        && isNeighbor bottomLeft isOpenCurve then
                         Just (RoundCorner TopLeftBigCurve)
-                    else if isNeighbor (rightOf x y model) isRoundCorner
-                        && isNeighbor (bottomLeftOf x y model) isOpenCurve then
+                    else if isNeighbor right isRoundCorner
+                        && isNeighbor bottomLeft isOpenCurve then
                         Just (RoundCorner TopLeftBigCurve)
-                    else if isNeighbor (leftOf x y model) isHorizontal
-                        && isNeighbor (bottomRightOf x y model) isCloseCurve then
+                    else if isNeighbor left isHorizontal
+                        && isNeighbor bottomRight isCloseCurve then
                         Just (RoundCorner TopRightBigCurve)
-                    else if isNeighbor (leftOf x y model) isRoundCorner
-                        && isNeighbor (bottomRightOf x y model) isCloseCurve then
+                    else if isNeighbor left isRoundCorner
+                        && isNeighbor bottomRight isCloseCurve then
                         Just (RoundCorner TopRightBigCurve)
-                    else if isNeighbor (rightOf x y model) isHorizontal
-                        && isNeighbor (topLeftOf x y model) isOpenCurve then
+                    else if isNeighbor right isHorizontal
+                        && isNeighbor topLeft isOpenCurve then
                         Just (RoundCorner BottomLeftBigCurve)
-                    else if isNeighbor (leftOf x y model) isHorizontal
-                        && isNeighbor (topRightOf x y model) isCloseCurve then
+                    else if isNeighbor left isHorizontal
+                        && isNeighbor topRight isCloseCurve then
                         Just (RoundCorner BottomRightBigCurve)
-                    else if isNeighbor (rightOf x y model) isRoundCorner
-                        && isNeighbor (topLeftOf x y model) isOpenCurve then
+                    else if isNeighbor right isRoundCorner
+                        && isNeighbor topLeft isOpenCurve then
                         Just (RoundCorner BottomLeftBigCurve)
-                    else if isNeighbor (leftOf x y model) isRoundCorner
-                        && isNeighbor (topRightOf x y model) isCloseCurve then
+                    else if isNeighbor left isRoundCorner
+                        && isNeighbor topRight isCloseCurve then
                         Just (RoundCorner BottomRightBigCurve)
-                    else if isNeighbor (topOf x y model) isVertical
-                        && isNeighbor (rightOf x y model) isHorizontal then
+                    else if isNeighbor top isVertical
+                        && isNeighbor right isHorizontal then
                         Just (RoundCorner BottomLeftCorner)
-                    else if isNeighbor (topOf x y model) isVertical 
-                        && isNeighbor (rightOf x y model) isLowHorizontal then
+                    else if isNeighbor top isVertical 
+                        && isNeighbor right isLowHorizontal then
                         Just (RoundCorner BottomLeftLowHorizontal) 
-                    else if isNeighbor (topOf x y model) isVertical 
-                        && isNeighbor (leftOf x y model) isLowHorizontal then
+                    else if isNeighbor top isVertical 
+                        && isNeighbor left isLowHorizontal then
                         Just (RoundCorner BottomRightLowHorizontal) 
-                    else if isNeighbor (rightOf x y model) isHorizontal 
-                            && isNeighbor (topLeftOf x y model) isSlantLeft then
+                    else if isNeighbor right isHorizontal 
+                            && isNeighbor topLeft isSlantLeft then
                         Just (RoundCorner BottomLeftSlantedTopLeft)
-                    else if isNeighbor (rightOf x y model) isHorizontal 
-                            && isNeighbor (topRightOf x y model) isSlantRight then
+                    else if isNeighbor right isHorizontal 
+                            && isNeighbor topRight isSlantRight then
                         Just (RoundCorner BottomLeftSlantedTopRight)
-                    else if isNeighbor (topOf x y model) isVertical 
-                            && isNeighbor (bottomRightOf x y model) isSlantLeft then
+                    else if isNeighbor top isVertical 
+                            && isNeighbor bottomRight isSlantLeft then
                         Just (RoundCorner BottomLeftSlantedBottomRight)
-                    else if isNeighbor (leftOf x y model) isHorizontal 
-                            && isNeighbor (topRightOf x y model) isSlantRight then
+                    else if isNeighbor left isHorizontal 
+                            && isNeighbor topRight isSlantRight then
                         Just (RoundCorner BottomRightSlantedTopRight)
-                    else if isNeighbor (rightOf x y model) isLowHorizontal 
-                            && isNeighbor (topRightOf x y model) isSlantRight then
+                    else if isNeighbor right isLowHorizontal 
+                            && isNeighbor topRight isSlantRight then
                         Just (RoundCorner BottomLeftSlantedTopRightLowHorizontal)
-                    else if isNeighbor (leftOf x y model) isLowHorizontal 
-                            && isNeighbor (topLeftOf x y model) isSlantLeft then
+                    else if isNeighbor left isLowHorizontal 
+                            && isNeighbor topLeft isSlantLeft then
                         Just (RoundCorner BottomRightSlantedTopLeftLowHorizontal)
-                    else if isNeighbor (leftOf x y model) isHorizontal
-                            && isNeighbor (topLeftOf x y model) isSlantLeft then
+                    else if isNeighbor left isHorizontal
+                            && isNeighbor topLeft isSlantLeft then
                         Just (RoundCorner BottomRightSlantedTopLeft)
-                    else if isNeighbor (topOf x y model) isVertical
-                            && isNeighbor (bottomLeftOf x y model) isSlantRight then
+                    else if isNeighbor top isVertical
+                            && isNeighbor bottomLeft isSlantRight then
                         Just (RoundCorner BottomRightSlantedBottomLeft)
-                    else if isNeighbor (topOf x y model) isVertical
-                        && isNeighbor (leftOf x y model) isHorizontal then
+                    else if isNeighbor top isVertical
+                        && isNeighbor left isHorizontal then
                         Just (RoundCorner BottomRightCorner)
-                        -- no verticals, rounded corner next to it
-                    else if isNeighbor (rightOf x y model) isHorizontal
-                        && isNeighbor (bottomOf x y model) isRoundCorner then
+                    else if isNeighbor right isHorizontal
+                        && isNeighbor bottom isRoundCorner then
                         Just (RoundCorner TopLeftCorner)
-                    else if isNeighbor (leftOf x y model) isHorizontal 
-                        && isNeighbor (bottomOf x y model) isRoundCorner then
+                    else if isNeighbor left isHorizontal 
+                        && isNeighbor bottom isRoundCorner then
                         Just (RoundCorner TopRightCorner)
-                    else if isNeighbor (leftOf x y model) isHorizontal 
-                        && isNeighbor (topOf x y model) isRoundCorner then
+                    else if isNeighbor left isHorizontal 
+                        && isNeighbor top isRoundCorner then
                         Just (RoundCorner BottomRightCorner)
-                    else if isNeighbor (rightOf x y model) isHorizontal
-                        && isNeighbor (topOf x y model) isRoundCorner then
+                    else if isNeighbor right isHorizontal
+                        && isNeighbor top isRoundCorner then
                         Just (RoundCorner BottomLeftCorner)
-                    else if isNeighbor (rightOf x y model) isHorizontal
-                        && isNeighbor (bottomLeftOf x y model) isSlantRight then
+                    else if isNeighbor right isHorizontal
+                        && isNeighbor bottomLeft isSlantRight then
                         Just (RoundCorner TopLeftSlantedBottomLeft)
-                    else if isNeighbor (rightOf x y model) isHorizontal
-                        && isNeighbor (bottomRightOf x y model) isSlantLeft then
+                    else if isNeighbor right isHorizontal
+                        && isNeighbor bottomRight isSlantLeft then
                         Just (RoundCorner TopLeftSlantedBottomRight)
-                    else if isNeighbor (leftOf x y model) isHorizontal
-                        && isNeighbor (bottomRightOf x y model) isSlantLeft then
+                    else if isNeighbor left isHorizontal
+                        && isNeighbor bottomRight isSlantLeft then
                         Just (RoundCorner TopRightSlantedBottomRight)
-                    else if isNeighbor (leftOf x y model) isHorizontal
-                        && isNeighbor (bottomLeftOf x y model) isSlantRight then
+                    else if isNeighbor left isHorizontal
+                        && isNeighbor bottomLeft isSlantRight then
                         Just (RoundCorner TopRightSlantedBottomLeft)
-                    else if isNeighbor (bottomOf x y model) isVertical
-                        && isNeighbor (topLeftOf x y model) isSlantLeft then
+                    else if isNeighbor bottom isVertical
+                        && isNeighbor topLeft isSlantLeft then
                         Just (RoundCorner TopRightSlantedTopLeft)
                     else
                         Just (Text char)
                 else if isArrowRight char then
                     Just ArrowEast
                 else if isArrowDown char then
-                    if isNeighbor (topOf x y model) isVertical then
+                    if isNeighbor top isVertical then
                         Just ArrowSouth
-                    else if isNeighbor (topRightOf x y model) isSlantRight then
+                    else if isNeighbor topRight isSlantRight then
                         Just ArrowSouthWest
-                    else if isNeighbor (topLeftOf x y model) isSlantLeft then
+                    else if isNeighbor topLeft isSlantLeft then
                         Just ArrowSouthEast
                     else
                         Just <| Text char
@@ -421,11 +438,11 @@ getElement x y model =
                 else if isArrowLeft char then
                     Just ArrowWest
                 else if isArrowUp char then
-                    if isNeighbor (bottomOf x y model) isVertical then
+                    if isNeighbor bottom isVertical then
                         Just ArrowNorth
-                    else if isNeighbor (bottomLeftOf x y model) isSlantRight then
+                    else if isNeighbor bottomLeft isSlantRight then
                         Just ArrowNorthWest
-                    else if isNeighbor (bottomRightOf x y model) isSlantLeft then
+                    else if isNeighbor bottomRight isSlantLeft then
                         Just ArrowNorthEast
                     else
                         Just <| Text char
@@ -433,21 +450,22 @@ getElement x y model =
                     Just SlantRight
                 else if isSlantLeft char then
                     Just SlantLeft
-                else if isOpenCurve char 
-                    && isNeighbor (topRightOf x y model) isSlantRight 
-                    && isNeighbor (bottomRightOf x y model) isSlantLeft then
-                    Just OpenCurve
-                else if isOpenCurve char
-                    && isNeighbor (topRightOf x y model) isRoundCorner 
-                    && isNeighbor (bottomRightOf x y model) isRoundCorner then
-                    Just BigOpenCurve
+                else if isOpenCurve char then
+                        if isNeighbor topRight isSlantRight 
+                            && isNeighbor bottomRight isSlantLeft then
+                            Just OpenCurve
+                        else if isNeighbor topRight isRoundCorner 
+                            && isNeighbor bottomRight isRoundCorner then
+                            Just BigOpenCurve
+                        else
+                            Just <| Text char
                 else if isCloseCurve char
-                    && isNeighbor (topLeftOf x y model) isRoundCorner 
-                    && isNeighbor (bottomLeftOf x y model) isRoundCorner then
+                    && isNeighbor topLeft isRoundCorner 
+                    && isNeighbor bottomLeft isRoundCorner then
                     Just BigCloseCurve
                 else if isCloseCurve char
-                    && isNeighbor (topLeftOf x y model) isSlantLeft
-                    && isNeighbor (bottomLeftOf x y model) isSlantRight then
+                    && isNeighbor topLeft isSlantLeft
+                    && isNeighbor bottomLeft isSlantRight then
                     Just CloseCurve
                 else if char /= ' ' then
                     Just <| Text char 
