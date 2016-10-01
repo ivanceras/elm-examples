@@ -22,6 +22,7 @@ lineWidth = 1.0
 textWidth = 8.0
 textHeight = 16.0
 arcRadius = textWidth / 2
+color = Color.rgb 0 0 0
 
 type Position 
     = TopRightCorner 
@@ -32,6 +33,7 @@ type Position
     | BottomRightLowHorizontal
     | BottomLeftSlantedTopLeft
     | BottomLeftSlantedTopRight
+    | BottomLeftSlantedBottomRight
     | BottomLeftSlantedTopRightLowHorizontal
     | BottomRightSlantedTopRight
     | BottomRightSlantedTopLeftLowHorizontal
@@ -41,12 +43,13 @@ type Position
     | TopLeftSlantedBottomRight
     | TopRightSlantedBottomRight
     | TopRightSlantedBottomLeft
+    | TopRightSlantedTopLeft
     | SlantedRightJunctionRight
     | SlantedLeftJunctionLeft
     | SlantedRightJunctionLeft
     | SlantedLeftJunctionRight
-    | VerticalJunctionSlantedBottomLeft
-    | VerticalJunctionSlantedBottomRight
+    | TriJunctionVerticalVerticalBottomLeft
+    | TriJunctionVerticalVerticalBottomRight
     | TopLeftSlantedTopRight
     | TopLeftBigCurve
     | TopRightBigCurve
@@ -299,11 +302,11 @@ getElement x y model =
                     else if isNeighbor (topOf x y model) isVertical
                         && isNeighbor (bottomOf x y model) isVertical
                         && isNeighbor (bottomLeftOf x y model) isSlantRight then
-                        Just (RoundCorner VerticalJunctionSlantedBottomLeft)
+                        Just (RoundCorner TriJunctionVerticalVerticalBottomLeft)
                     else if isNeighbor (topOf x y model) isVertical
                         && isNeighbor (bottomOf x y model) isVertical
                         && isNeighbor (bottomRightOf x y model) isSlantLeft then
-                        Just (RoundCorner VerticalJunctionSlantedBottomRight)
+                        Just (RoundCorner TriJunctionVerticalVerticalBottomRight)
                     else if isNeighbor (bottomOf x y model) isVertical 
                         && isNeighbor (rightOf x y model) isHorizontal then
                         Just (RoundCorner TopLeftCorner)
@@ -352,6 +355,9 @@ getElement x y model =
                     else if isNeighbor (rightOf x y model) isHorizontal 
                             && isNeighbor (topRightOf x y model) isSlantRight then
                         Just (RoundCorner BottomLeftSlantedTopRight)
+                    else if isNeighbor (topOf x y model) isVertical 
+                            && isNeighbor (bottomRightOf x y model) isSlantLeft then
+                        Just (RoundCorner BottomLeftSlantedBottomRight)
                     else if isNeighbor (leftOf x y model) isHorizontal 
                             && isNeighbor (topRightOf x y model) isSlantRight then
                         Just (RoundCorner BottomRightSlantedTopRight)
@@ -395,6 +401,9 @@ getElement x y model =
                     else if isNeighbor (leftOf x y model) isHorizontal
                         && isNeighbor (bottomLeftOf x y model) isSlantRight then
                         Just (RoundCorner TopRightSlantedBottomLeft)
+                    else if isNeighbor (bottomOf x y model) isVertical
+                        && isNeighbor (topLeftOf x y model) isSlantLeft then
+                        Just (RoundCorner TopRightSlantedTopLeft)
                     else
                         Just (Text char)
                 else if isArrowRight char then
@@ -602,7 +611,7 @@ drawHorizontalLine x y model =
         startY = measureY y + textHeight / 2
         endY = startY
     in
-    drawLine startX startY endX endY (Color.rgb 200 20 20)
+    drawLine startX startY endX endY color
 
 
 drawLowHorizontalLine: Int -> Int -> Model -> Svg a
@@ -613,7 +622,7 @@ drawLowHorizontalLine x y model =
         startY = measureY y + textHeight
         endY = startY
     in
-    drawLine startX startY endX endY (Color.rgb 200 200 20)
+    drawLine startX startY endX endY color
 
 drawLowHorizontalExtendLeft: Int -> Int -> Model -> Svg a
 drawLowHorizontalExtendLeft x y model =
@@ -623,7 +632,7 @@ drawLowHorizontalExtendLeft x y model =
         startY = measureY y + textHeight
         endY = startY
     in
-    drawLine startX startY endX endY (Color.rgb 200 20 200)
+    drawLine startX startY endX endY color
 
 drawLowHorizontalExtendVerticalLeft: Int -> Int -> Model -> Svg a
 drawLowHorizontalExtendVerticalLeft x y model =
@@ -633,7 +642,7 @@ drawLowHorizontalExtendVerticalLeft x y model =
         startY = measureY y + textHeight
         endY = startY
     in
-    drawLine startX startY endX endY (Color.rgb 200 20 200)
+    drawLine startX startY endX endY color
 
 drawLowHorizontalExtendVerticalBottomLeft: Int -> Int -> Model -> Svg a
 drawLowHorizontalExtendVerticalBottomLeft x y model =
@@ -643,7 +652,7 @@ drawLowHorizontalExtendVerticalBottomLeft x y model =
         startY = measureY y + textHeight
         endY = startY
     in
-    drawLine startX startY endX endY (Color.rgb 200 20 200)
+    drawLine startX startY endX endY color
 
 drawLowHorizontalExtendVerticalBottomRight: Int -> Int -> Model -> Svg a
 drawLowHorizontalExtendVerticalBottomRight x y model =
@@ -653,7 +662,7 @@ drawLowHorizontalExtendVerticalBottomRight x y model =
         startY = measureY y + textHeight
         endY = startY
     in
-    drawLine startX startY endX endY (Color.rgb 200 20 200)
+    drawLine startX startY endX endY color
 
 drawLowHorizontalExtendRight: Int -> Int -> Model -> Svg a
 drawLowHorizontalExtendRight x y model =
@@ -663,7 +672,7 @@ drawLowHorizontalExtendRight x y model =
         startY = measureY y + textHeight
         endY = startY
     in
-    drawLine startX startY endX endY (Color.rgb 200 20 200)
+    drawLine startX startY endX endY color
 
 drawLowHorizontalExtendVerticalRight: Int -> Int -> Model -> Svg a
 drawLowHorizontalExtendVerticalRight x y model =
@@ -673,7 +682,7 @@ drawLowHorizontalExtendVerticalRight x y model =
         startY = measureY y + textHeight
         endY = startY
     in
-    drawLine startX startY endX endY (Color.rgb 200 20 200)
+    drawLine startX startY endX endY color
 
 drawVerticalLine: Int -> Int -> Model -> Svg a
 drawVerticalLine x y model =
@@ -683,7 +692,7 @@ drawVerticalLine x y model =
         startY = measureY y
         endY = startY + textHeight
     in
-    drawLine startX startY endX endY (Color.rgb 20 200 20)
+    drawLine startX startY endX endY color
 
 
 drawSlantRightLine: Int -> Int -> Model -> Svg a
@@ -694,7 +703,7 @@ drawSlantRightLine x y model =
         startY = measureY y + textHeight
         endY = measureY y
     in
-    drawLine startX startY endX endY (Color.rgb 20 200 20)
+    drawLine startX startY endX endY color
 
 
 drawSlantLeftLine: Int -> Int -> Model -> Svg a
@@ -705,7 +714,7 @@ drawSlantLeftLine x y model =
         startY = measureY y
         endY = measureY y + textHeight
     in
-    drawLine startX startY endX endY (Color.rgb 20 200 20)
+    drawLine startX startY endX endY color
 
 drawOpenCurve: Int -> Int -> Model -> List (Svg a)
 drawOpenCurve x y model =
@@ -771,6 +780,8 @@ drawRoundCorner x y pos  model =
             drawRoundTopRightSlantedBottomRight x y
         TopRightSlantedBottomLeft ->
             drawRoundTopRightSlantedBottomLeft x y
+        TopRightSlantedTopLeft ->
+            drawRoundTopRightSlantedTopLeft x y 
         SlantedRightJunctionRight ->
             drawRoundSlantedRightJunctionRight x y
         SlantedLeftJunctionLeft ->
@@ -787,6 +798,8 @@ drawRoundCorner x y pos  model =
             drawRoundBottomLeftSlantedTopLeftCorner x y
         BottomLeftSlantedTopRight ->
             drawRoundBottomLeftSlantedTopRightCorner x y
+        BottomLeftSlantedBottomRight ->
+            drawRoundBottomLeftSlantedBottomRightCorner x y
         BottomLeftSlantedTopRightLowHorizontal ->
             drawRoundBottomLeftSlantedTopRightLowHorizontal x y
         BottomRightSlantedTopRight ->
@@ -797,10 +810,10 @@ drawRoundCorner x y pos  model =
             drawRoundBottomRightSlantedTopLeftCorner x y
         BottomRightSlantedBottomLeft ->
             drawRoundBottomRightSlantedBottomLeft x y
-        VerticalJunctionSlantedBottomLeft ->
-            drawRoundVerticalJunctionSlantedBottomLeft x y
-        VerticalJunctionSlantedBottomRight ->
-            drawRoundVerticalJunctionSlantedBottomRight x y
+        TriJunctionVerticalVerticalBottomLeft ->
+            drawRoundTriJunctionVerticalVerticalBottomLeft x y
+        TriJunctionVerticalVerticalBottomRight ->
+            drawRoundedTriJunctionVerticalVerticalBottomRight x y
         TopLeftSlantedTopRight ->
             drawRoundTopLeftSlantedTopRightCorner x y
         TopLeftBigCurve ->
@@ -820,7 +833,7 @@ drawRoundTopLeftCorner x y =
         endY = measureY y + textHeight / 2 + textWidth / 2 --then the rest is line
     in
     [drawArc startX startY endX endY arcRadius
-    ,drawLine endX endY endX (measureY y +  textHeight) (Color.rgb 0 0 0)
+    ,drawLine endX endY endX (measureY y +  textHeight) color
     ]
 
 drawTopLeftBigCurve x y =
@@ -862,8 +875,6 @@ drawTopRightBigCurve x y =
 
 drawRoundTopLeftSlantedTopRightCorner x y =
     let
-        startX = measureX x + textWidth
-        startY = measureY y + textHeight / 2
         endX = measureX x + textWidth / 2  --circular arc 
         endY = measureY y + textHeight / 2 + textWidth / 2 --then the rest is line
         lstartX = measureX x + textWidth
@@ -876,8 +887,8 @@ drawRoundTopLeftSlantedTopRightCorner x y =
         l2endY = measureY y + textHeight * 3 / 4
     in
     [drawArc lendX lendY l2endX l2endY (arcRadius * 4)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
-    ,drawLine l2startX l2startY l2endX l2endY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
+    ,drawLine l2startX l2startY l2endX l2endY color
     ]
 
 drawRoundTopRightSlantedBottomRight x y =
@@ -890,7 +901,7 @@ drawRoundTopRightSlantedBottomRight x y =
         lendY = measureY y + textHeight * 3 /4 
     in
     [drawArc lendX lendY startX startY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundTopRightSlantedBottomLeft x y =
@@ -903,7 +914,23 @@ drawRoundTopRightSlantedBottomLeft x y =
         lendY = measureY y + textHeight * 3 / 4
     in
     [drawArc lendX lendY startX startY arcRadius 
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
+    ]
+
+drawRoundTopRightSlantedTopLeft x y =
+    let
+        lstartX = measureX x + textWidth / 2
+        lstartY = measureY y + textHeight
+        lendX = measureX x + textWidth / 2
+        lendY = measureY y + textHeight * 3 / 4
+        l2startX = measureX x
+        l2startY = measureY y
+        l2endX = measureX x + textWidth * 1 /4
+        l2endY = measureY y + textHeight * 1 /4
+    in
+    [drawArc lendX lendY l2endX l2endY (arcRadius * 4)
+    ,drawLine lstartX lstartY lendX lendY color
+    ,drawLine l2startX l2startY l2endX l2endY color
     ]
 
 drawRoundTopLeftSlantedBottomLeftCorner x y =
@@ -916,7 +943,7 @@ drawRoundTopLeftSlantedBottomLeftCorner x y =
         lendY = measureY y + textHeight * 3 /4 
     in
     [drawArc startX startY lendX lendY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundTopLeftSlantedBottomRightCorner x y =
@@ -929,7 +956,7 @@ drawRoundTopLeftSlantedBottomRightCorner x y =
         lendY = measureY y + textHeight * 3 /4 
     in
     [drawArc startX startY lendX lendY arcRadius
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundBottomLeftSlantedTopLeftCorner x y =
@@ -942,7 +969,7 @@ drawRoundBottomLeftSlantedTopLeftCorner x y =
         lendY = measureY y + textHeight * 1 /4 
     in
     [drawArc lendX lendY startX startY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundBottomLeftSlantedTopRightCorner x y =
@@ -955,7 +982,23 @@ drawRoundBottomLeftSlantedTopRightCorner x y =
         lendY = measureY y + textHeight * 1 /4 
     in
     [drawArc lendX lendY startX startY arcRadius
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
+    ]
+
+drawRoundBottomLeftSlantedBottomRightCorner x y =
+    let
+        lstartX = measureX x + textWidth / 2
+        lstartY = measureY y
+        lendX = measureX x + textWidth / 2
+        lendY = measureY y + textHeight * 1 /4 
+        l2startX = measureX x + textWidth
+        l2startY = measureY y + textHeight
+        l2endX = measureX x + textWidth * 3 / 4
+        l2endY = measureY y + textHeight * 3 / 4
+    in
+    [drawArc lendX lendY l2endX l2endY (arcRadius * 4)
+    ,drawLine lstartX lstartY lendX lendY color
+    ,drawLine l2startX l2startY l2endX l2endY color
     ]
 
 drawRoundBottomLeftSlantedTopRightLowHorizontal x y =
@@ -968,7 +1011,7 @@ drawRoundBottomLeftSlantedTopRightLowHorizontal x y =
         lendY = measureY y + textHeight / 2
     in
     [drawArc lendX lendY startX startY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundBottomRightSlantedTopLeftLowHorizontal x y =
@@ -981,7 +1024,7 @@ drawRoundBottomRightSlantedTopLeftLowHorizontal x y =
         lendY = measureY y + textHeight / 2
     in
     [drawArc startX startY lendX lendY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundSlantedRightJunctionRight x y =
@@ -996,7 +1039,7 @@ drawRoundSlantedRightJunctionRight x y =
         lendY = measureY y + textHeight
     in
     [drawArc startX startY endX endY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 100 100 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 
@@ -1012,7 +1055,7 @@ drawRoundSlantedRightJunctionLeft x y =
         lendY = measureY y + textHeight
     in
     [drawArc startX startY endX endY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 100 100 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundSlantedLeftJunctionLeft x y =
@@ -1027,7 +1070,7 @@ drawRoundSlantedLeftJunctionLeft x y =
         lendY = measureY y + textHeight
     in
     [drawArc startX startY endX endY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 100 100 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundSlantedLeftJunctionRight x y =
@@ -1042,7 +1085,7 @@ drawRoundSlantedLeftJunctionRight x y =
         lendY = measureY y + textHeight
     in
     [drawArc startX startY endX endY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 100 100 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundBottomRightSlantedTopRightCorner x y =
@@ -1055,7 +1098,7 @@ drawRoundBottomRightSlantedTopRightCorner x y =
         lendY = measureY y + textHeight * 1 /4 
     in
     [drawArc startX startY lendX lendY (arcRadius * 2)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundBottomRightSlantedTopLeftCorner x y =
@@ -1068,13 +1111,11 @@ drawRoundBottomRightSlantedTopLeftCorner x y =
         lendY = measureY y + textHeight * 1 / 4
     in
     [drawArc startX startY lendX lendY arcRadius
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundBottomRightSlantedBottomLeft x y =
     let
-        startX = measureX x
-        startY = measureY y + textHeight / 2
         lstartX = measureX x + textWidth / 2
         lstartY = measureY y
         lendX = measureX x + textWidth / 2
@@ -1085,11 +1126,11 @@ drawRoundBottomRightSlantedBottomLeft x y =
         l2endY = measureY y + textHeight * 3 / 4
     in
     [drawArc l2endX l2endY lendX lendY (arcRadius * 4)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
-    ,drawLine l2startX l2startY l2endX l2endY (Color.rgb 200 0 200)
+    ,drawLine lstartX lstartY lendX lendY color
+    ,drawLine l2startX l2startY l2endX l2endY color
     ]
 
-drawRoundVerticalJunctionSlantedBottomLeft x y =
+drawRoundTriJunctionVerticalVerticalBottomLeft x y =
     let
         startX = measureX x
         startY = measureY y + textHeight
@@ -1100,11 +1141,11 @@ drawRoundVerticalJunctionSlantedBottomLeft x y =
         lendX = measureX x + textWidth / 2
         lendY = measureY y + textHeight
     in
-    [drawLine startX startY endX endY (Color.rgb 0 0 0)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    [drawLine startX startY endX endY color
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
-drawRoundVerticalJunctionSlantedBottomRight x y =
+drawRoundedTriJunctionVerticalVerticalBottomRight x y =
     let
         startX = measureX x + textWidth
         startY = measureY y + textHeight
@@ -1115,8 +1156,8 @@ drawRoundVerticalJunctionSlantedBottomRight x y =
         lendX = measureX x + textWidth / 2
         lendY = measureY y + textHeight
     in
-    [drawLine startX startY endX endY (Color.rgb 0 0 200)
-    ,drawLine lstartX lstartY lendX lendY (Color.rgb 0 0 0)
+    [drawLine startX startY endX endY color
+    ,drawLine lstartX lstartY lendX lendY color
     ]
 
 drawRoundBottomLeftCorner x y =
@@ -1127,7 +1168,7 @@ drawRoundBottomLeftCorner x y =
         endY = measureY y + textHeight / 2
     in
     [drawArc startX startY endX endY arcRadius
-    ,drawLine startX startY startX (measureY y) (Color.rgb 0 0 0)
+    ,drawLine startX startY startX (measureY y) color
     ]
 
 drawRoundBottomLeftLowHorizontalCorner x y =
@@ -1138,7 +1179,7 @@ drawRoundBottomLeftLowHorizontalCorner x y =
         endY = measureY y + textHeight
     in
     [drawArc startX startY endX endY arcRadius
-    ,drawLine startX startY startX (measureY y) (Color.rgb 0 0 0)
+    ,drawLine startX startY startX (measureY y) color
     ]
 
 
@@ -1150,7 +1191,7 @@ drawRoundBottomRightLowHorizontalCorner x y =
         endY = measureY y + textHeight - textWidth / 2
     in
     [drawArc startX startY endX endY arcRadius
-    ,drawLine endX endY endX (measureY y) (Color.rgb 0 0 0)
+    ,drawLine endX endY endX (measureY y) color
     ]
 
 drawRoundTopRightCorner x y =
@@ -1161,7 +1202,7 @@ drawRoundTopRightCorner x y =
         endY = measureY y + textHeight / 2
     in
     [drawArc startX startY endX endY arcRadius 
-    ,drawLine startX startY startX (measureY y + textHeight) (Color.rgb 0 0 0)
+    ,drawLine startX startY startX (measureY y + textHeight) color
     ]
 
 drawRoundBottomRightCorner x y =
@@ -1172,7 +1213,7 @@ drawRoundBottomRightCorner x y =
         endY = measureY y + textHeight / 2 - textWidth / 2
     in
     [drawArc startX startY endX endY arcRadius 
-    ,drawLine endX endY endX (measureY y) (Color.rgb 0 0 0)
+    ,drawLine endX endY endX (measureY y) color
     ]
 
 
@@ -1204,10 +1245,10 @@ drawIntersection x y itype model =
         h2startY = measureY y + textHeight / 2
         h2endY = h2startY 
 
-        v1Line = drawLine v1startX v1startY v1endX v1endY (Color.rgb 20 20 200)
-        v2Line = drawLine v2startX v2startY v2endX v2endY (Color.rgb 20 200 200)
-        h1Line = drawLine h1startX h1startY h1endX h1endY (Color.rgb 200 200 200)
-        h2Line = drawLine h2startX h2startY h2endX h2endY (Color.rgb 20 200 200)
+        v1Line = drawLine v1startX v1startY v1endX v1endY color
+        v2Line = drawLine v2startX v2startY v2endX v2endY color
+        h1Line = drawLine h1startX h1startY h1endX h1endY color
+        h2Line = drawLine h2startX h2startY h2endX h2endY color
         
     in
     case itype of
@@ -1237,7 +1278,6 @@ drawArrowRight x y model =
         endX = startX + textWidth / 2
         startY = measureY y + textHeight / 2
         endY = startY
-        color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
     in
@@ -1258,7 +1298,6 @@ drawArrowLeft x y model =
         endX = measureX x + textWidth / 2
         startY = measureY y + textHeight / 2
         endY = startY
-        color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
     in
@@ -1280,7 +1319,6 @@ drawArrowDown x y model =
         endX = startX
         startY = measureY y
         endY = startY + textHeight 
-        color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
     in
@@ -1300,7 +1338,6 @@ drawArrowSouthWest x y model =
         startY = measureY y
         endX = startX - textWidth / 2
         endY = startY + textHeight / 2
-        color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
     in
@@ -1320,7 +1357,6 @@ drawArrowSouthEast x y model =
         startY = measureY y
         endX = startX + textWidth / 2
         endY = startY + textHeight  / 2
-        color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
     in
@@ -1340,7 +1376,6 @@ drawArrowUp x y model =
         endX = startX
         startY = measureY y + textHeight
         endY = measureY y 
-        color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
     in
@@ -1360,7 +1395,6 @@ drawArrowNorthWest x y model =
         startY = measureY y + textHeight
         endX = startX + textWidth / 2
         endY = measureY y + textHeight / 2
-        color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
     in
@@ -1380,7 +1414,6 @@ drawArrowNorthEast x y model =
         startY = measureY y + textHeight
         endX = measureX x + textWidth / 2
         endY = measureY y + textHeight / 2
-        color = (Color.rgb 230 40 178)
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
     in

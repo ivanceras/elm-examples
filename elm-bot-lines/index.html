@@ -8511,6 +8511,7 @@ var _user$project$Grid$isVertical = function ($char) {
 var _user$project$Grid$isLine = function ($char) {
 	return _user$project$Grid$isVertical($char) || (_user$project$Grid$isHorizontal($char) || _user$project$Grid$isLowHorizontal($char));
 };
+var _user$project$Grid$color = A3(_elm_lang$core$Color$rgb, 0, 0, 0);
 var _user$project$Grid$textHeight = 16.0;
 var _user$project$Grid$measureY = function (y) {
 	return _elm_lang$core$Basics$toFloat(y) * _user$project$Grid$textHeight;
@@ -8646,8 +8647,7 @@ var _user$project$Grid$drawTopRightBigCurve = F2(
 	});
 var _user$project$Grid$drawArrowRight = F3(
 	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p2 = _elm_lang$core$Color$toRgb(color);
+		var _p2 = _elm_lang$core$Color$toRgb(_user$project$Grid$color);
 		var red = _p2.red;
 		var green = _p2.green;
 		var blue = _p2.blue;
@@ -8705,8 +8705,7 @@ var _user$project$Grid$drawArrowRight = F3(
 	});
 var _user$project$Grid$drawArrowLeft = F3(
 	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p3 = _elm_lang$core$Color$toRgb(color);
+		var _p3 = _elm_lang$core$Color$toRgb(_user$project$Grid$color);
 		var red = _p3.red;
 		var green = _p3.green;
 		var blue = _p3.blue;
@@ -8764,8 +8763,7 @@ var _user$project$Grid$drawArrowLeft = F3(
 	});
 var _user$project$Grid$drawArrowDown = F3(
 	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p4 = _elm_lang$core$Color$toRgb(color);
+		var _p4 = _elm_lang$core$Color$toRgb(_user$project$Grid$color);
 		var red = _p4.red;
 		var green = _p4.green;
 		var blue = _p4.blue;
@@ -8823,8 +8821,7 @@ var _user$project$Grid$drawArrowDown = F3(
 	});
 var _user$project$Grid$drawArrowSouthWest = F3(
 	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p5 = _elm_lang$core$Color$toRgb(color);
+		var _p5 = _elm_lang$core$Color$toRgb(_user$project$Grid$color);
 		var red = _p5.red;
 		var green = _p5.green;
 		var blue = _p5.blue;
@@ -8882,8 +8879,7 @@ var _user$project$Grid$drawArrowSouthWest = F3(
 	});
 var _user$project$Grid$drawArrowSouthEast = F3(
 	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p6 = _elm_lang$core$Color$toRgb(color);
+		var _p6 = _elm_lang$core$Color$toRgb(_user$project$Grid$color);
 		var red = _p6.red;
 		var green = _p6.green;
 		var blue = _p6.blue;
@@ -8941,8 +8937,7 @@ var _user$project$Grid$drawArrowSouthEast = F3(
 	});
 var _user$project$Grid$drawArrowUp = F3(
 	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p7 = _elm_lang$core$Color$toRgb(color);
+		var _p7 = _elm_lang$core$Color$toRgb(_user$project$Grid$color);
 		var red = _p7.red;
 		var green = _p7.green;
 		var blue = _p7.blue;
@@ -9000,8 +8995,7 @@ var _user$project$Grid$drawArrowUp = F3(
 	});
 var _user$project$Grid$drawArrowNorthWest = F3(
 	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p8 = _elm_lang$core$Color$toRgb(color);
+		var _p8 = _elm_lang$core$Color$toRgb(_user$project$Grid$color);
 		var red = _p8.red;
 		var green = _p8.green;
 		var blue = _p8.blue;
@@ -9059,8 +9053,7 @@ var _user$project$Grid$drawArrowNorthWest = F3(
 	});
 var _user$project$Grid$drawArrowNorthEast = F3(
 	function (x, y, model) {
-		var color = A3(_elm_lang$core$Color$rgb, 230, 40, 178);
-		var _p9 = _elm_lang$core$Color$toRgb(color);
+		var _p9 = _elm_lang$core$Color$toRgb(_user$project$Grid$color);
 		var red = _p9.red;
 		var green = _p9.green;
 		var blue = _p9.blue;
@@ -9175,13 +9168,7 @@ var _user$project$Grid$drawHorizontalLine = F3(
 		var endY = startY;
 		var startX = _user$project$Grid$measureX(x);
 		var endX = startX + _user$project$Grid$textWidth;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 20, 20));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawLowHorizontalLine = F3(
 	function (x, y, model) {
@@ -9189,13 +9176,7 @@ var _user$project$Grid$drawLowHorizontalLine = F3(
 		var endY = startY;
 		var startX = _user$project$Grid$measureX(x);
 		var endX = startX + _user$project$Grid$textWidth;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 200, 20));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawLowHorizontalExtendLeft = F3(
 	function (x, y, model) {
@@ -9203,13 +9184,7 @@ var _user$project$Grid$drawLowHorizontalExtendLeft = F3(
 		var endY = startY;
 		var endX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		var startX = _user$project$Grid$measureX(x) - _user$project$Grid$textWidth;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawLowHorizontalExtendVerticalLeft = F3(
 	function (x, y, model) {
@@ -9217,13 +9192,7 @@ var _user$project$Grid$drawLowHorizontalExtendVerticalLeft = F3(
 		var endY = startY;
 		var endX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		var startX = _user$project$Grid$measureX(x) - (_user$project$Grid$textWidth / 2);
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawLowHorizontalExtendVerticalBottomLeft = F3(
 	function (x, y, model) {
@@ -9231,13 +9200,7 @@ var _user$project$Grid$drawLowHorizontalExtendVerticalBottomLeft = F3(
 		var endY = startY;
 		var endX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		var startX = _user$project$Grid$measureX(x) - (_user$project$Grid$textWidth / 2);
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawLowHorizontalExtendVerticalBottomRight = F3(
 	function (x, y, model) {
@@ -9245,13 +9208,7 @@ var _user$project$Grid$drawLowHorizontalExtendVerticalBottomRight = F3(
 		var endY = startY;
 		var endX = (_user$project$Grid$measureX(x) + _user$project$Grid$textWidth) + (_user$project$Grid$textWidth / 2);
 		var startX = _user$project$Grid$measureX(x);
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawLowHorizontalExtendRight = F3(
 	function (x, y, model) {
@@ -9259,13 +9216,7 @@ var _user$project$Grid$drawLowHorizontalExtendRight = F3(
 		var endY = startY;
 		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth * 2);
 		var startX = _user$project$Grid$measureX(x);
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawLowHorizontalExtendVerticalRight = F3(
 	function (x, y, model) {
@@ -9273,13 +9224,7 @@ var _user$project$Grid$drawLowHorizontalExtendVerticalRight = F3(
 		var endY = startY;
 		var endX = (_user$project$Grid$measureX(x) + _user$project$Grid$textWidth) + (_user$project$Grid$textWidth / 2);
 		var startX = _user$project$Grid$measureX(x);
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 200, 20, 200));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawVerticalLine = F3(
 	function (x, y, model) {
@@ -9287,13 +9232,7 @@ var _user$project$Grid$drawVerticalLine = F3(
 		var endY = startY + _user$project$Grid$textHeight;
 		var startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		var endX = startX;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawSlantRightLine = F3(
 	function (x, y, model) {
@@ -9301,13 +9240,7 @@ var _user$project$Grid$drawSlantRightLine = F3(
 		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
 		var startX = _user$project$Grid$measureX(x);
 		var endX = startX + _user$project$Grid$textWidth;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawSlantLeftLine = F3(
 	function (x, y, model) {
@@ -9315,13 +9248,7 @@ var _user$project$Grid$drawSlantLeftLine = F3(
 		var startY = _user$project$Grid$measureY(y);
 		var startX = _user$project$Grid$measureX(x);
 		var endX = startX + _user$project$Grid$textWidth;
-		return A5(
-			_user$project$Grid$drawLine,
-			startX,
-			startY,
-			endX,
-			endY,
-			A3(_elm_lang$core$Color$rgb, 20, 200, 20));
+		return A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color);
 	});
 var _user$project$Grid$drawRoundTopLeftCorner = F2(
 	function (x, y) {
@@ -9338,7 +9265,7 @@ var _user$project$Grid$drawRoundTopLeftCorner = F2(
 				endY,
 				endX,
 				_user$project$Grid$measureY(y) + _user$project$Grid$textHeight,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				_user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundTopLeftSlantedTopRightCorner = F2(
@@ -9353,25 +9280,11 @@ var _user$project$Grid$drawRoundTopLeftSlantedTopRightCorner = F2(
 		var lstartX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		var endY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) + (_user$project$Grid$textWidth / 2);
 		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, lendX, lendY, l2endX, l2endY, _user$project$Grid$arcRadius * 4),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0)),
-				A5(
-				_user$project$Grid$drawLine,
-				l2startX,
-				l2startY,
-				l2endX,
-				l2endY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundTopRightSlantedBottomRight = F2(
@@ -9385,13 +9298,7 @@ var _user$project$Grid$drawRoundTopRightSlantedBottomRight = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, _user$project$Grid$arcRadius * 2),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundTopRightSlantedBottomLeft = F2(
@@ -9405,13 +9312,24 @@ var _user$project$Grid$drawRoundTopRightSlantedBottomLeft = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, _user$project$Grid$arcRadius),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
+			]);
+	});
+var _user$project$Grid$drawRoundTopRightSlantedTopLeft = F2(
+	function (x, y) {
+		var l2endY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 1) / 4);
+		var l2endX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 1) / 4);
+		var l2startY = _user$project$Grid$measureY(y);
+		var l2startX = _user$project$Grid$measureX(x);
+		var lendY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 3) / 4);
+		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var lstartY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var lstartX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(_user$project$Grid$drawArc, lendX, lendY, l2endX, l2endY, _user$project$Grid$arcRadius * 4),
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundTopLeftSlantedBottomLeftCorner = F2(
@@ -9425,13 +9343,7 @@ var _user$project$Grid$drawRoundTopLeftSlantedBottomLeftCorner = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, _user$project$Grid$arcRadius * 2),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundTopLeftSlantedBottomRightCorner = F2(
@@ -9445,13 +9357,7 @@ var _user$project$Grid$drawRoundTopLeftSlantedBottomRightCorner = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, _user$project$Grid$arcRadius),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomLeftSlantedTopLeftCorner = F2(
@@ -9465,13 +9371,7 @@ var _user$project$Grid$drawRoundBottomLeftSlantedTopLeftCorner = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, _user$project$Grid$arcRadius * 2),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomLeftSlantedTopRightCorner = F2(
@@ -9485,13 +9385,24 @@ var _user$project$Grid$drawRoundBottomLeftSlantedTopRightCorner = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, _user$project$Grid$arcRadius),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
+			]);
+	});
+var _user$project$Grid$drawRoundBottomLeftSlantedBottomRightCorner = F2(
+	function (x, y) {
+		var l2endY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 3) / 4);
+		var l2endX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 3) / 4);
+		var l2startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l2startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var lendY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 1) / 4);
+		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var lstartY = _user$project$Grid$measureY(y);
+		var lstartX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(_user$project$Grid$drawArc, lendX, lendY, l2endX, l2endY, _user$project$Grid$arcRadius * 4),
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomLeftSlantedTopRightLowHorizontal = F2(
@@ -9505,13 +9416,7 @@ var _user$project$Grid$drawRoundBottomLeftSlantedTopRightLowHorizontal = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, _user$project$Grid$arcRadius * 2),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomRightSlantedTopLeftLowHorizontal = F2(
@@ -9525,13 +9430,7 @@ var _user$project$Grid$drawRoundBottomRightSlantedTopLeftLowHorizontal = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, _user$project$Grid$arcRadius * 2),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundSlantedRightJunctionRight = F2(
@@ -9547,13 +9446,7 @@ var _user$project$Grid$drawRoundSlantedRightJunctionRight = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, startX, startY, endX, endY, _user$project$Grid$arcRadius * 2),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 100, 100, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundSlantedRightJunctionLeft = F2(
@@ -9569,13 +9462,7 @@ var _user$project$Grid$drawRoundSlantedRightJunctionLeft = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, startX, startY, endX, endY, _user$project$Grid$arcRadius * 2),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 100, 100, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundSlantedLeftJunctionLeft = F2(
@@ -9591,13 +9478,7 @@ var _user$project$Grid$drawRoundSlantedLeftJunctionLeft = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, startX, startY, endX, endY, _user$project$Grid$arcRadius * 2),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 100, 100, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundSlantedLeftJunctionRight = F2(
@@ -9613,13 +9494,7 @@ var _user$project$Grid$drawRoundSlantedLeftJunctionRight = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, startX, startY, endX, endY, _user$project$Grid$arcRadius * 2),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 100, 100, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomRightSlantedTopRightCorner = F2(
@@ -9633,13 +9508,7 @@ var _user$project$Grid$drawRoundBottomRightSlantedTopRightCorner = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, _user$project$Grid$arcRadius * 2),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomRightSlantedTopLeftCorner = F2(
@@ -9653,13 +9522,7 @@ var _user$project$Grid$drawRoundBottomRightSlantedTopLeftCorner = F2(
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, _user$project$Grid$arcRadius),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomRightSlantedBottomLeft = F2(
@@ -9672,28 +9535,14 @@ var _user$project$Grid$drawRoundBottomRightSlantedBottomLeft = F2(
 		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		var lstartY = _user$project$Grid$measureY(y);
 		var lstartX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var startX = _user$project$Grid$measureX(x);
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, l2endX, l2endY, lendX, lendY, _user$project$Grid$arcRadius * 4),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0)),
-				A5(
-				_user$project$Grid$drawLine,
-				l2startX,
-				l2startY,
-				l2endX,
-				l2endY,
-				A3(_elm_lang$core$Color$rgb, 200, 0, 200))
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color)
 			]);
 	});
-var _user$project$Grid$drawRoundVerticalJunctionSlantedBottomLeft = F2(
+var _user$project$Grid$drawRoundTriJunctionVerticalVerticalBottomLeft = F2(
 	function (x, y) {
 		var lendY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
 		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
@@ -9705,23 +9554,11 @@ var _user$project$Grid$drawRoundVerticalJunctionSlantedBottomLeft = F2(
 		var startX = _user$project$Grid$measureX(x);
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(
-				_user$project$Grid$drawLine,
-				startX,
-				startY,
-				endX,
-				endY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0)),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
-var _user$project$Grid$drawRoundVerticalJunctionSlantedBottomRight = F2(
+var _user$project$Grid$drawRoundedTriJunctionVerticalVerticalBottomRight = F2(
 	function (x, y) {
 		var lendY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
 		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
@@ -9733,20 +9570,8 @@ var _user$project$Grid$drawRoundVerticalJunctionSlantedBottomRight = F2(
 		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(
-				_user$project$Grid$drawLine,
-				startX,
-				startY,
-				endX,
-				endY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 200)),
-				A5(
-				_user$project$Grid$drawLine,
-				lstartX,
-				lstartY,
-				lendX,
-				lendY,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomLeftCorner = F2(
@@ -9764,7 +9589,7 @@ var _user$project$Grid$drawRoundBottomLeftCorner = F2(
 				startY,
 				startX,
 				_user$project$Grid$measureY(y),
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				_user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomLeftLowHorizontalCorner = F2(
@@ -9782,7 +9607,7 @@ var _user$project$Grid$drawRoundBottomLeftLowHorizontalCorner = F2(
 				startY,
 				startX,
 				_user$project$Grid$measureY(y),
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				_user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomRightLowHorizontalCorner = F2(
@@ -9800,7 +9625,7 @@ var _user$project$Grid$drawRoundBottomRightLowHorizontalCorner = F2(
 				endY,
 				endX,
 				_user$project$Grid$measureY(y),
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				_user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundTopRightCorner = F2(
@@ -9818,7 +9643,7 @@ var _user$project$Grid$drawRoundTopRightCorner = F2(
 				startY,
 				startX,
 				_user$project$Grid$measureY(y) + _user$project$Grid$textHeight,
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				_user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomRightCorner = F2(
@@ -9836,7 +9661,7 @@ var _user$project$Grid$drawRoundBottomRightCorner = F2(
 				endY,
 				endX,
 				_user$project$Grid$measureY(y),
-				A3(_elm_lang$core$Color$rgb, 0, 0, 0))
+				_user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundCorner = F4(
@@ -9859,6 +9684,8 @@ var _user$project$Grid$drawRoundCorner = F4(
 				return A2(_user$project$Grid$drawRoundTopRightSlantedBottomRight, x, y);
 			case 'TopRightSlantedBottomLeft':
 				return A2(_user$project$Grid$drawRoundTopRightSlantedBottomLeft, x, y);
+			case 'TopRightSlantedTopLeft':
+				return A2(_user$project$Grid$drawRoundTopRightSlantedTopLeft, x, y);
 			case 'SlantedRightJunctionRight':
 				return A2(_user$project$Grid$drawRoundSlantedRightJunctionRight, x, y);
 			case 'SlantedLeftJunctionLeft':
@@ -9875,6 +9702,8 @@ var _user$project$Grid$drawRoundCorner = F4(
 				return A2(_user$project$Grid$drawRoundBottomLeftSlantedTopLeftCorner, x, y);
 			case 'BottomLeftSlantedTopRight':
 				return A2(_user$project$Grid$drawRoundBottomLeftSlantedTopRightCorner, x, y);
+			case 'BottomLeftSlantedBottomRight':
+				return A2(_user$project$Grid$drawRoundBottomLeftSlantedBottomRightCorner, x, y);
 			case 'BottomLeftSlantedTopRightLowHorizontal':
 				return A2(_user$project$Grid$drawRoundBottomLeftSlantedTopRightLowHorizontal, x, y);
 			case 'BottomRightSlantedTopRight':
@@ -9885,10 +9714,10 @@ var _user$project$Grid$drawRoundCorner = F4(
 				return A2(_user$project$Grid$drawRoundBottomRightSlantedTopLeftCorner, x, y);
 			case 'BottomRightSlantedBottomLeft':
 				return A2(_user$project$Grid$drawRoundBottomRightSlantedBottomLeft, x, y);
-			case 'VerticalJunctionSlantedBottomLeft':
-				return A2(_user$project$Grid$drawRoundVerticalJunctionSlantedBottomLeft, x, y);
-			case 'VerticalJunctionSlantedBottomRight':
-				return A2(_user$project$Grid$drawRoundVerticalJunctionSlantedBottomRight, x, y);
+			case 'TriJunctionVerticalVerticalBottomLeft':
+				return A2(_user$project$Grid$drawRoundTriJunctionVerticalVerticalBottomLeft, x, y);
+			case 'TriJunctionVerticalVerticalBottomRight':
+				return A2(_user$project$Grid$drawRoundedTriJunctionVerticalVerticalBottomRight, x, y);
 			case 'TopLeftSlantedTopRight':
 				return A2(_user$project$Grid$drawRoundTopLeftSlantedTopRightCorner, x, y);
 			case 'TopLeftBigCurve':
@@ -9914,40 +9743,16 @@ var _user$project$Grid$drawIntersection = F4(
 		var lw = _user$project$Grid$lineWidth / 2;
 		var v1startY = _user$project$Grid$measureY(y) - lw;
 		var v1endY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) + lw;
-		var v1Line = A5(
-			_user$project$Grid$drawLine,
-			v1startX,
-			v1startY,
-			v1endX,
-			v1endY,
-			A3(_elm_lang$core$Color$rgb, 20, 20, 200));
+		var v1Line = A5(_user$project$Grid$drawLine, v1startX, v1startY, v1endX, v1endY, _user$project$Grid$color);
 		var v2startY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) - lw;
 		var v2endY = (_user$project$Grid$measureY(y) + _user$project$Grid$textHeight) + lw;
-		var v2Line = A5(
-			_user$project$Grid$drawLine,
-			v2startX,
-			v2startY,
-			v2endX,
-			v2endY,
-			A3(_elm_lang$core$Color$rgb, 20, 200, 200));
+		var v2Line = A5(_user$project$Grid$drawLine, v2startX, v2startY, v2endX, v2endY, _user$project$Grid$color);
 		var h1startX = _user$project$Grid$measureX(x) - lw;
 		var h1endX = (_user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2)) + lw;
-		var h1Line = A5(
-			_user$project$Grid$drawLine,
-			h1startX,
-			h1startY,
-			h1endX,
-			h1endY,
-			A3(_elm_lang$core$Color$rgb, 200, 200, 200));
+		var h1Line = A5(_user$project$Grid$drawLine, h1startX, h1startY, h1endX, h1endY, _user$project$Grid$color);
 		var h2startX = (_user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2)) - lw;
 		var h2endX = (h2startX + _user$project$Grid$textWidth) + lw;
-		var h2Line = A5(
-			_user$project$Grid$drawLine,
-			h2startX,
-			h2startY,
-			h2endX,
-			h2endY,
-			A3(_elm_lang$core$Color$rgb, 20, 200, 200));
+		var h2Line = A5(_user$project$Grid$drawLine, h2startX, h2startY, h2endX, h2endY, _user$project$Grid$color);
 		var _p12 = itype;
 		switch (_p12.ctor) {
 			case 'VertJunctionLeft':
@@ -10016,12 +9821,13 @@ var _user$project$Grid$BottomLeftBigCurve = {ctor: 'BottomLeftBigCurve'};
 var _user$project$Grid$TopRightBigCurve = {ctor: 'TopRightBigCurve'};
 var _user$project$Grid$TopLeftBigCurve = {ctor: 'TopLeftBigCurve'};
 var _user$project$Grid$TopLeftSlantedTopRight = {ctor: 'TopLeftSlantedTopRight'};
-var _user$project$Grid$VerticalJunctionSlantedBottomRight = {ctor: 'VerticalJunctionSlantedBottomRight'};
-var _user$project$Grid$VerticalJunctionSlantedBottomLeft = {ctor: 'VerticalJunctionSlantedBottomLeft'};
+var _user$project$Grid$TriJunctionVerticalVerticalBottomRight = {ctor: 'TriJunctionVerticalVerticalBottomRight'};
+var _user$project$Grid$TriJunctionVerticalVerticalBottomLeft = {ctor: 'TriJunctionVerticalVerticalBottomLeft'};
 var _user$project$Grid$SlantedLeftJunctionRight = {ctor: 'SlantedLeftJunctionRight'};
 var _user$project$Grid$SlantedRightJunctionLeft = {ctor: 'SlantedRightJunctionLeft'};
 var _user$project$Grid$SlantedLeftJunctionLeft = {ctor: 'SlantedLeftJunctionLeft'};
 var _user$project$Grid$SlantedRightJunctionRight = {ctor: 'SlantedRightJunctionRight'};
+var _user$project$Grid$TopRightSlantedTopLeft = {ctor: 'TopRightSlantedTopLeft'};
 var _user$project$Grid$TopRightSlantedBottomLeft = {ctor: 'TopRightSlantedBottomLeft'};
 var _user$project$Grid$TopRightSlantedBottomRight = {ctor: 'TopRightSlantedBottomRight'};
 var _user$project$Grid$TopLeftSlantedBottomRight = {ctor: 'TopLeftSlantedBottomRight'};
@@ -10031,6 +9837,7 @@ var _user$project$Grid$BottomRightSlantedTopLeft = {ctor: 'BottomRightSlantedTop
 var _user$project$Grid$BottomRightSlantedTopLeftLowHorizontal = {ctor: 'BottomRightSlantedTopLeftLowHorizontal'};
 var _user$project$Grid$BottomRightSlantedTopRight = {ctor: 'BottomRightSlantedTopRight'};
 var _user$project$Grid$BottomLeftSlantedTopRightLowHorizontal = {ctor: 'BottomLeftSlantedTopRightLowHorizontal'};
+var _user$project$Grid$BottomLeftSlantedBottomRight = {ctor: 'BottomLeftSlantedBottomRight'};
 var _user$project$Grid$BottomLeftSlantedTopRight = {ctor: 'BottomLeftSlantedTopRight'};
 var _user$project$Grid$BottomLeftSlantedTopLeft = {ctor: 'BottomLeftSlantedTopLeft'};
 var _user$project$Grid$BottomRightLowHorizontal = {ctor: 'BottomRightLowHorizontal'};
@@ -10299,7 +10106,7 @@ var _user$project$Grid$getElement = F3(
 															_user$project$Grid$isNeighbor,
 															A3(_user$project$Grid$bottomLeftOf, x, y, model),
 															_user$project$Grid$isSlantRight))) ? _elm_lang$core$Maybe$Just(
-															_user$project$Grid$RoundCorner(_user$project$Grid$VerticalJunctionSlantedBottomLeft)) : ((A2(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TriJunctionVerticalVerticalBottomLeft)) : ((A2(
 															_user$project$Grid$isNeighbor,
 															A3(_user$project$Grid$topOf, x, y, model),
 															_user$project$Grid$isVertical) && (A2(
@@ -10309,7 +10116,7 @@ var _user$project$Grid$getElement = F3(
 															_user$project$Grid$isNeighbor,
 															A3(_user$project$Grid$bottomRightOf, x, y, model),
 															_user$project$Grid$isSlantLeft))) ? _elm_lang$core$Maybe$Just(
-															_user$project$Grid$RoundCorner(_user$project$Grid$VerticalJunctionSlantedBottomRight)) : ((A2(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TriJunctionVerticalVerticalBottomRight)) : ((A2(
 															_user$project$Grid$isNeighbor,
 															A3(_user$project$Grid$bottomOf, x, y, model),
 															_user$project$Grid$isVertical) && A2(
@@ -10423,6 +10230,13 @@ var _user$project$Grid$getElement = F3(
 															_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
 															_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftSlantedTopRight)) : ((A2(
 															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomRightOf, x, y, model),
+															_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$BottomLeftSlantedBottomRight)) : ((A2(
+															_user$project$Grid$isNeighbor,
 															A3(_user$project$Grid$leftOf, x, y, model),
 															_user$project$Grid$isHorizontal) && A2(
 															_user$project$Grid$isNeighbor,
@@ -10519,8 +10333,15 @@ var _user$project$Grid$getElement = F3(
 															_user$project$Grid$isNeighbor,
 															A3(_user$project$Grid$bottomLeftOf, x, y, model),
 															_user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
-															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightSlantedBottomLeft)) : _elm_lang$core$Maybe$Just(
-															_user$project$Grid$Text(_p14)))))))))))))))))))))))))))))))))))));
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightSlantedBottomLeft)) : ((A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$bottomOf, x, y, model),
+															_user$project$Grid$isVertical) && A2(
+															_user$project$Grid$isNeighbor,
+															A3(_user$project$Grid$topLeftOf, x, y, model),
+															_user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightSlantedTopLeft)) : _elm_lang$core$Maybe$Just(
+															_user$project$Grid$Text(_p14)))))))))))))))))))))))))))))))))))))));
 													} else {
 														if (_user$project$Grid$isArrowRight(_p14)) {
 															return _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowEast);
@@ -10793,7 +10614,7 @@ var _user$project$Grid$getSvg = function (model) {
 					[_user$project$Grid$arrowMarker])),
 			_user$project$Grid$drawPaths(model)));
 };
-var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |------------------------------------------------------------.\n  | ooo |    |                          |                            |\n  | ooo |    |                          |                            |\n  \'_____\'    |                          |                            |\n             |                          |                            |\n             v                          v                            v\n   .-------------------.  .---------------------------.    .-------------------.\n   | Loadable module C |  |     Loadable module A     |    | Loadable module B |\n   \'-------------------\'  |---------------------------|    |   (instrumented)  |\n             |            |         .-----.           |    \'-------------------\'\n             \'------------+-------->| A.o |           |              |\n                 calls    |         \'-----\'           |              |\n                          |    .------------------.   |              |\n                          |   / A.instrumented.o /<---+--------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived::More\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived::Deeper\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    î\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\nJunctions\n\n   \n\n    |   \\/   \n   -+-  /\\      \n    |   \n    \n\n                 |    |  |     |\n         .- -.   .-  -.  ._   _.\n         |   |\n\n    .-   -.  .-.       \n    \'-   -\'  | |  | |  \n                  \'-\'\n\n  \\      |    /  |\n   .     \'   \'   .\n   |    /    |    \\ \n\n   \\\n   /\n\n   /\n   \\\n\n\n    \\\n     .\n     |\n   \n   /      \\\n  \'--    --\'\n /          \\\n\n   /   \\\n--\'     \'--\n /       \\\n\n\n\n    |   |\n    .   .\n   /|   |\\ \n\n   -.  -.\n   /     \\\n\n    .-  .-\n   /     \\\n\n  \n   /   /     \\    \\\n  \'-  \'_     _\'   -\'\n   \n\nShapes\n\ncircle\n   .-.\n  (   )\n   \'-\'\n\n   ..\n  (  )\n   \'\'\n\n   .------.\n  (        )\n   \'------\'\n\n    ________  \n   /       /\n  /       /\n /_______/\n\n\n    ________  \n    \\       \\\n     \\       \\\n      \\_______\\\n\n   ________ \n  |________|\n\n\n   ________ \n  |        |\n  |________|\n\n  .-.\n  \'-\'\n\n    ________  \n    \\_______\\\n\n   /\\\n  /  \\\n /____\\\n\n   /\\\n  /  \\\n /    \\\n\'------\'\n\n    ';
+var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |------------------------------------------------------------.\n  | ooo |    |                          |                            |\n  | ooo |    |                          |                            |\n  \'_____\'    |                          |                            |\n             |                          |                            |\n             v                          v                            v\n   .-------------------.  .---------------------------.    .-------------------.\n   | Loadable module C |  |     Loadable module A     |    | Loadable module B |\n   \'-------------------\'  |---------------------------|    |   (instrumented)  |\n             |            |         .-----.           |    \'-------------------\'\n             \'------------+-------->| A.o |           |              |\n                 calls    |         \'-----\'           |              |\n                          |    .------------------.   |              |\n                          |   / A.instrumented.o /<---+--------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived::More\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived::Deeper\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    î\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\nJunctions\n\n   \n\n    |   \\/   \n   -+-  /\\      \n    |   \n    \n\n                 |    |  |     |\n         .- -.   .-  -.  ._   _.\n         |   |\n\n    .-   -.  .-.       \n    \'-   -\'  | |  | |  \n                  \'-\'\n\n  \\      |    /  |\n   .     \'   \'   .\n   |    /    |    \\ \n\n   \\\n   /\n\n   /\n   \\\n\n\n   /      \\\n  \'--    --\'\n /          \\\n\n   /   \\\n--\'     \'--\n /       \\\n\n\n\n    |   |\n    .   .\n   /|   |\\ \n\n   -.  -.\n   /     \\\n\n    .-  .-\n   /     \\\n\n  \n   /   /     \\    \\\n  \'-  \'_     _\'   -\'\n   \n\nShapes\n\ncircle\n   .-.\n  (   )\n   \'-\'\n\n   ..\n  (  )\n   \'\'\n\n\n   .------.\n  (        )\n   \'------\'\n\n    ________  \n   /       /\n  /       /\n /_______/\n\n\n    ________  \n    \\       \\\n     \\       \\\n      \\_______\\\n\n   ________ \n  |________|\n\n\n   ________ \n  |        |\n  |________|\n\n  .-.\n  \'-\'\n\n    ________  \n    \\_______\\\n\n   /\\\n  /  \\\n /____\\\n\n   /\\\n  /  \\\n /    \\\n\'------\'\n\n   ___\n  /   \\\n  \\___/\n\n  ______\n /      \\\n/        \\\n\\        /\n \\______/\n    \n\n    ';
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
