@@ -121,24 +121,24 @@ arg =
                                        /
                                       .----> Base::Class::Derived_B    
       Something -------.             /         \\
-                        \\           /           '---> Base::Class::Derived::More
+                        \\           /           \\---> Base::Class::Derived::More
       Something::else    \\         /             \\
             \\             \\       /               '--> Base::Class::Derived::Deeper
              \\             \\     /
               \\             \\   .-----------> Base::Class::Derived_C 
                \\             \\ /
-                '-------Base::Class
+                '------ Base::Class
                        /   \\ \\ \\
                       '     \\ \\ \\
                       |      \\ \\ '--- The::Latest
                      /|       \\ \\      \\
- With::Some::fantasy' '        \\ \\      '---- The::Latest::Greatest
+ With::Some::fantasy  '        \\ \\      '---- The::Latest::Greatest
                      /|         \\ \\
-         More::Stuff' '          \\ '- I::Am::Running::Out::Of::Ideas
+         More::Stuff  '          \\ '- I::Am::Running::Out::Of::Ideas
                      /|           \\
-         More::Stuff' '            \\
+         More::Stuff  '            \\
                      /              '--- Last::One
-         More::Stuff'
+         More::Stuff 
 
   Safety
     î
@@ -147,6 +147,84 @@ arg =
     | *Python
     |                        *C++
     +-----------------------------> Control
+
+Junctions
+
+   
+
+    |    \\ /
+   -+-    *
+    |    / \\
+
+                 |    |  |     |
+         .- -.   .-  -.  ._   _.
+         |   |
+
+    .-   -.  .-.       
+    '-   -'  | |  | |  
+                  '-'
+
+    |    /  |
+    '   '   .
+   /    |    \\ 
+
+   \\
+    .
+   /
+   
+   /      \\
+  '--    --'
+ /          \\
+
+   /   \\
+--'     '--
+ /       \\
+
+
+   /
+  .
+   \\
+
+
+    \\
+     .
+     |
+
+   -.  -.
+   /     \\
+
+    .-  .-
+   /     \\
+
+  
+   /  /     \\    \\
+  '-  ._    _.   -'
+   
+
+Shapes
+
+circle
+   .-.
+  (   )
+   '-'
+
+   ..
+  (  )
+   ''
+
+   .------.
+  (        )
+   '------'
+
+   /\\
+  /  \\
+ /    \\
+ ------
+
+   /\\
+  /  \\
+ /    \\
+'------'
 
     """
 
