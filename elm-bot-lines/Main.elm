@@ -1,8 +1,11 @@
-import Html exposing (text,pre,div)
-import Html.Attributes exposing (class, style,contenteditable)
+port module Main exposing (..)
+import Html exposing (text,pre,div,button,textarea)
+import Html.Attributes exposing (class, style,contenteditable,id)
+import Html.Events exposing (onClick)
 import String
 import Grid
 import Html.App as App
+import Json.Decode exposing (string)
 
 
 {-- code which detects lines and connections
@@ -13,30 +16,51 @@ type alias Model =
  {grid: Grid.Model
  }
 
-type Msg = DoSomething
+type Msg = Input String | Convert
 
 
 view model =
-    let _ = Debug.log "model" model
-        _ = Debug.log "get 0 0 " <| Grid.getElement 0 2 model.grid
-    in
-    div [style [("display", "flex")]]
-        [pre 
-            [style 
-                [("font-size", "13px")
-                ,("word-wrap","nowrap")
-                ,("overflow", "auto")
+    div []
+        [
+        button [
+                style [("padding","10px")
+                      ,("margin-left","500px")
+                      ]
+                ,onClick Convert
+               ] 
+               [text "Convert >>"]
+        ,div [style [("display", "flex")]]
+            [pre 
+                [style 
+                    [--("font-size", "15.4px")
+                    --,("font-family","monospace")
+                     ("word-wrap","nowrap")
+                    ,("overflow", "auto")
+                    ,("border", "1px solid #ddd")
+                    ]
+                  ,contenteditable True
+                  ,id "ascii_text" 
+                 ]
+                 --[textarea [id "ascii_text"]
+                    [text arg]
+                 --]
+            ,div [style [("padding-left", "10px")]]
+                [Grid.getSvg model.grid
                 ]
-              ,contenteditable True
-             ]
-            [text arg]
-        ,div [style [("padding-left", "10px")]]
-            [Grid.getSvg model.grid
             ]
         ]
         
 update msg model =
-    (model, Cmd.none)
+    case msg of
+        Convert ->
+            (model, getAsciiText () )
+        Input asciiText ->
+            let
+                _ = Debug.log "Got" asciiText
+            in
+            ({model | grid = Grid.init asciiText}
+            ,Cmd.none
+            )
 
 main =
     App.program
@@ -48,7 +72,11 @@ main =
 
 subscriptions: Model -> Sub Msg
 subscriptions model =
-    Sub.batch []
+    Sub.batch [receiveAsciiText Input]
+
+port getAsciiText: () -> Cmd msg
+
+port receiveAsciiText: (String -> msg) -> Sub msg
 
 
 
@@ -108,20 +136,20 @@ arg =
   | ___ |
   ||   ||  device
   ||___||  loads
-  | ooo |------------------------------------------------------------.
-  | ooo |    |                          |                            |
-  | ooo |    |                          |                            |
-  '_____'    |                          |                            |
-             |                          |                            |
-             v                          v                            v
-   .-------------------.  .---------------------------.    .-------------------.
-   | Loadable module C |  |     Loadable module A     |    | Loadable module B |
-   '-------------------'  |---------------------------|    |   (instrumented)  |
-             |            |         .-----.           |    '-------------------'
-             '------------+-------->| A.o |           |              |
-                 calls    |         '-----'           |              |
-                          |    .------------------.   |              |
-                          |   / A.instrumented.o /<---+--------------'
+  | ooo |----------------------------------------------------------.
+  | ooo |    |                          |                          |
+  | ooo |    |                          |                          |
+  '_____'    |                          |                          |
+             |                          |                          |
+             v                          v                          v
+   .-------------------.  .---------------------------.  .-------------------.
+   | Loadable module C |  |     Loadable module A     |  | Loadable module B |
+   '-------------------'  |---------------------------|  |   (instrumented)  |
+             |            |         .-----.           |  '-------------------'
+             '------------+-------->| A.o |           |             |
+                 calls    |         '-----'           |             |
+                          |    .------------------.   |             |
+                          |   / A.instrumented.o /<---+-------------'
                           |  '------------------'     |    calls
                           '---------------------------'   
 
@@ -130,9 +158,9 @@ arg =
                                        /
                                       .----> Base::Class::Derived_B    
       Something -------.             /         \\
-                        \\           /           \\---> Base::Class::Derived::More
+                        \\           /           \\---> Base::Class::Derived
       Something::else    \\         /             \\
-            \\             \\       /               '--> Base::Class::Derived::Deeper
+            \\             \\       /               '--> Base::Class::Derived
              \\             \\     /
               \\             \\   .-----------> Base::Class::Derived_C 
                \\             \\ /
@@ -151,7 +179,7 @@ arg =
          More::Stuff 
 
   Safety
-    î
+    ^
     |                       *Rust
     |           *Java
     | *Python
@@ -211,9 +239,6 @@ Junctions
   '-  '_     _'   -'
    
 
-Shapes
-
-circle
    .-.
   (   )
    '-'
