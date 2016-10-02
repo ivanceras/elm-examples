@@ -49,9 +49,11 @@ type Position
     | SlantedLeftJunctionLeft
     | SlantedRightJunctionLeft
     | SlantedLeftJunctionRight
-    | TriJunctionVerticalVerticalBottomLeft
-    | TriJunctionVerticalVerticalBottomRight
+    | VerticalTopDownJunctionBottomLeft
+    | VerticalTopDownJunctionBottomRight
     | TopLeftSlantedTopRight
+    | VerticalTopDownJunctionTopRight
+    | VerticalTopDownJunctionTopLeft
     | TopLeftBigCurve
     | TopRightBigCurve
     | BottomLeftBigCurve
@@ -306,6 +308,10 @@ getElement x y model =
                         && isNeighbor bottomLeft isSlantRight
                         && isNeighbor right isHorizontal then
                         Just (RoundCorner SlantedRightJunctionRight)
+                    else if isNeighbor top isVertical
+                        && isNeighbor bottom isVertical
+                        && isNeighbor topLeft isSlantLeft then
+                        Just (RoundCorner VerticalTopDownJunctionTopLeft)
                     else if isNeighbor topLeft isSlantLeft
                         && isNeighbor bottomRight isSlantLeft
                         && isNeighbor left isHorizontal then
@@ -321,11 +327,15 @@ getElement x y model =
                     else if isNeighbor top isVertical
                         && isNeighbor bottom isVertical
                         && isNeighbor bottomLeft isSlantRight then
-                        Just (RoundCorner TriJunctionVerticalVerticalBottomLeft)
+                        Just (RoundCorner VerticalTopDownJunctionBottomLeft)
                     else if isNeighbor top isVertical
                         && isNeighbor bottom isVertical
                         && isNeighbor bottomRight isSlantLeft then
-                        Just (RoundCorner TriJunctionVerticalVerticalBottomRight)
+                        Just (RoundCorner VerticalTopDownJunctionBottomRight)
+                    else if isNeighbor top isVertical
+                        && isNeighbor bottom isVertical
+                        && isNeighbor topRight isSlantRight then
+                        Just (RoundCorner VerticalTopDownJunctionTopRight)
                     else if isNeighbor bottom isVertical 
                         && isNeighbor right isHorizontal then
                         Just (RoundCorner TopLeftCorner)
@@ -516,21 +526,18 @@ getSvg model =
         )
         
 --TODO: optimize here to indexedMap only the lines and chars
+--TODO: modularized parts in order to easily fit and match
 drawPaths: Model -> List (Svg a)
 drawPaths model =
-    let 
-        rowRange = [0..model.rows]
-        columnRange = [0..model.columns]
-    in
-        List.map
-        (\r ->
-           List.map
-            (\ c ->
-               drawElement c r model
-            ) columnRange
-        ) rowRange
-        |> List.concat
-        |> List.concat
+    List.indexedMap
+    (\r line ->
+       List.indexedMap
+        (\ c char->
+           drawElement c r model
+        ) line
+    ) model.lines
+    |> List.concat
+    |> List.concat
 
 drawElement: Int -> Int -> Model -> List (Svg a)
 drawElement x y model =
@@ -801,6 +808,8 @@ drawRoundCorner x y pos  model =
             drawRoundTopRightSlantedBottomLeft x y
         TopRightSlantedTopLeft ->
             drawRoundTopRightSlantedTopLeft x y 
+        VerticalTopDownJunctionTopLeft ->
+            drawVerticalTopDownJunctionTopLeft x y
         SlantedRightJunctionRight ->
             drawRoundSlantedRightJunctionRight x y
         SlantedLeftJunctionLeft ->
@@ -829,12 +838,14 @@ drawRoundCorner x y pos  model =
             drawRoundBottomRightSlantedTopLeftCorner x y
         BottomRightSlantedBottomLeft ->
             drawRoundBottomRightSlantedBottomLeft x y
-        TriJunctionVerticalVerticalBottomLeft ->
-            drawRoundTriJunctionVerticalVerticalBottomLeft x y
-        TriJunctionVerticalVerticalBottomRight ->
-            drawRoundedTriJunctionVerticalVerticalBottomRight x y
+        VerticalTopDownJunctionBottomLeft ->
+            drawVerticalTopDownJunctionBottomLeft x y
+        VerticalTopDownJunctionBottomRight ->
+            drawVerticalTopDownJunctionBottomRight x y
         TopLeftSlantedTopRight ->
             drawRoundTopLeftSlantedTopRightCorner x y
+        VerticalTopDownJunctionTopRight ->
+            drawVerticalTopDownJunctionTopRight x y
         TopLeftBigCurve ->
             drawTopLeftBigCurve x y
         TopRightBigCurve ->
@@ -894,8 +905,6 @@ drawTopRightBigCurve x y =
 
 drawRoundTopLeftSlantedTopRightCorner x y =
     let
-        endX = measureX x + textWidth / 2  --circular arc 
-        endY = measureY y + textHeight / 2 + textWidth / 2 --then the rest is line
         lstartX = measureX x + textWidth
         lstartY = measureY y
         lendX = measureX x + textWidth * 3 / 4
@@ -908,6 +917,28 @@ drawRoundTopLeftSlantedTopRightCorner x y =
     [drawArc lendX lendY l2endX l2endY (arcRadius * 4)
     ,drawLine lstartX lstartY lendX lendY color
     ,drawLine l2startX l2startY l2endX l2endY color
+    ]
+
+
+drawVerticalTopDownJunctionTopRight x y =
+    let
+        lstartX = measureX x + textWidth
+        lstartY = measureY y
+        lendX = measureX x + textWidth * 3 / 4
+        lendY = measureY y + textHeight * 1 / 4
+        l2startX = measureX x + textWidth / 2
+        l2startY = measureY y + textHeight
+        l2endX = measureX x + textWidth / 2
+        l2endY = measureY y + textHeight * 3 / 4
+        l3startX = measureX x + textWidth / 2
+        l3startY = measureY y
+        l3endX = measureX x + textWidth / 2
+        l3endY = measureY y + textHeight
+    in
+    [drawArc lendX lendY l2endX l2endY (arcRadius * 4)
+    ,drawLine lstartX lstartY lendX lendY color
+    ,drawLine l2startX l2startY l2endX l2endY color
+    ,drawLine l3startX l3startY l3endX l3endY color
     ]
 
 drawRoundTopRightSlantedBottomRight x y =
@@ -950,6 +981,27 @@ drawRoundTopRightSlantedTopLeft x y =
     [drawArc lendX lendY l2endX l2endY (arcRadius * 4)
     ,drawLine lstartX lstartY lendX lendY color
     ,drawLine l2startX l2startY l2endX l2endY color
+    ]
+
+drawVerticalTopDownJunctionTopLeft x y =
+    let
+        lstartX = measureX x + textWidth / 2
+        lstartY = measureY y + textHeight
+        lendX = measureX x + textWidth / 2
+        lendY = measureY y + textHeight * 3 / 4
+        l2startX = measureX x
+        l2startY = measureY y
+        l2endX = measureX x + textWidth * 1 /4
+        l2endY = measureY y + textHeight * 1 /4
+        l3startX = measureX x + textWidth / 2
+        l3startY = measureY y
+        l3endX = measureX x + textWidth / 2
+        l3endY = measureY y + textHeight
+    in
+    [drawArc lendX lendY l2endX l2endY (arcRadius * 4)
+    ,drawLine lstartX lstartY lendX lendY color
+    ,drawLine l2startX l2startY l2endX l2endY color
+    ,drawLine l3startX l3startY l3endX l3endY color
     ]
 
 drawRoundTopLeftSlantedBottomLeftCorner x y =
@@ -1149,34 +1201,47 @@ drawRoundBottomRightSlantedBottomLeft x y =
     ,drawLine l2startX l2startY l2endX l2endY color
     ]
 
-drawRoundTriJunctionVerticalVerticalBottomLeft x y =
+drawVerticalTopDownJunctionBottomLeft x y =
+
     let
-        startX = measureX x
-        startY = measureY y + textHeight
-        endX = measureX x + textWidth / 2
-        endY = measureY y + textHeight / 2
         lstartX = measureX x + textWidth / 2
         lstartY = measureY y
         lendX = measureX x + textWidth / 2
-        lendY = measureY y + textHeight
+        lendY = measureY y + textHeight * 1 / 4
+        l2startX = measureX x
+        l2startY = measureY y + textHeight
+        l2endX = measureX x + textWidth * 1 / 4
+        l2endY = measureY y + textHeight * 3 / 4
+        l3startX = measureX x + textWidth / 2
+        l3startY = measureY y
+        l3endX = measureX x + textWidth / 2
+        l3endY = measureY y + textHeight
     in
-    [drawLine startX startY endX endY color
+    [drawArc l2endX l2endY lendX lendY (arcRadius * 4)
     ,drawLine lstartX lstartY lendX lendY color
+    ,drawLine l2startX l2startY l2endX l2endY color
+    ,drawLine l3startX l3startY l3endX l3endY color
     ]
 
-drawRoundedTriJunctionVerticalVerticalBottomRight x y =
+drawVerticalTopDownJunctionBottomRight x y =
     let
-        startX = measureX x + textWidth
-        startY = measureY y + textHeight
-        endX = measureX x + textWidth / 2
-        endY = measureY y + textHeight / 2
         lstartX = measureX x + textWidth / 2
         lstartY = measureY y
         lendX = measureX x + textWidth / 2
-        lendY = measureY y + textHeight
+        lendY = measureY y + textHeight * 1 /4 
+        l2startX = measureX x + textWidth
+        l2startY = measureY y + textHeight
+        l2endX = measureX x + textWidth * 3 / 4
+        l2endY = measureY y + textHeight * 3 / 4
+        l3startX = measureX x + textWidth / 2
+        l3startY = measureY y
+        l3endX = measureX x + textWidth / 2
+        l3endY = measureY y + textHeight
     in
-    [drawLine startX startY endX endY color
+    [drawArc lendX lendY l2endX l2endY (arcRadius * 4)
     ,drawLine lstartX lstartY lendX lendY color
+    ,drawLine l2startX l2startY l2endX l2endY color
+    ,drawLine l3startX l3startY l3endX l3endY color
     ]
 
 drawRoundBottomLeftCorner x y =
@@ -1535,8 +1600,8 @@ init str =
                 |> List.maximum
         lineChar = 
             List.map (
-                \l ->
-                    String.toList l
+                \line ->
+                    String.toList <| String.trimRight line
             ) lines
     in
     {rows = List.length lineChar

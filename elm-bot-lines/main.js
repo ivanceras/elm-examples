@@ -8422,8 +8422,9 @@ var _user$project$Grid$init = function (str) {
 			lines));
 	var lineChar = A2(
 		_elm_lang$core$List$map,
-		function (l) {
-			return _elm_lang$core$String$toList(l);
+		function (line) {
+			return _elm_lang$core$String$toList(
+				_elm_lang$core$String$trimRight(line));
 		},
 		lines);
 	return {
@@ -9404,13 +9405,33 @@ var _user$project$Grid$drawRoundTopLeftSlantedTopRightCorner = F2(
 		var lendX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 3) / 4);
 		var lstartY = _user$project$Grid$measureY(y);
 		var lstartX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
-		var endY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) + (_user$project$Grid$textWidth / 2);
-		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		return _elm_lang$core$Native_List.fromArray(
 			[
 				A5(_user$project$Grid$drawArc, lendX, lendY, l2endX, l2endY, _user$project$Grid$arcRadius * 4),
 				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color),
 				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color)
+			]);
+	});
+var _user$project$Grid$drawVerticalTopDownJunctionTopRight = F2(
+	function (x, y) {
+		var l3endY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l3endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var l3startY = _user$project$Grid$measureY(y);
+		var l3startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var l2endY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 3) / 4);
+		var l2endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var l2startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l2startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var lendY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 1) / 4);
+		var lendX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 3) / 4);
+		var lstartY = _user$project$Grid$measureY(y);
+		var lstartX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(_user$project$Grid$drawArc, lendX, lendY, l2endX, l2endY, _user$project$Grid$arcRadius * 4),
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l3startX, l3startY, l3endX, l3endY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundTopRightSlantedBottomRight = F2(
@@ -9456,6 +9477,28 @@ var _user$project$Grid$drawRoundTopRightSlantedTopLeft = F2(
 				A5(_user$project$Grid$drawArc, lendX, lendY, l2endX, l2endY, _user$project$Grid$arcRadius * 4),
 				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color),
 				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color)
+			]);
+	});
+var _user$project$Grid$drawVerticalTopDownJunctionTopLeft = F2(
+	function (x, y) {
+		var l3endY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l3endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var l3startY = _user$project$Grid$measureY(y);
+		var l3startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var l2endY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 1) / 4);
+		var l2endX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 1) / 4);
+		var l2startY = _user$project$Grid$measureY(y);
+		var l2startX = _user$project$Grid$measureX(x);
+		var lendY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 3) / 4);
+		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var lstartY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var lstartX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				A5(_user$project$Grid$drawArc, lendX, lendY, l2endX, l2endY, _user$project$Grid$arcRadius * 4),
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l3startX, l3startY, l3endX, l3endY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundTopLeftSlantedBottomLeftCorner = F2(
@@ -9668,36 +9711,48 @@ var _user$project$Grid$drawRoundBottomRightSlantedBottomLeft = F2(
 				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color)
 			]);
 	});
-var _user$project$Grid$drawRoundTriJunctionVerticalVerticalBottomLeft = F2(
+var _user$project$Grid$drawVerticalTopDownJunctionBottomLeft = F2(
 	function (x, y) {
-		var lendY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l3endY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l3endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var l3startY = _user$project$Grid$measureY(y);
+		var l3startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var l2endY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 3) / 4);
+		var l2endX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 1) / 4);
+		var l2startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l2startX = _user$project$Grid$measureX(x);
+		var lendY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 1) / 4);
 		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		var lstartY = _user$project$Grid$measureY(y);
 		var lstartX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
-		var startX = _user$project$Grid$measureX(x);
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color),
-				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
+				A5(_user$project$Grid$drawArc, l2endX, l2endY, lendX, lendY, _user$project$Grid$arcRadius * 4),
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l3startX, l3startY, l3endX, l3endY, _user$project$Grid$color)
 			]);
 	});
-var _user$project$Grid$drawRoundedTriJunctionVerticalVerticalBottomRight = F2(
+var _user$project$Grid$drawVerticalTopDownJunctionBottomRight = F2(
 	function (x, y) {
-		var lendY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l3endY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l3endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var l3startY = _user$project$Grid$measureY(y);
+		var l3startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var l2endY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 3) / 4);
+		var l2endX = _user$project$Grid$measureX(x) + ((_user$project$Grid$textWidth * 3) / 4);
+		var l2startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var l2startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
+		var lendY = _user$project$Grid$measureY(y) + ((_user$project$Grid$textHeight * 1) / 4);
 		var lendX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		var lstartY = _user$project$Grid$measureY(y);
 		var lstartX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
-		var endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
-		var startY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
-		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(_user$project$Grid$drawLine, startX, startY, endX, endY, _user$project$Grid$color),
-				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
+				A5(_user$project$Grid$drawArc, lendX, lendY, l2endX, l2endY, _user$project$Grid$arcRadius * 4),
+				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l2startX, l2startY, l2endX, l2endY, _user$project$Grid$color),
+				A5(_user$project$Grid$drawLine, l3startX, l3startY, l3endX, l3endY, _user$project$Grid$color)
 			]);
 	});
 var _user$project$Grid$drawRoundBottomLeftCorner = F2(
@@ -9812,6 +9867,8 @@ var _user$project$Grid$drawRoundCorner = F4(
 				return A2(_user$project$Grid$drawRoundTopRightSlantedBottomLeft, x, y);
 			case 'TopRightSlantedTopLeft':
 				return A2(_user$project$Grid$drawRoundTopRightSlantedTopLeft, x, y);
+			case 'VerticalTopDownJunctionTopLeft':
+				return A2(_user$project$Grid$drawVerticalTopDownJunctionTopLeft, x, y);
 			case 'SlantedRightJunctionRight':
 				return A2(_user$project$Grid$drawRoundSlantedRightJunctionRight, x, y);
 			case 'SlantedLeftJunctionLeft':
@@ -9840,12 +9897,14 @@ var _user$project$Grid$drawRoundCorner = F4(
 				return A2(_user$project$Grid$drawRoundBottomRightSlantedTopLeftCorner, x, y);
 			case 'BottomRightSlantedBottomLeft':
 				return A2(_user$project$Grid$drawRoundBottomRightSlantedBottomLeft, x, y);
-			case 'TriJunctionVerticalVerticalBottomLeft':
-				return A2(_user$project$Grid$drawRoundTriJunctionVerticalVerticalBottomLeft, x, y);
-			case 'TriJunctionVerticalVerticalBottomRight':
-				return A2(_user$project$Grid$drawRoundedTriJunctionVerticalVerticalBottomRight, x, y);
+			case 'VerticalTopDownJunctionBottomLeft':
+				return A2(_user$project$Grid$drawVerticalTopDownJunctionBottomLeft, x, y);
+			case 'VerticalTopDownJunctionBottomRight':
+				return A2(_user$project$Grid$drawVerticalTopDownJunctionBottomRight, x, y);
 			case 'TopLeftSlantedTopRight':
 				return A2(_user$project$Grid$drawRoundTopLeftSlantedTopRightCorner, x, y);
+			case 'VerticalTopDownJunctionTopRight':
+				return A2(_user$project$Grid$drawVerticalTopDownJunctionTopRight, x, y);
 			case 'TopLeftBigCurve':
 				return A2(_user$project$Grid$drawTopLeftBigCurve, x, y);
 			case 'TopRightBigCurve':
@@ -9945,9 +10004,11 @@ var _user$project$Grid$BottomRightBigCurve = {ctor: 'BottomRightBigCurve'};
 var _user$project$Grid$BottomLeftBigCurve = {ctor: 'BottomLeftBigCurve'};
 var _user$project$Grid$TopRightBigCurve = {ctor: 'TopRightBigCurve'};
 var _user$project$Grid$TopLeftBigCurve = {ctor: 'TopLeftBigCurve'};
+var _user$project$Grid$VerticalTopDownJunctionTopLeft = {ctor: 'VerticalTopDownJunctionTopLeft'};
+var _user$project$Grid$VerticalTopDownJunctionTopRight = {ctor: 'VerticalTopDownJunctionTopRight'};
 var _user$project$Grid$TopLeftSlantedTopRight = {ctor: 'TopLeftSlantedTopRight'};
-var _user$project$Grid$TriJunctionVerticalVerticalBottomRight = {ctor: 'TriJunctionVerticalVerticalBottomRight'};
-var _user$project$Grid$TriJunctionVerticalVerticalBottomLeft = {ctor: 'TriJunctionVerticalVerticalBottomLeft'};
+var _user$project$Grid$VerticalTopDownJunctionBottomRight = {ctor: 'VerticalTopDownJunctionBottomRight'};
+var _user$project$Grid$VerticalTopDownJunctionBottomLeft = {ctor: 'VerticalTopDownJunctionBottomLeft'};
 var _user$project$Grid$SlantedLeftJunctionRight = {ctor: 'SlantedLeftJunctionRight'};
 var _user$project$Grid$SlantedRightJunctionLeft = {ctor: 'SlantedRightJunctionLeft'};
 var _user$project$Grid$SlantedLeftJunctionLeft = {ctor: 'SlantedLeftJunctionLeft'};
@@ -10088,12 +10149,14 @@ var _user$project$Grid$getElement = F3(
 												} else {
 													if (_user$project$Grid$isRoundCorner(_p14)) {
 														return (A2(_user$project$Grid$isNeighbor, topRight, _user$project$Grid$isSlantRight) && (A2(_user$project$Grid$isNeighbor, bottomLeft, _user$project$Grid$isSlantRight) && A2(_user$project$Grid$isNeighbor, right, _user$project$Grid$isHorizontal))) ? _elm_lang$core$Maybe$Just(
-															_user$project$Grid$RoundCorner(_user$project$Grid$SlantedRightJunctionRight)) : ((A2(_user$project$Grid$isNeighbor, topLeft, _user$project$Grid$isSlantLeft) && (A2(_user$project$Grid$isNeighbor, bottomRight, _user$project$Grid$isSlantLeft) && A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isHorizontal))) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$SlantedRightJunctionRight)) : ((A2(_user$project$Grid$isNeighbor, top, _user$project$Grid$isVertical) && (A2(_user$project$Grid$isNeighbor, bottom, _user$project$Grid$isVertical) && A2(_user$project$Grid$isNeighbor, topLeft, _user$project$Grid$isSlantLeft))) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$VerticalTopDownJunctionTopLeft)) : ((A2(_user$project$Grid$isNeighbor, topLeft, _user$project$Grid$isSlantLeft) && (A2(_user$project$Grid$isNeighbor, bottomRight, _user$project$Grid$isSlantLeft) && A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isHorizontal))) ? _elm_lang$core$Maybe$Just(
 															_user$project$Grid$RoundCorner(_user$project$Grid$SlantedLeftJunctionLeft)) : ((A2(_user$project$Grid$isNeighbor, topRight, _user$project$Grid$isSlantRight) && (A2(_user$project$Grid$isNeighbor, bottomLeft, _user$project$Grid$isSlantRight) && A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isHorizontal))) ? _elm_lang$core$Maybe$Just(
 															_user$project$Grid$RoundCorner(_user$project$Grid$SlantedRightJunctionLeft)) : ((A2(_user$project$Grid$isNeighbor, topLeft, _user$project$Grid$isSlantLeft) && (A2(_user$project$Grid$isNeighbor, bottomRight, _user$project$Grid$isSlantLeft) && A2(_user$project$Grid$isNeighbor, right, _user$project$Grid$isHorizontal))) ? _elm_lang$core$Maybe$Just(
 															_user$project$Grid$RoundCorner(_user$project$Grid$SlantedLeftJunctionRight)) : ((A2(_user$project$Grid$isNeighbor, top, _user$project$Grid$isVertical) && (A2(_user$project$Grid$isNeighbor, bottom, _user$project$Grid$isVertical) && A2(_user$project$Grid$isNeighbor, bottomLeft, _user$project$Grid$isSlantRight))) ? _elm_lang$core$Maybe$Just(
-															_user$project$Grid$RoundCorner(_user$project$Grid$TriJunctionVerticalVerticalBottomLeft)) : ((A2(_user$project$Grid$isNeighbor, top, _user$project$Grid$isVertical) && (A2(_user$project$Grid$isNeighbor, bottom, _user$project$Grid$isVertical) && A2(_user$project$Grid$isNeighbor, bottomRight, _user$project$Grid$isSlantLeft))) ? _elm_lang$core$Maybe$Just(
-															_user$project$Grid$RoundCorner(_user$project$Grid$TriJunctionVerticalVerticalBottomRight)) : ((A2(_user$project$Grid$isNeighbor, bottom, _user$project$Grid$isVertical) && A2(_user$project$Grid$isNeighbor, right, _user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$VerticalTopDownJunctionBottomLeft)) : ((A2(_user$project$Grid$isNeighbor, top, _user$project$Grid$isVertical) && (A2(_user$project$Grid$isNeighbor, bottom, _user$project$Grid$isVertical) && A2(_user$project$Grid$isNeighbor, bottomRight, _user$project$Grid$isSlantLeft))) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$VerticalTopDownJunctionBottomRight)) : ((A2(_user$project$Grid$isNeighbor, top, _user$project$Grid$isVertical) && (A2(_user$project$Grid$isNeighbor, bottom, _user$project$Grid$isVertical) && A2(_user$project$Grid$isNeighbor, topRight, _user$project$Grid$isSlantRight))) ? _elm_lang$core$Maybe$Just(
+															_user$project$Grid$RoundCorner(_user$project$Grid$VerticalTopDownJunctionTopRight)) : ((A2(_user$project$Grid$isNeighbor, bottom, _user$project$Grid$isVertical) && A2(_user$project$Grid$isNeighbor, right, _user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
 															_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftCorner)) : ((A2(_user$project$Grid$isNeighbor, bottom, _user$project$Grid$isVertical) && A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isHorizontal)) ? _elm_lang$core$Maybe$Just(
 															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightCorner)) : ((A2(_user$project$Grid$isNeighbor, bottom, _user$project$Grid$isVertical) && A2(_user$project$Grid$isNeighbor, topRight, _user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
 															_user$project$Grid$RoundCorner(_user$project$Grid$TopLeftSlantedTopRight)) : ((A2(_user$project$Grid$isNeighbor, right, _user$project$Grid$isHorizontal) && A2(_user$project$Grid$isNeighbor, bottomLeft, _user$project$Grid$isOpenCurve)) ? _elm_lang$core$Maybe$Just(
@@ -10126,7 +10189,7 @@ var _user$project$Grid$getElement = F3(
 															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightSlantedBottomRight)) : ((A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isHorizontal) && A2(_user$project$Grid$isNeighbor, bottomLeft, _user$project$Grid$isSlantRight)) ? _elm_lang$core$Maybe$Just(
 															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightSlantedBottomLeft)) : ((A2(_user$project$Grid$isNeighbor, bottom, _user$project$Grid$isVertical) && A2(_user$project$Grid$isNeighbor, topLeft, _user$project$Grid$isSlantLeft)) ? _elm_lang$core$Maybe$Just(
 															_user$project$Grid$RoundCorner(_user$project$Grid$TopRightSlantedTopLeft)) : _elm_lang$core$Maybe$Just(
-															_user$project$Grid$Text(_p14)))))))))))))))))))))))))))))))))))))));
+															_user$project$Grid$Text(_p14)))))))))))))))))))))))))))))))))))))))));
 													} else {
 														if (_user$project$Grid$isArrowRight(_p14)) {
 															return _elm_lang$core$Maybe$Just(_user$project$Grid$ArrowEast);
@@ -10316,21 +10379,21 @@ var _user$project$Grid$drawElement = F3(
 		}
 	});
 var _user$project$Grid$drawPaths = function (model) {
-	var columnRange = _elm_lang$core$Native_List.range(0, model.columns);
-	var rowRange = _elm_lang$core$Native_List.range(0, model.rows);
 	return _elm_lang$core$List$concat(
 		_elm_lang$core$List$concat(
 			A2(
-				_elm_lang$core$List$map,
-				function (r) {
-					return A2(
-						_elm_lang$core$List$map,
-						function (c) {
-							return A3(_user$project$Grid$drawElement, c, r, model);
-						},
-						columnRange);
-				},
-				rowRange)));
+				_elm_lang$core$List$indexedMap,
+				F2(
+					function (r, line) {
+						return A2(
+							_elm_lang$core$List$indexedMap,
+							F2(
+								function (c, $char) {
+									return A3(_user$project$Grid$drawElement, c, r, model);
+								}),
+							line);
+					}),
+				model.lines)));
 };
 var _user$project$Grid$getSvg = function (model) {
 	var gheight = _elm_lang$core$Basics$toString(
@@ -10355,7 +10418,7 @@ var _user$project$Grid$getSvg = function (model) {
 			_user$project$Grid$drawPaths(model)));
 };
 
-var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |----------------------------------------------------------.\n  | ooo |    |                          |                          |\n  | ooo |    |                          |                          |\n  \'_____\'    |                          |                          |\n             |                          |                          |\n             v                          v                          v\n   .-------------------.  .---------------------------.  .-------------------.\n   | Loadable module C |  |     Loadable module A     |  | Loadable module B |\n   \'-------------------\'  |---------------------------|  |   (instrumented)  |\n             |            |         .-----.           |  \'-------------------\'\n             \'------------+-------->| A.o |           |             |\n                 calls    |         \'-----\'           |             |\n                          |    .------------------.   |             |\n                          |   / A.instrumented.o /<---+-------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    ^\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\nJunctions\n\n   \n\n    |   \\/   \n   -+-  /\\      \n    |   \n    \n    |      |    |      |\n    +--  --+    +--  --+   +--  --+\n                |      |   |      |\n\n                 |    |  |     |\n         .- -.   .-  -.  ._   _.\n         |   |\n\n    .-   -.  .-.       \n    \'-   -\'  | |  | |  \n                  \'-\'\n\n  \\      |    /  |\n   .     \'   \'   .\n   |    /    |    \\ \n\n   \\\n   /\n\n   /\n   \\\n\n\n   /      \\\n  \'--    --\'\n /          \\\n\n   /   \\\n--\'     \'--\n /       \\\n\n                   \\         /\n   --.--  --.--   --.--   --.--\n    /        \\     \n\n\n    |   |\n    .   .\n   /|   |\\ \n\n    \n    |/  \\|\n    .    .\n    |    |\n\n\n   -.  -.\n   /     \\\n\n    .-  .-\n   /     \\\n\n  \n   /   /     \\    \\\n  \'-  \'_     _\'   -\'\n   \n\n   .-.\n  (   )\n   \'-\'\n\n   ..\n  (  )\n   \'\'\n\n\n   .------.\n  (        )\n   \'------\'\n\n    ________  \n   /       /\n  /       /\n /_______/\n\n\n    ________  \n    \\       \\\n     \\       \\\n      \\_______\\\n\n   ________ \n  |________|\n\n\n   ________ \n  |        |\n  |________|\n\n  .-.\n  \'-\'\n\n    ________  \n    \\_______\\\n\n   /\\\n  /  \\\n /____\\\n\n   /\\\n  /  \\\n /    \\\n\'------\'\n\n   ___\n  /   \\\n  \\___/\n\n  ______\n /      \\\n/        \\\n\\        /\n \\______/\n    \n\n    +---------+\n    |         |                        +--------------+\n    |   NFS   |--+                     |              |\n    |         |  |                 +-->|   CacheFS    |\n    +---------+  |   +----------+  |   |  /dev/hda5   |\n                 |   |          |  |   +--------------+\n    +---------+  +-->|          |  |\n    |         |      |          |--+\n    |   AFS   |----->| FS-Cache |\n    |         |      |          |--+\n    +---------+  +-->|          |  |\n                 |   |          |  |   +--------------+\n    +---------+  |   +----------+  |   |              |\n    |         |  |                 +-->|  CacheFiles  |\n    |  ISOFS  |--+                     |  /var/cache  |\n    |         |                        +--------------+\n    +---------+\n    ';
+var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |----------------------------------------------------------.\n  | ooo |    |                          |                          |\n  | ooo |    |                          |                          |\n  \'_____\'    |                          |                          |\n             |                          |                          |\n             v                          v                          v\n   .-------------------.  .---------------------------.  .-------------------.\n   | Loadable module C |  |     Loadable module A     |  | Loadable module B |\n   \'-------------------\'  |---------------------------|  |   (instrumented)  |\n             |            |         .-----.           |  \'-------------------\'\n             \'------------+-------->| A.o |           |             |\n                 calls    |         \'-----\'           |             |\n                          |    .------------------.   |             |\n                          |   / A.instrumented.o /<---+-------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    ^\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\nJunctions\n\n   \n\n    |   \\/   \n   -+-  /\\      \n    |   \n    \n    |      |    |      |\n    +--  --+    +--  --+   +--  --+\n                |      |   |      |\n\n                 |    |  |     |\n         .- -.   .-  -.  ._   _.\n         |   |\n\n    .-   -.  .-.       \n    \'-   -\'  | |  | |  \n                  \'-\'\n\n  \\      |    /  |\n   .     \'   \'   .\n   |    /    |    \\ \n\n   \\\n   /\n\n   /\n   \\\n\n\n   /      \\\n  \'--    --\'\n /          \\\n\n   /   \\\n--\'     \'--\n /       \\\n\n                   \\         /\n   --.--  --.--   --.--   --.--\n    /        \\     \n\n\n    |   |\n    .   .\n   /|   |\\ \n\n    |\n    .\n   / \\\n\n   \\|/\n    .\n   /|\\\n\n   \n   \\|/\n  --.--\n   /|\\\n\n   \\|/\n  --+--\n   /|\\\n    \n    |/  \\|\n    .    .\n    |    |\n\n\n   -.  -.\n   /     \\\n\n    .-  .-\n   /     \\\n\n  \n   /   /     \\    \\\n  \'-  \'_     _\'   -\'\n   \n\n   .-.\n  (   )\n   \'-\'\n\n   ..\n  (  )\n   \'\'\n\n\n   .------.\n  (        )\n   \'------\'\n\n    ________  \n   /       /\n  /       /\n /_______/\n\n\n    ________  \n    \\       \\\n     \\       \\\n      \\_______\\\n\n   ________ \n  |________|\n\n\n   ________ \n  |        |\n  |________|\n\n  .-.\n  \'-\'\n\n    ________  \n    \\_______\\\n\n   /\\\n  /  \\\n /____\\\n\n   /\\\n  /  \\\n /    \\\n\'------\'\n\n   ___\n  /   \\\n  \\___/\n\n  ______\n /      \\\n/        \\\n\\        /\n \\______/\n    \n\n    +---------+\n    |         |                        +--------------+\n    |   NFS   |--+                     |              |\n    |         |  |                 +-->|   CacheFS    |\n    +---------+  |   +----------+  |   |  /dev/hda5   |\n                 |   |          |  |   +--------------+\n    +---------+  +-->|          |  |\n    |         |      |          |--+\n    |   AFS   |----->| FS-Cache |\n    |         |      |          |--+\n    +---------+  +-->|          |  |\n                 |   |          |  |   +--------------+\n    +---------+  |   +----------+  |   |              |\n    |         |  |                 +-->|  CacheFiles  |\n    |  ISOFS  |--+                     |  /var/cache  |\n    |         |                        +--------------+\n    +---------+\n    ';
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
