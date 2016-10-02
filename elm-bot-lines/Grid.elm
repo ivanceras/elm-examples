@@ -11,11 +11,12 @@ import Svg.Attributes exposing (
     )
 import Char
 import Color
+import Array exposing (Array)
 
 type alias Model =
     {rows: Int
     ,columns: Int
-    ,lines: List (List Char)
+    ,lines: Array (Array Char)
     }
 
 fontSize = 14.0
@@ -529,13 +530,15 @@ getSvg model =
 --TODO: modularized parts in order to easily fit and match
 drawPaths: Model -> List (Svg a)
 drawPaths model =
-    List.indexedMap
+    Array.indexedMap
     (\r line ->
-       List.indexedMap
+       Array.indexedMap
         (\ c char->
            drawElement c r model
         ) line
+        |> Array.toList
     ) model.lines
+    |> Array.toList
     |> List.concat
     |> List.concat
 
@@ -1555,33 +1558,14 @@ get x y model =
     let
         row = y
 
-        line: Maybe (List Char)
-        line = 
-            List.indexedMap 
-                (\ r l  ->
-                   if r == row then
-                     Just l
-                   else
-                    Nothing
-                ) model.lines
-                |> List.filterMap
-                    (\l -> l)
-                    |> List.head
+        line: Maybe (Array Char)
+        line = Array.get y model.lines
 
         char: Maybe Char
         char =
             case line of
                 Just l ->
-                    List.indexedMap
-                        (\i char ->
-                           if i == x then
-                             Just char
-                           else
-                             Nothing 
-                        ) l
-                        |> List.filterMap
-                            (\c -> c)
-                                |> List.head
+                    Array.get x l
                 Nothing ->
                     Nothing
     in 
@@ -1594,17 +1578,19 @@ init str =
         lines = String.lines str 
         max = 
             List.map
-            (\l -> 
-                String.length l
+            (\line -> 
+                String.length line
             )lines
                 |> List.maximum
+        lineArr = Array.fromList lines
         lineChar = 
-            List.map (
+            Array.map (
                 \line ->
-                    String.toList <| String.trimRight line
-            ) lines
+                    (String.toList <| String.trimRight line)
+                    |> Array.fromList
+            ) lineArr
     in
-    {rows = List.length lineChar
+    {rows = Array.length lineChar
     ,columns = Maybe.withDefault 0 max
     ,lines = lineChar
     }
