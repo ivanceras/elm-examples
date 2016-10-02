@@ -60,9 +60,13 @@ type Position
     | BottomLeftBigCurve
     | BottomRightBigCurve
 
+type Element
+    = Vertical
+    | Horizontal
+
 type Component
     = Intersection Type 
-    | Horizontal
+    | Simple Element
     | LowHorizontal
     | LowHorizontalExtendLeft
     | LowHorizontalExtendVerticalLeft
@@ -70,7 +74,6 @@ type Component
     | LowHorizontalExtendVerticalRight
     | LowHorizontalExtendVerticalBottomLeft
     | LowHorizontalExtendVerticalBottomRight
-    | Vertical
     | RoundCorner Position
     | ArrowEast
     | ArrowSouth
@@ -87,6 +90,7 @@ type Component
     | BigOpenCurve
     | BigCloseCurve
     | Text Char
+
 
 type Type 
     = Cross 
@@ -214,11 +218,11 @@ getComponent x y model =
                 if isVertical char
                     && not (isNeighbor left isAlphaNumeric) 
                     && not (isNeighbor right isAlphaNumeric) then
-                    Just Vertical
+                    Just <| Simple Vertical
                 else if isHorizontal char 
                     && not (isNeighbor left isAlphaNumeric) 
                     && not (isNeighbor right isAlphaNumeric) then
-                    Just Horizontal
+                    Just <| Simple Horizontal
                 else if isLowHorizontal char
                     && isNeighbor left isSlantRight then
                     Just LowHorizontalExtendLeft
@@ -540,6 +544,7 @@ drawPaths model =
     |> List.concat
     |> List.concat
 
+
 drawComponent: Int -> Int -> Model -> List (Svg a)
 drawComponent x y model =
     let 
@@ -549,7 +554,7 @@ drawComponent x y model =
         case component of
             Just component ->
                 case component of
-                    Horizontal ->
+                    Simple Horizontal ->
                        [drawHorizontalLine x y model]
 
                     LowHorizontal ->
@@ -573,7 +578,7 @@ drawComponent x y model =
                     LowHorizontalExtendVerticalBottomRight ->
                         [drawLowHorizontalExtendVerticalBottomRight x y model]
 
-                    Vertical ->
+                    Simple Vertical ->
                        [drawVerticalLine x y model]
 
                     Intersection itype->

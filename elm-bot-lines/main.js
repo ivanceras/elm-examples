@@ -10145,6 +10145,8 @@ var _user$project$Grid$BottomLeftCorner = {ctor: 'BottomLeftCorner'};
 var _user$project$Grid$BottomRightCorner = {ctor: 'BottomRightCorner'};
 var _user$project$Grid$TopLeftCorner = {ctor: 'TopLeftCorner'};
 var _user$project$Grid$TopRightCorner = {ctor: 'TopRightCorner'};
+var _user$project$Grid$Horizontal = {ctor: 'Horizontal'};
+var _user$project$Grid$Vertical = {ctor: 'Vertical'};
 var _user$project$Grid$Text = function (a) {
 	return {ctor: 'Text', _0: a};
 };
@@ -10165,7 +10167,6 @@ var _user$project$Grid$ArrowEast = {ctor: 'ArrowEast'};
 var _user$project$Grid$RoundCorner = function (a) {
 	return {ctor: 'RoundCorner', _0: a};
 };
-var _user$project$Grid$Vertical = {ctor: 'Vertical'};
 var _user$project$Grid$LowHorizontalExtendVerticalBottomRight = {ctor: 'LowHorizontalExtendVerticalBottomRight'};
 var _user$project$Grid$LowHorizontalExtendVerticalBottomLeft = {ctor: 'LowHorizontalExtendVerticalBottomLeft'};
 var _user$project$Grid$LowHorizontalExtendVerticalRight = {ctor: 'LowHorizontalExtendVerticalRight'};
@@ -10173,7 +10174,9 @@ var _user$project$Grid$LowHorizontalExtendRight = {ctor: 'LowHorizontalExtendRig
 var _user$project$Grid$LowHorizontalExtendVerticalLeft = {ctor: 'LowHorizontalExtendVerticalLeft'};
 var _user$project$Grid$LowHorizontalExtendLeft = {ctor: 'LowHorizontalExtendLeft'};
 var _user$project$Grid$LowHorizontal = {ctor: 'LowHorizontal'};
-var _user$project$Grid$Horizontal = {ctor: 'Horizontal'};
+var _user$project$Grid$Simple = function (a) {
+	return {ctor: 'Simple', _0: a};
+};
 var _user$project$Grid$Intersection = function (a) {
 	return {ctor: 'Intersection', _0: a};
 };
@@ -10203,12 +10206,14 @@ var _user$project$Grid$getComponent = F3(
 			if (_user$project$Grid$isVertical(_p14) && (_elm_lang$core$Basics$not(
 				A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isAlphaNumeric)) && _elm_lang$core$Basics$not(
 				A2(_user$project$Grid$isNeighbor, right, _user$project$Grid$isAlphaNumeric)))) {
-				return _elm_lang$core$Maybe$Just(_user$project$Grid$Vertical);
+				return _elm_lang$core$Maybe$Just(
+					_user$project$Grid$Simple(_user$project$Grid$Vertical));
 			} else {
 				if (_user$project$Grid$isHorizontal(_p14) && (_elm_lang$core$Basics$not(
 					A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isAlphaNumeric)) && _elm_lang$core$Basics$not(
 					A2(_user$project$Grid$isNeighbor, right, _user$project$Grid$isAlphaNumeric)))) {
-					return _elm_lang$core$Maybe$Just(_user$project$Grid$Horizontal);
+					return _elm_lang$core$Maybe$Just(
+						_user$project$Grid$Simple(_user$project$Grid$Horizontal));
 				} else {
 					if (_user$project$Grid$isLowHorizontal(_p14) && A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isSlantRight)) {
 						return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalExtendLeft);
@@ -10373,11 +10378,6 @@ var _user$project$Grid$drawComponent = F3(
 		if (_p15.ctor === 'Just') {
 			var _p16 = _p15._0;
 			switch (_p16.ctor) {
-				case 'Horizontal':
-					return _elm_lang$core$Native_List.fromArray(
-						[
-							A3(_user$project$Grid$drawHorizontalLine, x, y, model)
-						]);
 				case 'LowHorizontal':
 					return _elm_lang$core$Native_List.fromArray(
 						[
@@ -10413,11 +10413,18 @@ var _user$project$Grid$drawComponent = F3(
 						[
 							A3(_user$project$Grid$drawLowHorizontalExtendVerticalBottomRight, x, y, model)
 						]);
-				case 'Vertical':
-					return _elm_lang$core$Native_List.fromArray(
-						[
-							A3(_user$project$Grid$drawVerticalLine, x, y, model)
-						]);
+				case 'Simple':
+					if (_p16._0.ctor === 'Horizontal') {
+						return _elm_lang$core$Native_List.fromArray(
+							[
+								A3(_user$project$Grid$drawHorizontalLine, x, y, model)
+							]);
+					} else {
+						return _elm_lang$core$Native_List.fromArray(
+							[
+								A3(_user$project$Grid$drawVerticalLine, x, y, model)
+							]);
+					}
 				case 'Intersection':
 					return A4(_user$project$Grid$drawIntersection, x, y, _p16._0, model);
 				case 'RoundCorner':
