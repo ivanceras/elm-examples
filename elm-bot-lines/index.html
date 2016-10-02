@@ -18,7 +18,6 @@ tt{
 var app = Elm.Main.fullscreen();
 app.ports.getAsciiText.subscribe(function(){
     var asciiText = document.getElementById("ascii_text").textContent;
-    console.log("asciiText:", asciiText);
    app.ports.receiveAsciiText.send(asciiText);
 });
 </script>

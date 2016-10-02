@@ -6,7 +6,8 @@ import Svg.Attributes exposing (
     width,d,markerHeight,
     markerWidth,orient,markerEnd,
     markerUnits,refX,refY,viewBox,id,
-    stroke,strokeWidth,fill
+    stroke,strokeWidth,fill,strokeLinecap,
+    strokeLinejoin
     )
 import Char
 import Color
@@ -103,7 +104,7 @@ horizontal = ['-']
 horizontalDouble = ['=']
 lowHorizontal = ['_']
 intersections = ['+']
-roundedCorners = ['.','\'']
+roundCorners = ['.','\'']
 arrowRight = ['>']
 arrowDown = ['V','v']
 arrowLeft = ['<']
@@ -139,7 +140,7 @@ isLine char =
     isVertical char || isHorizontal char || isLowHorizontal char
 
 isRoundCorner char =
-    List.member char roundedCorners
+    List.member char roundCorners
 
 isArrowRight char =
     List.member char arrowRight
@@ -209,13 +210,13 @@ getElement x y model =
     in
         case char of
             Just char ->
-                if isVertical char then
-                    --&& not (isNeighbor left isAlphaNumeric) 
-                    --&& not (isNeighbor right isAlphaNumeric) then
+                if isVertical char
+                    && not (isNeighbor left isAlphaNumeric) 
+                    && not (isNeighbor right isAlphaNumeric) then
                     Just Vertical
-                else if isHorizontal char then
-                   -- && not (isNeighbor left isAlphaNumeric) 
-                   -- && not (isNeighbor right isAlphaNumeric) then
+                else if isHorizontal char 
+                    && not (isNeighbor left isAlphaNumeric) 
+                    && not (isNeighbor right isAlphaNumeric) then
                     Just Horizontal
                 else if isLowHorizontal char
                     && isNeighbor left isSlantRight then
@@ -235,9 +236,9 @@ getElement x y model =
                 else if isLowHorizontal char
                     && isNeighbor bottomRight isVertical then
                     Just LowHorizontalExtendVerticalBottomRight
-                else if isLowHorizontal char then
-                    --&& not (isNeighbor left isAlphaNumeric) 
-                   -- && not (isNeighbor right isAlphaNumeric) then
+                else if isLowHorizontal char
+                    && not (isNeighbor left isAlphaNumeric) 
+                    && not (isNeighbor right isAlphaNumeric) then
                     Just LowHorizontal
                 else if isIntersection char then
                     let
@@ -514,7 +515,7 @@ getSvg model =
         ::drawPaths model
         )
         
-
+--TODO: optimize here to indexedMap only the lines and chars
 drawPaths: Model -> List (Svg a)
 drawPaths model =
     let 
@@ -931,7 +932,7 @@ drawRoundTopRightSlantedBottomLeft x y =
         lendX = measureX x + textWidth * 1 / 4
         lendY = measureY y + textHeight * 3 / 4
     in
-    [drawArc lendX lendY startX startY arcRadius 
+    [drawArc lendX lendY startX startY (arcRadius * 3 / 4)
     ,drawLine lstartX lstartY lendX lendY color
     ]
 
@@ -973,7 +974,7 @@ drawRoundTopLeftSlantedBottomRightCorner x y =
         lendX = measureX x + textWidth * 3 /4
         lendY = measureY y + textHeight * 3 /4 
     in
-    [drawArc startX startY lendX lendY arcRadius
+    [drawArc startX startY lendX lendY (arcRadius * 3 / 4)
     ,drawLine lstartX lstartY lendX lendY color
     ]
 
@@ -999,7 +1000,7 @@ drawRoundBottomLeftSlantedTopRightCorner x y =
         lendX = measureX x + textWidth * 3 /4
         lendY = measureY y + textHeight * 1 /4 
     in
-    [drawArc lendX lendY startX startY arcRadius
+    [drawArc lendX lendY startX startY (arcRadius * 3 / 4)
     ,drawLine lstartX lstartY lendX lendY color
     ]
 
@@ -1028,7 +1029,7 @@ drawRoundBottomLeftSlantedTopRightLowHorizontal x y =
         lendX = measureX x + textWidth / 2
         lendY = measureY y + textHeight / 2
     in
-    [drawArc lendX lendY startX startY (arcRadius * 2)
+    [drawArc lendX lendY startX startY (arcRadius * 1.5)
     ,drawLine lstartX lstartY lendX lendY color
     ]
 
@@ -1041,7 +1042,7 @@ drawRoundBottomRightSlantedTopLeftLowHorizontal x y =
         lendX = measureX x + textWidth / 2
         lendY = measureY y + textHeight / 2
     in
-    [drawArc startX startY lendX lendY (arcRadius * 2)
+    [drawArc startX startY lendX lendY (arcRadius * 1.5)
     ,drawLine lstartX lstartY lendX lendY color
     ]
 
@@ -1128,7 +1129,7 @@ drawRoundBottomRightSlantedTopLeftCorner x y =
         lendX = measureX x + textWidth * 1 / 4
         lendY = measureY y + textHeight * 1 / 4
     in
-    [drawArc startX startY lendX lendY arcRadius
+    [drawArc startX startY lendX lendY (arcRadius * 3 / 4)
     ,drawLine lstartX lstartY lendX lendY color
     ]
 
@@ -1238,28 +1239,27 @@ drawRoundBottomRightCorner x y =
 drawIntersection: Int -> Int -> Type ->  Model -> List (Svg a)
 drawIntersection x y itype model =
     let
-        lw = lineWidth / 2
         --vertical line
         v1startX = measureX x + textWidth / 2
         v1endX = v1startX 
-        v1startY = measureY y - lw
-        v1endY = measureY y + textHeight / 2 + lw
+        v1startY = measureY y
+        v1endY = measureY y + textHeight / 2 
  
         -- v line part 2
         v2startX = measureX x + textWidth / 2 
         v2endX = v2startX 
-        v2startY = measureY y + textHeight / 2 - lw
-        v2endY = measureY y + textHeight + lw
+        v2startY = measureY y + textHeight / 2 
+        v2endY = measureY y + textHeight
 
         --horizontal line
-        h1startX = measureX x - lw
-        h1endX = measureX x + textWidth / 2 + lw
+        h1startX = measureX x 
+        h1endX = measureX x + textWidth / 2 
         h1startY = measureY y + textHeight / 2 
         h1endY = h1startY
 
         --h line part 2
-        h2startX = measureX x + textWidth / 2 - lw
-        h2endX = h2startX + textWidth + lw
+        h2startX = measureX x + textWidth / 2 
+        h2endX = h2startX + textWidth
         h2startY = measureY y + textHeight / 2
         h2endY = h2startY 
 
@@ -1456,7 +1456,10 @@ drawLine startX startY endX endY color =
             ,x2 <| toString endX
             ,y1 <| toString startY
             ,y2 <| toString endY
-            ,Svg.Attributes.style ("stroke: "++colorText++";stroke-width:"++toString lineWidth)
+            ,stroke colorText
+            ,strokeWidth <| toString lineWidth
+            ,strokeLinecap "round"
+            ,strokeLinejoin "mitter"
             ]
             []
 

@@ -8596,13 +8596,13 @@ var _user$project$Grid$arrowRight = _elm_lang$core$Native_List.fromArray(
 var _user$project$Grid$isArrowRight = function ($char) {
 	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$arrowRight);
 };
-var _user$project$Grid$roundedCorners = _elm_lang$core$Native_List.fromArray(
+var _user$project$Grid$roundCorners = _elm_lang$core$Native_List.fromArray(
 	[
 		_elm_lang$core$Native_Utils.chr('.'),
 		_elm_lang$core$Native_Utils.chr('\'')
 	]);
 var _user$project$Grid$isRoundCorner = function ($char) {
-	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$roundedCorners);
+	return A2(_elm_lang$core$List$member, $char, _user$project$Grid$roundCorners);
 };
 var _user$project$Grid$intersections = _elm_lang$core$Native_List.fromArray(
 	[
@@ -9279,17 +9279,11 @@ var _user$project$Grid$drawLine = F5(
 					_elm_lang$core$Basics$toString(startY)),
 					_elm_lang$svg$Svg_Attributes$y2(
 					_elm_lang$core$Basics$toString(endY)),
-					_elm_lang$svg$Svg_Attributes$style(
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						'stroke: ',
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							colorText,
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								';stroke-width:',
-								_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth)))))
+					_elm_lang$svg$Svg_Attributes$stroke(colorText),
+					_elm_lang$svg$Svg_Attributes$strokeWidth(
+					_elm_lang$core$Basics$toString(_user$project$Grid$lineWidth)),
+					_elm_lang$svg$Svg_Attributes$strokeLinecap('round'),
+					_elm_lang$svg$Svg_Attributes$strokeLinejoin('mitter')
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[]));
@@ -9443,7 +9437,7 @@ var _user$project$Grid$drawRoundTopRightSlantedBottomLeft = F2(
 		var startX = _user$project$Grid$measureX(x);
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, _user$project$Grid$arcRadius),
+				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, (_user$project$Grid$arcRadius * 3) / 4),
 				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
@@ -9488,7 +9482,7 @@ var _user$project$Grid$drawRoundTopLeftSlantedBottomRightCorner = F2(
 		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, _user$project$Grid$arcRadius),
+				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, (_user$project$Grid$arcRadius * 3) / 4),
 				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
@@ -9516,7 +9510,7 @@ var _user$project$Grid$drawRoundBottomLeftSlantedTopRightCorner = F2(
 		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, _user$project$Grid$arcRadius),
+				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, (_user$project$Grid$arcRadius * 3) / 4),
 				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
@@ -9547,7 +9541,7 @@ var _user$project$Grid$drawRoundBottomLeftSlantedTopRightLowHorizontal = F2(
 		var startX = _user$project$Grid$measureX(x) + _user$project$Grid$textWidth;
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, _user$project$Grid$arcRadius * 2),
+				A5(_user$project$Grid$drawArc, lendX, lendY, startX, startY, _user$project$Grid$arcRadius * 1.5),
 				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
@@ -9561,7 +9555,7 @@ var _user$project$Grid$drawRoundBottomRightSlantedTopLeftLowHorizontal = F2(
 		var startX = _user$project$Grid$measureX(x);
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, _user$project$Grid$arcRadius * 2),
+				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, _user$project$Grid$arcRadius * 1.5),
 				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
@@ -9653,7 +9647,7 @@ var _user$project$Grid$drawRoundBottomRightSlantedTopLeftCorner = F2(
 		var startX = _user$project$Grid$measureX(x);
 		return _elm_lang$core$Native_List.fromArray(
 			[
-				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, _user$project$Grid$arcRadius),
+				A5(_user$project$Grid$drawArc, startX, startY, lendX, lendY, (_user$project$Grid$arcRadius * 3) / 4),
 				A5(_user$project$Grid$drawLine, lstartX, lstartY, lendX, lendY, _user$project$Grid$color)
 			]);
 	});
@@ -9866,25 +9860,24 @@ var _user$project$Grid$drawIntersection = F4(
 	function (x, y, itype, model) {
 		var h2startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
 		var h2endY = h2startY;
+		var h2startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var h2endX = h2startX + _user$project$Grid$textWidth;
+		var h2Line = A5(_user$project$Grid$drawLine, h2startX, h2startY, h2endX, h2endY, _user$project$Grid$color);
 		var h1startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
 		var h1endY = h1startY;
+		var h1endX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
+		var h1startX = _user$project$Grid$measureX(x);
+		var h1Line = A5(_user$project$Grid$drawLine, h1startX, h1startY, h1endX, h1endY, _user$project$Grid$color);
+		var v2endY = _user$project$Grid$measureY(y) + _user$project$Grid$textHeight;
+		var v2startY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
 		var v2startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		var v2endX = v2startX;
+		var v2Line = A5(_user$project$Grid$drawLine, v2startX, v2startY, v2endX, v2endY, _user$project$Grid$color);
+		var v1endY = _user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2);
+		var v1startY = _user$project$Grid$measureY(y);
 		var v1startX = _user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2);
 		var v1endX = v1startX;
-		var lw = _user$project$Grid$lineWidth / 2;
-		var v1startY = _user$project$Grid$measureY(y) - lw;
-		var v1endY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) + lw;
 		var v1Line = A5(_user$project$Grid$drawLine, v1startX, v1startY, v1endX, v1endY, _user$project$Grid$color);
-		var v2startY = (_user$project$Grid$measureY(y) + (_user$project$Grid$textHeight / 2)) - lw;
-		var v2endY = (_user$project$Grid$measureY(y) + _user$project$Grid$textHeight) + lw;
-		var v2Line = A5(_user$project$Grid$drawLine, v2startX, v2startY, v2endX, v2endY, _user$project$Grid$color);
-		var h1startX = _user$project$Grid$measureX(x) - lw;
-		var h1endX = (_user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2)) + lw;
-		var h1Line = A5(_user$project$Grid$drawLine, h1startX, h1startY, h1endX, h1endY, _user$project$Grid$color);
-		var h2startX = (_user$project$Grid$measureX(x) + (_user$project$Grid$textWidth / 2)) - lw;
-		var h2endX = (h2startX + _user$project$Grid$textWidth) + lw;
-		var h2Line = A5(_user$project$Grid$drawLine, h2startX, h2startY, h2endX, h2endY, _user$project$Grid$color);
 		var _p12 = itype;
 		switch (_p12.ctor) {
 			case 'VertJunctionLeft':
@@ -10033,10 +10026,14 @@ var _user$project$Grid$getElement = F3(
 		var _p13 = $char;
 		if (_p13.ctor === 'Just') {
 			var _p14 = _p13._0;
-			if (_user$project$Grid$isVertical(_p14)) {
+			if (_user$project$Grid$isVertical(_p14) && (_elm_lang$core$Basics$not(
+				A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isAlphaNumeric)) && _elm_lang$core$Basics$not(
+				A2(_user$project$Grid$isNeighbor, right, _user$project$Grid$isAlphaNumeric)))) {
 				return _elm_lang$core$Maybe$Just(_user$project$Grid$Vertical);
 			} else {
-				if (_user$project$Grid$isHorizontal(_p14)) {
+				if (_user$project$Grid$isHorizontal(_p14) && (_elm_lang$core$Basics$not(
+					A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isAlphaNumeric)) && _elm_lang$core$Basics$not(
+					A2(_user$project$Grid$isNeighbor, right, _user$project$Grid$isAlphaNumeric)))) {
 					return _elm_lang$core$Maybe$Just(_user$project$Grid$Horizontal);
 				} else {
 					if (_user$project$Grid$isLowHorizontal(_p14) && A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isSlantRight)) {
@@ -10057,7 +10054,9 @@ var _user$project$Grid$getElement = F3(
 										if (_user$project$Grid$isLowHorizontal(_p14) && A2(_user$project$Grid$isNeighbor, bottomRight, _user$project$Grid$isVertical)) {
 											return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontalExtendVerticalBottomRight);
 										} else {
-											if (_user$project$Grid$isLowHorizontal(_p14)) {
+											if (_user$project$Grid$isLowHorizontal(_p14) && (_elm_lang$core$Basics$not(
+												A2(_user$project$Grid$isNeighbor, left, _user$project$Grid$isAlphaNumeric)) && _elm_lang$core$Basics$not(
+												A2(_user$project$Grid$isNeighbor, right, _user$project$Grid$isAlphaNumeric)))) {
 												return _elm_lang$core$Maybe$Just(_user$project$Grid$LowHorizontal);
 											} else {
 												if (_user$project$Grid$isIntersection(_p14)) {
@@ -10356,7 +10355,7 @@ var _user$project$Grid$getSvg = function (model) {
 			_user$project$Grid$drawPaths(model)));
 };
 
-var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |----------------------------------------------------------.\n  | ooo |    |                          |                          |\n  | ooo |    |                          |                          |\n  \'_____\'    |                          |                          |\n             |                          |                          |\n             v                          v                          v\n   .-------------------.  .---------------------------.  .-------------------.\n   | Loadable module C |  |     Loadable module A     |  | Loadable module B |\n   \'-------------------\'  |---------------------------|  |   (instrumented)  |\n             |            |         .-----.           |  \'-------------------\'\n             \'------------+-------->| A.o |           |             |\n                 calls    |         \'-----\'           |             |\n                          |    .------------------.   |             |\n                          |   / A.instrumented.o /<---+-------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    ^\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\nJunctions\n\n   \n\n    |   \\/   \n   -+-  /\\      \n    |   \n    \n\n                 |    |  |     |\n         .- -.   .-  -.  ._   _.\n         |   |\n\n    .-   -.  .-.       \n    \'-   -\'  | |  | |  \n                  \'-\'\n\n  \\      |    /  |\n   .     \'   \'   .\n   |    /    |    \\ \n\n   \\\n   /\n\n   /\n   \\\n\n\n   /      \\\n  \'--    --\'\n /          \\\n\n   /   \\\n--\'     \'--\n /       \\\n\n\n\n    |   |\n    .   .\n   /|   |\\ \n\n   -.  -.\n   /     \\\n\n    .-  .-\n   /     \\\n\n  \n   /   /     \\    \\\n  \'-  \'_     _\'   -\'\n   \n\n   .-.\n  (   )\n   \'-\'\n\n   ..\n  (  )\n   \'\'\n\n\n   .------.\n  (        )\n   \'------\'\n\n    ________  \n   /       /\n  /       /\n /_______/\n\n\n    ________  \n    \\       \\\n     \\       \\\n      \\_______\\\n\n   ________ \n  |________|\n\n\n   ________ \n  |        |\n  |________|\n\n  .-.\n  \'-\'\n\n    ________  \n    \\_______\\\n\n   /\\\n  /  \\\n /____\\\n\n   /\\\n  /  \\\n /    \\\n\'------\'\n\n   ___\n  /   \\\n  \\___/\n\n  ______\n /      \\\n/        \\\n\\        /\n \\______/\n    \n\n vncviewer         .-,(  ),-.    \n   __  _         .-(          )-.           gateway           vncserver \n  [__]|=|  ---->(    internet    )-------> __________ ------> ____   __ \n  /::/|_|        \'-(          ).-\'        [_...__... ]       |    | |==|\n                     \'-.( ).-\'                               |____| |  |\n                                                             /::::/ |__|\n\n    ';
+var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |----------------------------------------------------------.\n  | ooo |    |                          |                          |\n  | ooo |    |                          |                          |\n  \'_____\'    |                          |                          |\n             |                          |                          |\n             v                          v                          v\n   .-------------------.  .---------------------------.  .-------------------.\n   | Loadable module C |  |     Loadable module A     |  | Loadable module B |\n   \'-------------------\'  |---------------------------|  |   (instrumented)  |\n             |            |         .-----.           |  \'-------------------\'\n             \'------------+-------->| A.o |           |             |\n                 calls    |         \'-----\'           |             |\n                          |    .------------------.   |             |\n                          |   / A.instrumented.o /<---+-------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    ^\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\nJunctions\n\n   \n\n    |   \\/   \n   -+-  /\\      \n    |   \n    \n    |      |    |      |\n    +--  --+    +--  --+   +--  --+\n                |      |   |      |\n\n                 |    |  |     |\n         .- -.   .-  -.  ._   _.\n         |   |\n\n    .-   -.  .-.       \n    \'-   -\'  | |  | |  \n                  \'-\'\n\n  \\      |    /  |\n   .     \'   \'   .\n   |    /    |    \\ \n\n   \\\n   /\n\n   /\n   \\\n\n\n   /      \\\n  \'--    --\'\n /          \\\n\n   /   \\\n--\'     \'--\n /       \\\n\n                   \\         /\n   --.--  --.--   --.--   --.--\n    /        \\     \n\n\n    |   |\n    .   .\n   /|   |\\ \n\n    \n    |/  \\|\n    .    .\n    |    |\n\n\n   -.  -.\n   /     \\\n\n    .-  .-\n   /     \\\n\n  \n   /   /     \\    \\\n  \'-  \'_     _\'   -\'\n   \n\n   .-.\n  (   )\n   \'-\'\n\n   ..\n  (  )\n   \'\'\n\n\n   .------.\n  (        )\n   \'------\'\n\n    ________  \n   /       /\n  /       /\n /_______/\n\n\n    ________  \n    \\       \\\n     \\       \\\n      \\_______\\\n\n   ________ \n  |________|\n\n\n   ________ \n  |        |\n  |________|\n\n  .-.\n  \'-\'\n\n    ________  \n    \\_______\\\n\n   /\\\n  /  \\\n /____\\\n\n   /\\\n  /  \\\n /    \\\n\'------\'\n\n   ___\n  /   \\\n  \\___/\n\n  ______\n /      \\\n/        \\\n\\        /\n \\______/\n    \n\n    +---------+\n    |         |                        +--------------+\n    |   NFS   |--+                     |              |\n    |         |  |                 +-->|   CacheFS    |\n    +---------+  |   +----------+  |   |  /dev/hda5   |\n                 |   |          |  |   +--------------+\n    +---------+  +-->|          |  |\n    |         |      |          |--+\n    |   AFS   |----->| FS-Cache |\n    |         |      |          |--+\n    +---------+  +-->|          |  |\n                 |   |          |  |   +--------------+\n    +---------+  |   +----------+  |   |              |\n    |         |  |                 +-->|  CacheFiles  |\n    |  ISOFS  |--+                     |  /var/cache  |\n    |         |                        +--------------+\n    +---------+\n    ';
 var _user$project$Main$init = {
 	ctor: '_Tuple2',
 	_0: {
@@ -10380,14 +10379,12 @@ var _user$project$Main$update = F2(
 					{ctor: '_Tuple0'})
 			};
 		} else {
-			var _p2 = _p0._0;
-			var _p1 = A2(_elm_lang$core$Debug$log, 'Got', _p2);
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
 					{
-						grid: _user$project$Grid$init(_p2)
+						grid: _user$project$Grid$init(_p0._0)
 					}),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
