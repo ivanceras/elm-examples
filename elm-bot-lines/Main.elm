@@ -6,6 +6,7 @@ import String
 import Grid
 import Html.App as App
 import Json.Decode exposing (string)
+import Regex
 
 
 {-- code which detects lines and connections
@@ -23,7 +24,9 @@ init: (Model, Cmd Msg)
 init  =
     ({grid = Grid.init arg
      }
-    ,Cmd.none
+    ,Cmd.batch[
+        setAsciiText arg
+    ]
     )
 
 textContentDecoder =
@@ -32,6 +35,27 @@ textContentDecoder =
 
 
 view model =
+    div [style 
+            [("display", "flex")
+            ]
+        ]
+        [
+        div[] 
+           [button [onClick Convert
+                   ] 
+                   [text "Convert >>"]
+           ]
+        ,div 
+            [style [("width", "500px")
+                   ,("height", "100%")
+                   ,("overflow", "auto")
+                   ]
+            ]
+            [Grid.getSvg model.grid
+            ]
+        ]
+
+    {--
     div []
         [
         button [
@@ -62,6 +86,8 @@ view model =
                 ]
             ]
         ]
+    --}
+
         
 update msg model =
     case msg of
@@ -86,6 +112,8 @@ subscriptions model =
 
 port getAsciiText: () -> Cmd msg
 
+port setAsciiText: String -> Cmd msg
+
 port receiveAsciiText: (String -> msg) -> Sub msg
 
 
@@ -93,6 +121,7 @@ port receiveAsciiText: (String -> msg) -> Sub msg
 
 arg = 
     """
+
 +------+   +-----+   +-----+   +-----+
 |      |   |     |   |     |   |     |
 | Foo  +-->| Bar +---+ Baz |<--+ Moo |

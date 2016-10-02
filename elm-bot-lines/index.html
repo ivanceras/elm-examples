@@ -1,25 +1,86 @@
 <html>
 <head>
-    <title>Ascii to SVG</title>
-    <script src="main.js"> </script>
+<title>Ascii to SVG</title>
+<script src="main.js"> </script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/codemirror.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/hint/show-hint.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/fold/foldgutter.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/codemirror.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/hint/show-hint.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/hint/javascript-hint.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/mode/javascript/javascript.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/fold/foldcode.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/fold/foldgutter.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/fold/brace-fold.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/fold/xml-fold.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/addon/fold/comment-fold.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.19.0/mode/javascript/javascript.js"></script>
 <style>
-pre,
-code,
-kbd,
-samp,
-tt{
-  font-family:monospace,monospace;
-  font-size:15.4px;
+#editor{
+font-size:15.4px;
 }
 </style>
 </head>
 <body>
+<div style="display:flex">
+    <div id="editor" style="border:1px solid #ccc"></div>
+    <div id="elm"></div>
+</div>
 <script>
-var app = Elm.Main.fullscreen();
+var elm = document.getElementById("elm")
+var app = Elm.Main.embed(elm);
 app.ports.getAsciiText.subscribe(function(){
-    var asciiText = document.getElementById("ascii_text").textContent;
-   app.ports.receiveAsciiText.send(asciiText);
+    var asciiText = cm.getValue();
+    app.ports.receiveAsciiText.send(asciiText);
 });
+
+
+var editor = document.getElementById("editor")
+app.ports.setAsciiText.subscribe(function(asciiText){
+    cm.setValue(asciiText)
+});
+
+var cm = CodeMirror(editor,
+        {
+            mode: "javascript",
+            lineNumbers: true,
+            lineWrapping: false,
+            extraKeys: {"Ctrl-Space": "autocomplete"},
+            foldGutter: {
+                rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.brace, CodeMirror.fold.comment)
+            },
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        }
+    );
+cm.setSize("500px", "100%");
+
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+
+
+var sendAsciiText = debounce(function() {
+    console.log("called?");
+    window.requestAnimationFrame(function(){
+        var asciiText = cm.getValue();
+        app.ports.receiveAsciiText.send(asciiText);
+    });
+}, 500);
+
+cm.on("change",sendAsciiText);
+
+
 </script>
 </body>
 </html>
