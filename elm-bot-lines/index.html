@@ -42,14 +42,16 @@ app.ports.setAsciiText.subscribe(function(asciiText){
 
 var cm = CodeMirror(editor,
         {
-            mode: "javascript",
+            mode: "text",
             lineNumbers: true,
             lineWrapping: false,
-            extraKeys: {"Ctrl-Space": "autocomplete"},
-            foldGutter: {
-                rangeFinder: new CodeMirror.fold.combine(CodeMirror.fold.brace, CodeMirror.fold.comment)
-            },
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+            gutters: ["CodeMirror-linenumbers"],
+            extraKeys: {
+                       Tab: function(cm) {
+                            var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+                            cm.replaceSelection(spaces, "end", "+input");
+                        }
+                    }
         }
     );
 cm.setSize("500px", "100%");
@@ -71,7 +73,6 @@ function debounce(func, wait, immediate) {
 
 
 var sendAsciiText = debounce(function() {
-    console.log("called?");
     window.requestAnimationFrame(function(){
         var asciiText = cm.getValue();
         app.ports.receiveAsciiText.send(asciiText);
