@@ -60,8 +60,8 @@ type Position
     | BottomLeftBigCurve
     | BottomRightBigCurve
 
-type Element
-    = Intersection Type -- also corner
+type Component
+    = Intersection Type 
     | Horizontal
     | LowHorizontal
     | LowHorizontalExtendLeft
@@ -88,8 +88,6 @@ type Element
     | BigCloseCurve
     | Text Char
 
-{-- intersection types
---}
 type Type 
     = Cross 
     | HorJunctionTop
@@ -197,8 +195,8 @@ isNeighbor neighbor check =
             False
 
 
-getElement: Int -> Int -> Model -> Maybe Element
-getElement x y model =
+getComponent: Int -> Int -> Model -> Maybe Component
+getComponent x y model =
     let
         char = get x y model
         top = topOf x y model
@@ -534,7 +532,7 @@ drawPaths model =
     (\r line ->
        Array.indexedMap
         (\ c char->
-           drawElement c r model
+           drawComponent c r model
         ) line
         |> Array.toList
     ) model.lines
@@ -542,15 +540,15 @@ drawPaths model =
     |> List.concat
     |> List.concat
 
-drawElement: Int -> Int -> Model -> List (Svg a)
-drawElement x y model =
+drawComponent: Int -> Int -> Model -> List (Svg a)
+drawComponent x y model =
     let 
-        element =
-            getElement x y model 
+        component =
+            getComponent x y model 
     in
-        case element of
-            Just element ->
-                case element of
+        case component of
+            Just component ->
+                case component of
                     Horizontal ->
                        [drawHorizontalLine x y model]
 

@@ -10186,7 +10186,7 @@ var _user$project$Grid$VertJunctionLeft = {ctor: 'VertJunctionLeft'};
 var _user$project$Grid$HorJunctionBot = {ctor: 'HorJunctionBot'};
 var _user$project$Grid$HorJunctionTop = {ctor: 'HorJunctionTop'};
 var _user$project$Grid$Cross = {ctor: 'Cross'};
-var _user$project$Grid$getElement = F3(
+var _user$project$Grid$getComponent = F3(
 	function (x, y, model) {
 		var bottomRight = A3(_user$project$Grid$bottomRightOf, x, y, model);
 		var bottomLeft = A3(_user$project$Grid$bottomLeftOf, x, y, model);
@@ -10366,10 +10366,10 @@ var _user$project$Grid$getElement = F3(
 			return _elm_lang$core$Maybe$Nothing;
 		}
 	});
-var _user$project$Grid$drawElement = F3(
+var _user$project$Grid$drawComponent = F3(
 	function (x, y, model) {
-		var element = A3(_user$project$Grid$getElement, x, y, model);
-		var _p15 = element;
+		var component = A3(_user$project$Grid$getComponent, x, y, model);
+		var _p15 = component;
 		if (_p15.ctor === 'Just') {
 			var _p16 = _p15._0;
 			switch (_p16.ctor) {
@@ -10504,7 +10504,7 @@ var _user$project$Grid$drawPaths = function (model) {
 									_elm_lang$core$Array$indexedMap,
 									F2(
 										function (c, $char) {
-											return A3(_user$project$Grid$drawElement, c, r, model);
+											return A3(_user$project$Grid$drawComponent, c, r, model);
 										}),
 									line));
 						}),
