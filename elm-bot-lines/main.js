@@ -8416,59 +8416,37 @@ var _user$project$Grid$init = function (str) {
 	var max = _elm_lang$core$List$maximum(
 		A2(
 			_elm_lang$core$List$map,
-			function (l) {
-				return _elm_lang$core$String$length(l);
+			function (line) {
+				return _elm_lang$core$String$length(line);
 			},
 			lines));
+	var lineArr = _elm_lang$core$Array$fromList(lines);
 	var lineChar = A2(
-		_elm_lang$core$List$map,
+		_elm_lang$core$Array$map,
 		function (line) {
-			return _elm_lang$core$String$toList(
-				_elm_lang$core$String$trimRight(line));
+			return _elm_lang$core$Array$fromList(
+				_elm_lang$core$String$toList(
+					_elm_lang$core$String$trimRight(line)));
 		},
-		lines);
+		lineArr);
 	return {
-		rows: _elm_lang$core$List$length(lineChar),
+		rows: _elm_lang$core$Array$length(lineChar),
 		columns: A2(_elm_lang$core$Maybe$withDefault, 0, max),
 		lines: lineChar
 	};
 };
 var _user$project$Grid$get = F3(
 	function (x, y, model) {
-		var row = y;
-		var line = _elm_lang$core$List$head(
-			A2(
-				_elm_lang$core$List$filterMap,
-				function (l) {
-					return l;
-				},
-				A2(
-					_elm_lang$core$List$indexedMap,
-					F2(
-						function (r, l) {
-							return _elm_lang$core$Native_Utils.eq(r, row) ? _elm_lang$core$Maybe$Just(l) : _elm_lang$core$Maybe$Nothing;
-						}),
-					model.lines)));
+		var line = A2(_elm_lang$core$Array$get, y, model.lines);
 		var $char = function () {
 			var _p0 = line;
 			if (_p0.ctor === 'Just') {
-				return _elm_lang$core$List$head(
-					A2(
-						_elm_lang$core$List$filterMap,
-						function (c) {
-							return c;
-						},
-						A2(
-							_elm_lang$core$List$indexedMap,
-							F2(
-								function (i, $char) {
-									return _elm_lang$core$Native_Utils.eq(i, x) ? _elm_lang$core$Maybe$Just($char) : _elm_lang$core$Maybe$Nothing;
-								}),
-							_p0._0)));
+				return A2(_elm_lang$core$Array$get, x, _p0._0);
 			} else {
 				return _elm_lang$core$Maybe$Nothing;
 			}
 		}();
+		var row = y;
 		return $char;
 	});
 var _user$project$Grid$arrowMarker = A2(
@@ -10381,19 +10359,21 @@ var _user$project$Grid$drawElement = F3(
 var _user$project$Grid$drawPaths = function (model) {
 	return _elm_lang$core$List$concat(
 		_elm_lang$core$List$concat(
-			A2(
-				_elm_lang$core$List$indexedMap,
-				F2(
-					function (r, line) {
-						return A2(
-							_elm_lang$core$List$indexedMap,
-							F2(
-								function (c, $char) {
-									return A3(_user$project$Grid$drawElement, c, r, model);
-								}),
-							line);
-					}),
-				model.lines)));
+			_elm_lang$core$Array$toList(
+				A2(
+					_elm_lang$core$Array$indexedMap,
+					F2(
+						function (r, line) {
+							return _elm_lang$core$Array$toList(
+								A2(
+									_elm_lang$core$Array$indexedMap,
+									F2(
+										function (c, $char) {
+											return A3(_user$project$Grid$drawElement, c, r, model);
+										}),
+									line));
+						}),
+					model.lines))));
 };
 var _user$project$Grid$getSvg = function (model) {
 	var gheight = _elm_lang$core$Basics$toString(
