@@ -5983,6 +5983,141 @@ var _elm_lang$core$Json_Decode$dict = function (decoder) {
 };
 var _elm_lang$core$Json_Decode$Decoder = {ctor: 'Decoder'};
 
+//import Maybe, Native.List //
+
+var _elm_lang$core$Native_Regex = function() {
+
+function escape(str)
+{
+	return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+function caseInsensitive(re)
+{
+	return new RegExp(re.source, 'gi');
+}
+function regex(raw)
+{
+	return new RegExp(raw, 'g');
+}
+
+function contains(re, string)
+{
+	return string.match(re) !== null;
+}
+
+function find(n, re, str)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	var out = [];
+	var number = 0;
+	var string = str;
+	var lastIndex = re.lastIndex;
+	var prevLastIndex = -1;
+	var result;
+	while (number++ < n && (result = re.exec(string)))
+	{
+		if (prevLastIndex === re.lastIndex) break;
+		var i = result.length - 1;
+		var subs = new Array(i);
+		while (i > 0)
+		{
+			var submatch = result[i];
+			subs[--i] = submatch === undefined
+				? _elm_lang$core$Maybe$Nothing
+				: _elm_lang$core$Maybe$Just(submatch);
+		}
+		out.push({
+			match: result[0],
+			submatches: _elm_lang$core$Native_List.fromArray(subs),
+			index: result.index,
+			number: number
+		});
+		prevLastIndex = re.lastIndex;
+	}
+	re.lastIndex = lastIndex;
+	return _elm_lang$core$Native_List.fromArray(out);
+}
+
+function replace(n, re, replacer, string)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	var count = 0;
+	function jsReplacer(match)
+	{
+		if (count++ >= n)
+		{
+			return match;
+		}
+		var i = arguments.length - 3;
+		var submatches = new Array(i);
+		while (i > 0)
+		{
+			var submatch = arguments[i];
+			submatches[--i] = submatch === undefined
+				? _elm_lang$core$Maybe$Nothing
+				: _elm_lang$core$Maybe$Just(submatch);
+		}
+		return replacer({
+			match: match,
+			submatches: _elm_lang$core$Native_List.fromArray(submatches),
+			index: arguments[i - 1],
+			number: count
+		});
+	}
+	return string.replace(re, jsReplacer);
+}
+
+function split(n, re, str)
+{
+	n = n.ctor === 'All' ? Infinity : n._0;
+	if (n === Infinity)
+	{
+		return _elm_lang$core$Native_List.fromArray(str.split(re));
+	}
+	var string = str;
+	var result;
+	var out = [];
+	var start = re.lastIndex;
+	while (n--)
+	{
+		if (!(result = re.exec(string))) break;
+		out.push(string.slice(start, result.index));
+		start = re.lastIndex;
+	}
+	out.push(string.slice(start));
+	return _elm_lang$core$Native_List.fromArray(out);
+}
+
+return {
+	regex: regex,
+	caseInsensitive: caseInsensitive,
+	escape: escape,
+
+	contains: F2(contains),
+	find: F3(find),
+	replace: F4(replace),
+	split: F3(split)
+};
+
+}();
+
+var _elm_lang$core$Regex$split = _elm_lang$core$Native_Regex.split;
+var _elm_lang$core$Regex$replace = _elm_lang$core$Native_Regex.replace;
+var _elm_lang$core$Regex$find = _elm_lang$core$Native_Regex.find;
+var _elm_lang$core$Regex$contains = _elm_lang$core$Native_Regex.contains;
+var _elm_lang$core$Regex$caseInsensitive = _elm_lang$core$Native_Regex.caseInsensitive;
+var _elm_lang$core$Regex$regex = _elm_lang$core$Native_Regex.regex;
+var _elm_lang$core$Regex$escape = _elm_lang$core$Native_Regex.escape;
+var _elm_lang$core$Regex$Match = F4(
+	function (a, b, c, d) {
+		return {match: a, submatches: b, index: c, number: d};
+	});
+var _elm_lang$core$Regex$Regex = {ctor: 'Regex'};
+var _elm_lang$core$Regex$AtMost = function (a) {
+	return {ctor: 'AtMost', _0: a};
+};
+var _elm_lang$core$Regex$All = {ctor: 'All'};
+
 //import Native.Json //
 
 var _elm_lang$virtual_dom$Native_VirtualDom = function() {
@@ -10398,14 +10533,12 @@ var _user$project$Grid$getSvg = function (model) {
 			_user$project$Grid$drawPaths(model)));
 };
 
-var _user$project$Main$arg = '\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |----------------------------------------------------------.\n  | ooo |    |                          |                          |\n  | ooo |    |                          |                          |\n  \'_____\'    |                          |                          |\n             |                          |                          |\n             v                          v                          v\n   .-------------------.  .---------------------------.  .-------------------.\n   | Loadable module C |  |     Loadable module A     |  | Loadable module B |\n   \'-------------------\'  |---------------------------|  |   (instrumented)  |\n             |            |         .-----.           |  \'-------------------\'\n             \'------------+-------->| A.o |           |             |\n                 calls    |         \'-----\'           |             |\n                          |    .------------------.   |             |\n                          |   / A.instrumented.o /<---+-------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    ^\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\nJunctions\n\n   \n\n    |   \\/   \n   -+-  /\\      \n    |   \n    \n    |      |    |      |\n    +--  --+    +--  --+   +--  --+\n                |      |   |      |\n\n                 |    |  |     |\n         .- -.   .-  -.  ._   _.\n         |   |\n\n    .-   -.  .-.       \n    \'-   -\'  | |  | |  \n                  \'-\'\n\n  \\      |    /  |\n   .     \'   \'   .\n   |    /    |    \\ \n\n   \\\n   /\n\n   /\n   \\\n\n\n   /      \\\n  \'--    --\'\n /          \\\n\n   /   \\\n--\'     \'--\n /       \\\n\n                   \\         /\n   --.--  --.--   --.--   --.--\n    /        \\     \n\n\n    |   |\n    .   .\n   /|   |\\ \n\n    |\n    .\n   / \\\n\n   \\|/\n    .\n   /|\\\n\n   \n   \\|/\n  --.--\n   /|\\\n\n   \\|/\n  --+--\n   /|\\\n    \n    |/  \\|\n    .    .\n    |    |\n\n\n   -.  -.\n   /     \\\n\n    .-  .-\n   /     \\\n\n  \n   /   /     \\    \\\n  \'-  \'_     _\'   -\'\n   \n\n   .-.\n  (   )\n   \'-\'\n\n   ..\n  (  )\n   \'\'\n\n\n   .------.\n  (        )\n   \'------\'\n\n    ________  \n   /       /\n  /       /\n /_______/\n\n\n    ________  \n    \\       \\\n     \\       \\\n      \\_______\\\n\n   ________ \n  |________|\n\n\n   ________ \n  |        |\n  |________|\n\n  .-.\n  \'-\'\n\n    ________  \n    \\_______\\\n\n   /\\\n  /  \\\n /____\\\n\n   /\\\n  /  \\\n /    \\\n\'------\'\n\n   ___\n  /   \\\n  \\___/\n\n  ______\n /      \\\n/        \\\n\\        /\n \\______/\n    \n\n    +---------+\n    |         |                        +--------------+\n    |   NFS   |--+                     |              |\n    |         |  |                 +-->|   CacheFS    |\n    +---------+  |   +----------+  |   |  /dev/hda5   |\n                 |   |          |  |   +--------------+\n    +---------+  +-->|          |  |\n    |         |      |          |--+\n    |   AFS   |----->| FS-Cache |\n    |         |      |          |--+\n    +---------+  +-->|          |  |\n                 |   |          |  |   +--------------+\n    +---------+  |   +----------+  |   |              |\n    |         |  |                 +-->|  CacheFiles  |\n    |  ISOFS  |--+                     |  /var/cache  |\n    |         |                        +--------------+\n    +---------+\n    ';
-var _user$project$Main$init = {
-	ctor: '_Tuple2',
-	_0: {
-		grid: _user$project$Grid$init(_user$project$Main$arg)
-	},
-	_1: _elm_lang$core$Platform_Cmd$none
-};
+var _user$project$Main$arg = '\n\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |----------------------------------------------------------.\n  | ooo |    |                          |                          |\n  | ooo |    |                          |                          |\n  \'_____\'    |                          |                          |\n             |                          |                          |\n             v                          v                          v\n   .-------------------.  .---------------------------.  .-------------------.\n   | Loadable module C |  |     Loadable module A     |  | Loadable module B |\n   \'-------------------\'  |---------------------------|  |   (instrumented)  |\n             |            |         .-----.           |  \'-------------------\'\n             \'------------+-------->| A.o |           |             |\n                 calls    |         \'-----\'           |             |\n                          |    .------------------.   |             |\n                          |   / A.instrumented.o /<---+-------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    ^\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\n\n\n\n\n  TODO:\n\n   \n\n        |   \\/   \n       -+-  /\\      \n        |   \n        \n        |      |    |      |\n        +--  --+    +--  --+   +--  --+\n                    |      |   |      |\n\n                     |    |  |     |\n             .- -.   .-  -.  ._   _.\n             |   |\n\n        .-   -.  .-.       \n        \'-   -\'  | |  | |  \n                      \'-\'\n\n      \\      |    /  |\n       .     \'   \'   .\n       |    /    |    \\ \n\n       \\\n       /\n\n       /\n       \\\n\n\n       /      \\\n      \'--    --\'\n     /          \\\n\n       /   \\\n    --\'     \'--\n     /       \\\n\n                       \\         /\n       --.--  --.--   --.--   --.--\n        /        \\     \n\n\n        |   |\n        .   .\n       /|   |\\ \n\n        |\n        .\n       / \\\n\n       \\|/\n        .\n       /|\\\n\n       \n       \\|/\n      --.--\n       /|\\\n\n       \\|/\n      --+--\n       /|\\\n        \n        |/  \\|\n        .    .\n        |    |\n\n\n       -.  -.\n       /     \\\n\n        .-  .-\n       /     \\\n\n      \n       /   /     \\    \\\n      \'-  \'_     _\'   -\'\n       \n\n       .-.\n      (   )\n       \'-\'\n\n       ..\n      (  )\n       \'\'\n\n\n       .------.\n      (        )\n       \'------\'\n\n        ________  \n       /       /\n      /       /\n     /_______/\n\n\n        ________  \n        \\       \\\n         \\       \\\n          \\_______\\\n\n       ________ \n      |________|\n\n\n       ________ \n      |        |\n      |________|\n\n      .-.\n      \'-\'\n\n        ________  \n        \\_______\\\n\n       /\\\n      /  \\\n     /____\\\n\n       /\\\n      /  \\\n     /    \\\n    \'------\'\n\n       ___\n      /   \\\n      \\___/\n\n      ______\n     /      \\\n    /        \\\n    \\        /\n     \\______/\n        \n\n        +---------+\n        |         |                        +--------------+\n        |   NFS   |--+                     |              |\n        |         |  |                 +-->|   CacheFS    |\n        +---------+  |   +----------+  |   |  /dev/hda5   |\n                     |   |          |  |   +--------------+\n        +---------+  +-->|          |  |\n        |         |      |          |--+\n        |   AFS   |----->| FS-Cache |\n        |         |      |          |--+\n        +---------+  +-->|          |  |\n                     |   |          |  |   +--------------+\n        +---------+  |   +----------+  |   |              |\n        |         |  |                 +-->|  CacheFiles  |\n        |  ISOFS  |--+                     |  /var/cache  |\n        |         |                        +--------------+\n        +---------+\n    ';
+var _user$project$Main$textContentDecoder = A2(
+	_elm_lang$core$Json_Decode$at,
+	_elm_lang$core$Native_List.fromArray(
+		['target', 'textContent']),
+	_elm_lang$core$Json_Decode$string);
 var _user$project$Main$getAsciiText = _elm_lang$core$Native_Platform.outgoingPort(
 	'getAsciiText',
 	function (v) {
@@ -10433,6 +10566,22 @@ var _user$project$Main$update = F2(
 			};
 		}
 	});
+var _user$project$Main$setAsciiText = _elm_lang$core$Native_Platform.outgoingPort(
+	'setAsciiText',
+	function (v) {
+		return v;
+	});
+var _user$project$Main$init = {
+	ctor: '_Tuple2',
+	_0: {
+		grid: _user$project$Grid$init(_user$project$Main$arg)
+	},
+	_1: _elm_lang$core$Platform_Cmd$batch(
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_user$project$Main$setAsciiText(_user$project$Main$arg)
+			]))
+};
 var _user$project$Main$receiveAsciiText = _elm_lang$core$Native_Platform.incomingPort('receiveAsciiText', _elm_lang$core$Json_Decode$string);
 var _user$project$Main$Model = function (a) {
 	return {grid: a};
@@ -10442,24 +10591,31 @@ var _user$project$Main$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
-			[]),
+			[
+				_elm_lang$html$Html_Attributes$style(
+				_elm_lang$core$Native_List.fromArray(
+					[
+						{ctor: '_Tuple2', _0: 'display', _1: 'flex'}
+					]))
+			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
-				_elm_lang$html$Html$button,
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$style(
+						A2(
+						_elm_lang$html$Html$button,
 						_elm_lang$core$Native_List.fromArray(
 							[
-								{ctor: '_Tuple2', _0: 'padding', _1: '10px'},
-								{ctor: '_Tuple2', _0: 'margin-left', _1: '500px'}
-							])),
-						_elm_lang$html$Html_Events$onClick(_user$project$Main$Convert)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Convert >>')
+								_elm_lang$html$Html_Events$onClick(_user$project$Main$Convert)
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Convert >>')
+							]))
 					])),
 				A2(
 				_elm_lang$html$Html$div,
@@ -10468,45 +10624,14 @@ var _user$project$Main$view = function (model) {
 						_elm_lang$html$Html_Attributes$style(
 						_elm_lang$core$Native_List.fromArray(
 							[
-								{ctor: '_Tuple2', _0: 'display', _1: 'flex'}
+								{ctor: '_Tuple2', _0: 'width', _1: '500px'},
+								{ctor: '_Tuple2', _0: 'height', _1: '100%'},
+								{ctor: '_Tuple2', _0: 'overflow', _1: 'auto'}
 							]))
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						A2(
-						_elm_lang$html$Html$pre,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$style(
-								_elm_lang$core$Native_List.fromArray(
-									[
-										{ctor: '_Tuple2', _0: 'font-size', _1: '15.4px'},
-										{ctor: '_Tuple2', _0: 'font-family', _1: 'monospace'},
-										{ctor: '_Tuple2', _0: 'word-wrap', _1: 'nowrap'},
-										{ctor: '_Tuple2', _0: 'overflow', _1: 'auto'},
-										{ctor: '_Tuple2', _0: 'border', _1: '1px solid #ddd'}
-									])),
-								_elm_lang$html$Html_Attributes$contenteditable(true),
-								_elm_lang$html$Html_Attributes$id('ascii_text')
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html$text(_user$project$Main$arg)
-							])),
-						A2(
-						_elm_lang$html$Html$div,
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_elm_lang$html$Html_Attributes$style(
-								_elm_lang$core$Native_List.fromArray(
-									[
-										{ctor: '_Tuple2', _0: 'padding-left', _1: '10px'}
-									]))
-							]),
-						_elm_lang$core$Native_List.fromArray(
-							[
-								_user$project$Grid$getSvg(model.grid)
-							]))
+						_user$project$Grid$getSvg(model.grid)
 					]))
 			]));
 };

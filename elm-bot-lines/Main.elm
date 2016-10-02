@@ -1,11 +1,12 @@
 port module Main exposing (..)
 import Html exposing (text,pre,div,button,textarea)
 import Html.Attributes exposing (class, style,contenteditable,id)
-import Html.Events exposing (onClick)
+import Html.Events exposing (onClick,on)
 import String
 import Grid
 import Html.App as App
 import Json.Decode exposing (string)
+import Regex
 
 
 {-- code which detects lines and connections
@@ -19,7 +20,42 @@ type alias Model =
 type Msg = Input String | Convert
 
 
+init: (Model, Cmd Msg)
+init  =
+    ({grid = Grid.init arg
+     }
+    ,Cmd.batch[
+        setAsciiText arg
+    ]
+    )
+
+textContentDecoder =
+  Json.Decode.at ["target", "textContent"] string
+
+
+
 view model =
+    div [style 
+            [("display", "flex")
+            ]
+        ]
+        [
+        div[] 
+           [button [onClick Convert
+                   ] 
+                   [text "Convert >>"]
+           ]
+        ,div 
+            [style [("width", "500px")
+                   ,("height", "100%")
+                   ,("overflow", "auto")
+                   ]
+            ]
+            [Grid.getSvg model.grid
+            ]
+        ]
+
+    {--
     div []
         [
         button [
@@ -37,9 +73,12 @@ view model =
                     ,("word-wrap","nowrap")
                     ,("overflow", "auto")
                     ,("border", "1px solid #ddd")
+                    ,("min-height", "500px")
+                    ,("min-width", "500px")
                     ]
                   ,contenteditable True
                   ,id "ascii_text" 
+                  ,on "input" (Json.Decode.map Input textContentDecoder)
                  ]
                  [text arg]
             ,div [style [("padding-left", "10px")]]
@@ -47,6 +86,8 @@ view model =
                 ]
             ]
         ]
+    --}
+
         
 update msg model =
     case msg of
@@ -71,6 +112,8 @@ subscriptions model =
 
 port getAsciiText: () -> Cmd msg
 
+port setAsciiText: String -> Cmd msg
+
 port receiveAsciiText: (String -> msg) -> Sub msg
 
 
@@ -78,6 +121,7 @@ port receiveAsciiText: (String -> msg) -> Sub msg
 
 arg = 
     """
+
 +------+   +-----+   +-----+   +-----+
 |      |   |     |   |     |   |     |
 | Foo  +-->| Bar +---+ Baz |<--+ Moo |
@@ -181,169 +225,165 @@ arg =
     |                        *C++
     +-----------------------------> Control
 
-Junctions
+
+
+
+
+  TODO:
 
    
 
-    |   \\/   
-   -+-  /\\      
-    |   
-    
-    |      |    |      |
-    +--  --+    +--  --+   +--  --+
-                |      |   |      |
+        |   \\/   
+       -+-  /\\      
+        |   
+        
+        |      |    |      |
+        +--  --+    +--  --+   +--  --+
+                    |      |   |      |
 
-                 |    |  |     |
-         .- -.   .-  -.  ._   _.
-         |   |
+                     |    |  |     |
+             .- -.   .-  -.  ._   _.
+             |   |
 
-    .-   -.  .-.       
-    '-   -'  | |  | |  
-                  '-'
+        .-   -.  .-.       
+        '-   -'  | |  | |  
+                      '-'
 
-  \\      |    /  |
-   .     '   '   .
-   |    /    |    \\ 
+      \\      |    /  |
+       .     '   '   .
+       |    /    |    \\ 
 
-   \\
-   /
+       \\
+       /
 
-   /
-   \\
-
-
-   /      \\
-  '--    --'
- /          \\
-
-   /   \\
---'     '--
- /       \\
-
-                   \\         /
-   --.--  --.--   --.--   --.--
-    /        \\     
+       /
+       \\
 
 
-    |   |
-    .   .
-   /|   |\\ 
+       /      \\
+      '--    --'
+     /          \\
 
-    |
-    .
-   / \\
+       /   \\
+    --'     '--
+     /       \\
 
-   \\|/
-    .
-   /|\\
-
-   
-   \\|/
-  --.--
-   /|\\
-
-   \\|/
-  --+--
-   /|\\
-    
-    |/  \\|
-    .    .
-    |    |
+                       \\         /
+       --.--  --.--   --.--   --.--
+        /        \\     
 
 
-   -.  -.
-   /     \\
+        |   |
+        .   .
+       /|   |\\ 
 
-    .-  .-
-   /     \\
+        |
+        .
+       / \\
 
-  
-   /   /     \\    \\
-  '-  '_     _'   -'
-   
+       \\|/
+        .
+       /|\\
 
-   .-.
-  (   )
-   '-'
+       
+       \\|/
+      --.--
+       /|\\
 
-   ..
-  (  )
-   ''
-
-
-   .------.
-  (        )
-   '------'
-
-    ________  
-   /       /
-  /       /
- /_______/
+       \\|/
+      --+--
+       /|\\
+        
+        |/  \\|
+        .    .
+        |    |
 
 
-    ________  
-    \\       \\
-     \\       \\
-      \\_______\\
+       -.  -.
+       /     \\
 
-   ________ 
-  |________|
+        .-  .-
+       /     \\
+
+      
+       /   /     \\    \\
+      '-  '_     _'   -'
+       
+
+       .-.
+      (   )
+       '-'
+
+       ..
+      (  )
+       ''
 
 
-   ________ 
-  |        |
-  |________|
+       .------.
+      (        )
+       '------'
 
-  .-.
-  '-'
+        ________  
+       /       /
+      /       /
+     /_______/
 
-    ________  
-    \\_______\\
 
-   /\\
-  /  \\
- /____\\
+        ________  
+        \\       \\
+         \\       \\
+          \\_______\\
 
-   /\\
-  /  \\
- /    \\
-'------'
+       ________ 
+      |________|
 
-   ___
-  /   \\
-  \\___/
 
-  ______
- /      \\
-/        \\
-\\        /
- \\______/
-    
+       ________ 
+      |        |
+      |________|
 
-    +---------+
-    |         |                        +--------------+
-    |   NFS   |--+                     |              |
-    |         |  |                 +-->|   CacheFS    |
-    +---------+  |   +----------+  |   |  /dev/hda5   |
-                 |   |          |  |   +--------------+
-    +---------+  +-->|          |  |
-    |         |      |          |--+
-    |   AFS   |----->| FS-Cache |
-    |         |      |          |--+
-    +---------+  +-->|          |  |
-                 |   |          |  |   +--------------+
-    +---------+  |   +----------+  |   |              |
-    |         |  |                 +-->|  CacheFiles  |
-    |  ISOFS  |--+                     |  /var/cache  |
-    |         |                        +--------------+
-    +---------+
+      .-.
+      '-'
+
+        ________  
+        \\_______\\
+
+       /\\
+      /  \\
+     /____\\
+
+       /\\
+      /  \\
+     /    \\
+    '------'
+
+       ___
+      /   \\
+      \\___/
+
+      ______
+     /      \\
+    /        \\
+    \\        /
+     \\______/
+        
+
+        +---------+
+        |         |                        +--------------+
+        |   NFS   |--+                     |              |
+        |         |  |                 +-->|   CacheFS    |
+        +---------+  |   +----------+  |   |  /dev/hda5   |
+                     |   |          |  |   +--------------+
+        +---------+  +-->|          |  |
+        |         |      |          |--+
+        |   AFS   |----->| FS-Cache |
+        |         |      |          |--+
+        +---------+  +-->|          |  |
+                     |   |          |  |   +--------------+
+        +---------+  |   +----------+  |   |              |
+        |         |  |                 +-->|  CacheFiles  |
+        |  ISOFS  |--+                     |  /var/cache  |
+        |         |                        +--------------+
+        +---------+
     """
-
-init: (Model, Cmd Msg)
-init  =
-    ({grid = Grid.init arg
-     }
-    ,Cmd.none
-    )
-
 
