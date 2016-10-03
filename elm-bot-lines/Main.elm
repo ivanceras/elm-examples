@@ -7,6 +7,7 @@ import Grid
 import Html.App as App
 import Json.Decode exposing (string)
 import Regex
+import Diagram
 
 
 {-- code which detects lines and connections

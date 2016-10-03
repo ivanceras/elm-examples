@@ -8546,6 +8546,288 @@ var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$a
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
 
+var _user$project$Diagram$isNeighbor = F2(
+	function (neighbor, check) {
+		var _p0 = neighbor;
+		if (_p0.ctor === 'Just') {
+			return check(_p0._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Diagram$isChar = F2(
+	function ($char, check) {
+		var _p1 = $char;
+		if (_p1.ctor === 'Just') {
+			return check(_p1._0);
+		} else {
+			return false;
+		}
+	});
+var _user$project$Diagram$isAlphaNumeric = function ($char) {
+	return _elm_lang$core$Char$isDigit($char) || (_elm_lang$core$Char$isUpper($char) || _elm_lang$core$Char$isLower($char));
+};
+var _user$project$Diagram$get = F3(
+	function (x, y, model) {
+		var line = A2(_elm_lang$core$Array$get, y, model.lines);
+		var $char = function () {
+			var _p2 = line;
+			if (_p2.ctor === 'Just') {
+				return A2(_elm_lang$core$Array$get, x, _p2._0);
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		}();
+		var row = y;
+		return $char;
+	});
+var _user$project$Diagram$leftOf = F3(
+	function (x, y, model) {
+		return A3(_user$project$Diagram$get, x - 1, y, model);
+	});
+var _user$project$Diagram$rightOf = F3(
+	function (x, y, model) {
+		return A3(_user$project$Diagram$get, x + 1, y, model);
+	});
+var _user$project$Diagram$topOf = F3(
+	function (x, y, model) {
+		return A3(_user$project$Diagram$get, x, y - 1, model);
+	});
+var _user$project$Diagram$bottomOf = F3(
+	function (x, y, model) {
+		return A3(_user$project$Diagram$get, x, y + 1, model);
+	});
+var _user$project$Diagram$topLeftOf = F3(
+	function (x, y, model) {
+		return A3(_user$project$Diagram$get, x - 1, y - 1, model);
+	});
+var _user$project$Diagram$topRightOf = F3(
+	function (x, y, model) {
+		return A3(_user$project$Diagram$get, x + 1, y - 1, model);
+	});
+var _user$project$Diagram$bottomLeftOf = F3(
+	function (x, y, model) {
+		return A3(_user$project$Diagram$get, x - 1, y + 1, model);
+	});
+var _user$project$Diagram$bottomRightOf = F3(
+	function (x, y, model) {
+		return A3(_user$project$Diagram$get, x + 1, y + 1, model);
+	});
+var _user$project$Diagram$closeCurve = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr(')')
+	]);
+var _user$project$Diagram$isCloseCurve = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$closeCurve);
+};
+var _user$project$Diagram$openCurve = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('(')
+	]);
+var _user$project$Diagram$isOpenCurve = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$openCurve);
+};
+var _user$project$Diagram$slantLeft = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('\\')
+	]);
+var _user$project$Diagram$isSlantLeft = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$slantLeft);
+};
+var _user$project$Diagram$slantRight = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('/')
+	]);
+var _user$project$Diagram$isSlantRight = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$slantRight);
+};
+var _user$project$Diagram$arrowUp = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('^'),
+		_elm_lang$core$Native_Utils.chr('î')
+	]);
+var _user$project$Diagram$isArrowUp = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$arrowUp);
+};
+var _user$project$Diagram$arrowLeft = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('<')
+	]);
+var _user$project$Diagram$isArrowLeft = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$arrowLeft);
+};
+var _user$project$Diagram$arrowDown = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('V'),
+		_elm_lang$core$Native_Utils.chr('v')
+	]);
+var _user$project$Diagram$isArrowDown = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$arrowDown);
+};
+var _user$project$Diagram$arrowRight = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('>')
+	]);
+var _user$project$Diagram$isArrowRight = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$arrowRight);
+};
+var _user$project$Diagram$round = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('.'),
+		_elm_lang$core$Native_Utils.chr('\'')
+	]);
+var _user$project$Diagram$isRound = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$round);
+};
+var _user$project$Diagram$intersections = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('+')
+	]);
+var _user$project$Diagram$isIntersection = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$intersections);
+};
+var _user$project$Diagram$lowHorizontal = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('_')
+	]);
+var _user$project$Diagram$isLowHorizontal = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$lowHorizontal);
+};
+var _user$project$Diagram$horizontalDouble = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('=')
+	]);
+var _user$project$Diagram$horizontal = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('-')
+	]);
+var _user$project$Diagram$isHorizontal = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$horizontal);
+};
+var _user$project$Diagram$verticalDashed = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr(':')
+	]);
+var _user$project$Diagram$vertical = _elm_lang$core$Native_List.fromArray(
+	[
+		_elm_lang$core$Native_Utils.chr('|')
+	]);
+var _user$project$Diagram$isVertical = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$vertical);
+};
+var _user$project$Diagram$isLine = function ($char) {
+	return _user$project$Diagram$isVertical($char) || (_user$project$Diagram$isHorizontal($char) || _user$project$Diagram$isLowHorizontal($char));
+};
+var _user$project$Diagram$color = A3(_elm_lang$core$Color$rgb, 0, 0, 0);
+var _user$project$Diagram$textHeight = 16.0;
+var _user$project$Diagram$textWidth = 8.0;
+var _user$project$Diagram$arcRadius = _user$project$Diagram$textWidth / 2;
+var _user$project$Diagram$lineWidth = 1.0;
+var _user$project$Diagram$fontSize = 14.0;
+var _user$project$Diagram$Model = F3(
+	function (a, b, c) {
+		return {rows: a, columns: b, lines: c};
+	});
+var _user$project$Diagram$BottomRight = {ctor: 'BottomRight'};
+var _user$project$Diagram$BottomLeft = {ctor: 'BottomLeft'};
+var _user$project$Diagram$TopRight = {ctor: 'TopRight'};
+var _user$project$Diagram$TopLeft = {ctor: 'TopLeft'};
+var _user$project$Diagram$Right = {ctor: 'Right'};
+var _user$project$Diagram$Left = {ctor: 'Left'};
+var _user$project$Diagram$Bottom = {ctor: 'Bottom'};
+var _user$project$Diagram$Top = {ctor: 'Top'};
+var _user$project$Diagram$Bullet = {ctor: 'Bullet'};
+var _user$project$Diagram$FractionLine = function (a) {
+	return {ctor: 'FractionLine', _0: a};
+};
+var _user$project$Diagram$Arc = F2(
+	function (a, b) {
+		return {ctor: 'Arc', _0: a, _1: b};
+	});
+var _user$project$Diagram$SlantLeft = {ctor: 'SlantLeft'};
+var _user$project$Diagram$SlantRight = {ctor: 'SlantRight'};
+var _user$project$Diagram$LowHorizontal = {ctor: 'LowHorizontal'};
+var _user$project$Diagram$Horizontal = {ctor: 'Horizontal'};
+var _user$project$Diagram$Vertical = {ctor: 'Vertical'};
+var _user$project$Diagram$Trim = {ctor: 'Trim'};
+var _user$project$Diagram$Extend = {ctor: 'Extend'};
+var _user$project$Diagram$Sharp = {ctor: 'Sharp'};
+var _user$project$Diagram$Smooth = {ctor: 'Smooth'};
+var _user$project$Diagram$Solid = {ctor: 'Solid'};
+var _user$project$Diagram$Dashed = {ctor: 'Dashed'};
+var _user$project$Diagram$Junction = F3(
+	function (a, b, c) {
+		return {ctor: 'Junction', _0: a, _1: b, _2: c};
+	});
+var _user$project$Diagram$Curve = F3(
+	function (a, b, c) {
+		return {ctor: 'Curve', _0: a, _1: b, _2: c};
+	});
+var _user$project$Diagram$Action = F5(
+	function (a, b, c, d, e) {
+		return {ctor: 'Action', _0: a, _1: b, _2: c, _3: d, _4: e};
+	});
+var _user$project$Diagram$Corner = F2(
+	function (a, b) {
+		return {ctor: 'Corner', _0: a, _1: b};
+	});
+var _user$project$Diagram$Arrow = function (a) {
+	return {ctor: 'Arrow', _0: a};
+};
+var _user$project$Diagram$Element = F3(
+	function (a, b, c) {
+		return {ctor: 'Element', _0: a, _1: b, _2: c};
+	});
+var _user$project$Diagram$Text = function (a) {
+	return {ctor: 'Text', _0: a};
+};
+var _user$project$Diagram$High = {ctor: 'High'};
+var _user$project$Diagram$Mid = {ctor: 'Mid'};
+var _user$project$Diagram$componentMatchList = F3(
+	function (x, y, model) {
+		var bottomRight = A3(_user$project$Diagram$bottomRightOf, x, y, model);
+		var bottomLeft = A3(_user$project$Diagram$bottomLeftOf, x, y, model);
+		var topRight = A3(_user$project$Diagram$topRightOf, x, y, model);
+		var topLeft = A3(_user$project$Diagram$topLeftOf, x, y, model);
+		var right = A3(_user$project$Diagram$rightOf, x, y, model);
+		var left = A3(_user$project$Diagram$leftOf, x, y, model);
+		var bottom = A3(_user$project$Diagram$bottomOf, x, y, model);
+		var top = A3(_user$project$Diagram$topOf, x, y, model);
+		var $char = A3(_user$project$Diagram$get, x, y, model);
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, topRight, _user$project$Diagram$isSlantRight) && (A2(_user$project$Diagram$isNeighbor, bottomLeft, _user$project$Diagram$isSlantRight) && A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal))),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$TopRight, _user$project$Diagram$BottomRight, _user$project$Diagram$Right]),
+					_user$project$Diagram$Smooth)
+			}
+			]);
+	});
+var _user$project$Diagram$matchComponent = F3(
+	function (x, y, model) {
+		return _elm_lang$core$List$head(
+			A2(
+				_elm_lang$core$List$filterMap,
+				function (_p3) {
+					var _p4 = _p3;
+					return _p4._0 ? _elm_lang$core$Maybe$Just(_p4._1) : _elm_lang$core$Maybe$Nothing;
+				},
+				A3(_user$project$Diagram$componentMatchList, x, y, model)));
+	});
+var _user$project$Diagram$Low = {ctor: 'Low'};
+var _user$project$Diagram$Large = {ctor: 'Large'};
+var _user$project$Diagram$Medium = {ctor: 'Medium'};
+var _user$project$Diagram$Small = {ctor: 'Small'};
+var _user$project$Diagram$Quarter3 = {ctor: 'Quarter3'};
+var _user$project$Diagram$Quarter = {ctor: 'Quarter'};
+var _user$project$Diagram$Half = {ctor: 'Half'};
+var _user$project$Diagram$Full = {ctor: 'Full'};
+
 var _user$project$Grid$init = function (str) {
 	var lines = _elm_lang$core$String$lines(str);
 	var max = _elm_lang$core$List$maximum(
