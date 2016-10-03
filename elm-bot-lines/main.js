@@ -8731,6 +8731,10 @@ var _user$project$Diagram$Model = F3(
 	function (a, b, c) {
 		return {rows: a, columns: b, lines: c};
 	});
+var _user$project$Diagram$Point = F2(
+	function (a, b) {
+		return {x: a, y: b};
+	});
 var _user$project$Diagram$BottomRight = {ctor: 'BottomRight'};
 var _user$project$Diagram$BottomLeft = {ctor: 'BottomLeft'};
 var _user$project$Diagram$TopRight = {ctor: 'TopRight'};
@@ -8739,14 +8743,6 @@ var _user$project$Diagram$Right = {ctor: 'Right'};
 var _user$project$Diagram$Left = {ctor: 'Left'};
 var _user$project$Diagram$Bottom = {ctor: 'Bottom'};
 var _user$project$Diagram$Top = {ctor: 'Top'};
-var _user$project$Diagram$Bullet = {ctor: 'Bullet'};
-var _user$project$Diagram$FractionLine = function (a) {
-	return {ctor: 'FractionLine', _0: a};
-};
-var _user$project$Diagram$Arc = F2(
-	function (a, b) {
-		return {ctor: 'Arc', _0: a, _1: b};
-	});
 var _user$project$Diagram$SlantLeft = {ctor: 'SlantLeft'};
 var _user$project$Diagram$SlantRight = {ctor: 'SlantRight'};
 var _user$project$Diagram$LowHorizontal = {ctor: 'LowHorizontal'};
@@ -8842,6 +8838,38 @@ var _user$project$Diagram$Quarter3 = {ctor: 'Quarter3'};
 var _user$project$Diagram$Quarter = {ctor: 'Quarter'};
 var _user$project$Diagram$Half = {ctor: 'Half'};
 var _user$project$Diagram$Full = {ctor: 'Full'};
+var _user$project$Diagram$ArcMidQuarterBottomRight = {ctor: 'ArcMidQuarterBottomRight'};
+var _user$project$Diagram$ArcMidQuarterBottomLeft = {ctor: 'ArcMidQuarterBottomLeft'};
+var _user$project$Diagram$ArcMidQuarterTopRight = {ctor: 'ArcMidQuarterTopRight'};
+var _user$project$Diagram$ArcMidQuarterTopLeft = {ctor: 'ArcMidQuarterTopLeft'};
+var _user$project$Diagram$ArcMidHalfRight = {ctor: 'ArcMidHalfRight'};
+var _user$project$Diagram$ArcMidHalfLeft = {ctor: 'ArcMidHalfLeft'};
+var _user$project$Diagram$ArcLowHalfBottom = {ctor: 'ArcLowHalfBottom'};
+var _user$project$Diagram$ArcMidHalfBottom = {ctor: 'ArcMidHalfBottom'};
+var _user$project$Diagram$ArcMidHalfTop = {ctor: 'ArcMidHalfTop'};
+var _user$project$Diagram$LineMidHorizontal = {ctor: 'LineMidHorizontal'};
+var _user$project$Diagram$Arc = function (a) {
+	return {ctor: 'Arc', _0: a};
+};
+var _user$project$Diagram$Line = function (a) {
+	return {ctor: 'Line', _0: a};
+};
+var _user$project$Diagram$drawElementPaths = F2(
+	function (x, y) {
+		return _elm_lang$core$Native_List.fromArray(
+			[
+				{
+				ctor: '_Tuple2',
+				_0: _user$project$Diagram$LineMidHorizontal,
+				_1: _user$project$Diagram$Line(
+					{
+						ctor: '_Tuple2',
+						_0: A2(_user$project$Diagram$Point, x, y),
+						_1: A2(_user$project$Diagram$Point, x, y)
+					})
+			}
+			]);
+	});
 
 var _user$project$Grid$init = function (str) {
 	var lines = _elm_lang$core$String$lines(str);

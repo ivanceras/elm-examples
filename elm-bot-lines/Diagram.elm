@@ -46,9 +46,6 @@ type Element
     | LowHorizontal
     | SlantRight
     | SlantLeft
-    | Arc Location Chunk
-    | FractionLine Chunk
-    | Bullet -- * when only 1 line is connected
 
 
 type Action
@@ -83,6 +80,83 @@ type Chunk
     | Quarter 
     | Quarter3
 
+--basic drawing elements that has path maps
+type DrawElements
+
+    {--
+    draw a horizontal line in the mid of a block
+     - 
+    --}
+     
+    = LineMidHorizontal
+
+    {--
+    
+     .-.
+
+     --}
+    | ArcMidHalfTop 
+    {--
+
+     '-'
+
+    --}
+    | ArcMidHalfBottom 
+
+    {--
+
+    -- ._. 
+
+    --}
+    | ArcLowHalfBottom 
+
+    {--
+         _
+        (
+         -
+    --}
+    | ArcMidHalfLeft 
+    {--
+        -
+         )
+        -
+    --}
+    | ArcMidHalfRight 
+    {--
+       .-
+         
+    --}
+    | ArcMidQuarterTopLeft 
+    {--
+        -.
+          
+    --}
+    | ArcMidQuarterTopRight
+    {--
+         
+        '-
+    --}
+    | ArcMidQuarterBottomLeft
+    {--
+          
+        -'
+    --}
+    | ArcMidQuarterBottomRight
+
+type alias Point = 
+    { x : Float
+    , y: Float
+    }
+
+type Path
+    = Line (Point, Point)
+    | Arc (Point, Point, Float)
+
+
+drawElementPaths x y =
+    [
+    (LineMidHorizontal, Line (Point x y, Point x y))
+    ]
 
 vertical = ['|']
 verticalDashed = [':']
@@ -264,5 +338,6 @@ matchComponent x y model =
                     Nothing
             )
          |> List.head
+
 
 
