@@ -8708,6 +8708,9 @@ var _user$project$Diagram$verticalDashed = _elm_lang$core$Native_List.fromArray(
 	[
 		_elm_lang$core$Native_Utils.chr(':')
 	]);
+var _user$project$Diagram$isVerticalDashed = function ($char) {
+	return A2(_elm_lang$core$List$member, $char, _user$project$Diagram$verticalDashed);
+};
 var _user$project$Diagram$vertical = _elm_lang$core$Native_List.fromArray(
 	[
 		_elm_lang$core$Native_Utils.chr('|')
@@ -8798,6 +8801,21 @@ var _user$project$Diagram$componentMatchList = F3(
 			[
 				{
 				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isVertical),
+				_1: A3(_user$project$Diagram$Element, _user$project$Diagram$Mid, _user$project$Diagram$Vertical, _user$project$Diagram$Solid)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isHorizontal),
+				_1: A3(_user$project$Diagram$Element, _user$project$Diagram$Mid, _user$project$Diagram$Horizontal, _user$project$Diagram$Solid)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isVerticalDashed),
+				_1: A3(_user$project$Diagram$Element, _user$project$Diagram$Mid, _user$project$Diagram$Vertical, _user$project$Diagram$Dashed)
+			},
+				{
+				ctor: '_Tuple2',
 				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, topRight, _user$project$Diagram$isSlantRight) && (A2(_user$project$Diagram$isNeighbor, bottomLeft, _user$project$Diagram$isSlantRight) && A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal))),
 				_1: A3(
 					_user$project$Diagram$Junction,
@@ -8820,9 +8838,6 @@ var _user$project$Diagram$matchComponent = F3(
 				A3(_user$project$Diagram$componentMatchList, x, y, model)));
 	});
 var _user$project$Diagram$Low = {ctor: 'Low'};
-var _user$project$Diagram$Large = {ctor: 'Large'};
-var _user$project$Diagram$Medium = {ctor: 'Medium'};
-var _user$project$Diagram$Small = {ctor: 'Small'};
 var _user$project$Diagram$Quarter3 = {ctor: 'Quarter3'};
 var _user$project$Diagram$Quarter = {ctor: 'Quarter'};
 var _user$project$Diagram$Half = {ctor: 'Half'};

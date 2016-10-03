@@ -69,7 +69,7 @@ type Component
     | Arrow Location
     | Corner Location Outline
     | Action Elevation Element Action Location Chunk
-    | Curve Location Elevation Size
+    | Curve Location Elevation Chunk
     | Junction Elevation (List Location) Outline  -- + * . '
 
 type Elevation
@@ -77,12 +77,11 @@ type Elevation
     | Mid
     | High
 
-type Size
-    = Small
-    | Medium
-    | Large
-
-type Chunk = Full | Half | Quarter | Quarter3
+type Chunk 
+    = Full 
+    | Half 
+    | Quarter 
+    | Quarter3
 
 
 vertical = ['|']
@@ -129,6 +128,9 @@ isCloseCurve char =
 
 isVertical char =
     List.member char vertical
+
+isVerticalDashed char =
+    List.member char verticalDashed
 
 isAlphaNumeric char =
     Char.isDigit char || Char.isUpper char || Char.isLower char
@@ -222,6 +224,26 @@ componentMatchList x y model =
         bottomRight = bottomRightOf x y model
     in
         [
+            -- char |
+            (isChar char isVertical
+            ,Element Mid Vertical Solid
+            )
+            ,
+            -- char -
+            (isChar char isHorizontal
+            ,Element Mid Horizontal Solid
+            )
+            ,
+            -- char :
+            (isChar char isVerticalDashed
+            ,Element Mid Vertical Dashed
+            )
+            ,
+            {--    
+                   /
+                  .-
+                 /
+            --}
             (isChar char isRound
              && isNeighbor topRight isSlantRight
              && isNeighbor bottomLeft isSlantRight
