@@ -47,47 +47,14 @@ view model =
                    [text "Convert >>"]
            ]
         ,div 
-            [style [("width", "500px")
-                   ,("height", "100%")
+            [style [("width", "100%")
+                   ,("height", "auto")
                    ,("overflow", "auto")
                    ]
             ]
             [Diagram.getSvg model.grid
             ]
         ]
-
-    {--
-    div []
-        [
-        button [
-                style [("padding","10px")
-                      ,("margin-left","500px")
-                      ]
-                ,onClick Convert
-               ] 
-               [text "Convert >>"]
-        ,div [style [("display", "flex")]]
-            [pre 
-                [style 
-                    [("font-size", "15.4px")
-                    ,("font-family","monospace")
-                    ,("word-wrap","nowrap")
-                    ,("overflow", "auto")
-                    ,("border", "1px solid #ddd")
-                    ,("min-height", "500px")
-                    ,("min-width", "500px")
-                    ]
-                  ,contenteditable True
-                  ,id "ascii_text" 
-                  ,on "input" (Json.Decode.map Input textContentDecoder)
-                 ]
-                 [text arg]
-            ,div [style [("padding-left", "10px")]]
-                [Diagram.getSvg model.grid
-                ]
-            ]
-        ]
-    --}
 
         
 update msg model =
@@ -232,6 +199,8 @@ arg =
     :
     :
     +==============================>
+    
+    ..............................
 
 
 

@@ -5,8 +5,17 @@
 <link rel="stylesheet" href="lib/codemirror.css">
 <script src="lib/codemirror.js"></script>
 <style>
-#editor{
+#editor
+{
 font-size:15.4px;
+}
+.CodeMirror
+{
+height:auto;
+}
+.CodeMirror-scroll
+{
+height:auto;
 }
 </style>
 </head>
@@ -43,7 +52,7 @@ var cm = CodeMirror(editor,
                     }
         }
     );
-cm.setSize("500px", "100%");
+cm.setSize("800px", "auto");
 
 function debounce(func, wait, immediate) {
 	var timeout;

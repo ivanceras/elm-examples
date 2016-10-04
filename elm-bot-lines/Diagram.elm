@@ -132,78 +132,6 @@ type Chunk
     | Quarter 
     | Quarter3
 
---basic drawing elements that has path maps
-type DrawElement
-
-    {--
-    draw a horizontal line in the mid of a block
-     - 
-    --}
-     
-    = LineMidHorizontal
-    | LineMidHorizontalDashed
-    | LineLowHorizontal
-    | LineLowHorizontalDashed
-    | LineMidVertical
-    | LineMidVerticalDashed
-    | LineSlantLeft
-    | LineSlantRight
-    | SharpCorner Location
-    | RoundCorner Location
-    | CrossIntersection
-
-    {--
-    
-     .-.
-
-     --}
-    | ArcMidHalfTop 
-    {--
-
-     '-'
-
-    --}
-    | ArcMidHalfBottom 
-
-    {--
-
-    -- ._. 
-
-    --}
-    | ArcLowHalfBottom 
-
-    {--
-         _
-        (
-         -
-    --}
-    | ArcMidHalfLeft 
-    {--
-        -
-         )
-        -
-    --}
-    | ArcMidHalfRight 
-    {--
-       .-
-         
-    --}
-    | ArcMidQuarterTopLeft 
-    {--
-        -.
-          
-    --}
-    | ArcMidQuarterTopRight
-    {--
-         
-        '-
-    --}
-    | ArcMidQuarterBottomLeft
-    {--
-          
-        -'
-    --}
-    | ArcMidQuarterBottomRight
 
 type alias Point = 
     { x : Float
@@ -212,12 +140,13 @@ type alias Point =
 
 type Path
     = Line (Point, Point)
+    | ArrowLine (Point, Point)
     | Arc (Point, Point, Float)
     | DashedLine (Point, Point)
 
-
-elementPaths: Int -> Int -> List (DrawElement, List Path)
-elementPaths x y =
+-- corresponding paths for each component
+componentPaths: Int -> Int -> List (Component, List Path)
+componentPaths x y =
     let
         -- block start/quarter/mid/quarter3/end x y
         sx = measureX x
@@ -231,73 +160,101 @@ elementPaths x y =
         ex = measureX x + textWidth
         ey = measureY y + textHeight
     in
+
     [
-     (LineMidHorizontal
+     (Piece Mid Horizontal Solid
      ,[Line (Point sx my, Point ex my)]
      )
      ,
-     (LineMidHorizontalDashed
+     (Piece Mid Horizontal Dashed
      ,[DashedLine (Point sx my, Point ex my)]
      )
     ,
-    (LineLowHorizontal
+    (Piece Low Horizontal Solid
      ,[Line (Point sx ey, Point ex ey)]
      )
     ,
-    (LineLowHorizontalDashed
+    (Piece Low Horizontal Dashed
       ,[DashedLine (Point sx ey, Point ex ey)]
      )
     ,
-    (LineMidVertical
+    (Piece Mid Vertical Solid
      ,[Line (Point mx sy, Point mx ey)]
      )
     ,
-    (LineMidVerticalDashed 
+    (Piece Mid Vertical Dashed 
      ,[DashedLine (Point mx sy, Point mx ey)]
      )
     ,
-    (LineSlantLeft
+    (Piece Mid SlantLeft Solid
     ,[Line (Point sx sy, Point ex ey)]
     )
     ,
-    (LineSlantRight
+    (Piece Mid SlantRight Solid
     ,[Line (Point sx ey, Point ex sy)]
     )
     ,
-    (SharpCorner TopLeft
+    (Arrow Top
+    ,[ArrowLine (Point mx ey, Point mx sy)]
+    )
+    ,
+    (Arrow Bottom
+    ,[ArrowLine (Point mx sy, Point mx ey)]
+    )
+    ,
+    (Arrow Left
+    ,[ArrowLine (Point ex my, Point mx my)]
+    )
+    ,
+    (Arrow Right
+    ,[ArrowLine (Point sx my, Point mx my)]
+    )
+    ,
+    (Junction Mid [Bottom, Right] Sharp
     ,[Line (Point mx my, Point ex my)
      ,Line (Point mx my, Point mx ey)
      ]
     )
     ,
-    (SharpCorner TopRight
+    (Junction Mid [Bottom, Left] Sharp
     ,[Line (Point sx my, Point mx my)
      ,Line (Point mx my, Point mx ey)
      ]
     )
     ,
-    (SharpCorner BottomLeft
+    (Junction Mid [Top, Right] Sharp
     ,[Line (Point mx sy, Point mx my)
      ,Line (Point mx my, Point ex my)
      ]
     )
     ,
-    (SharpCorner BottomRight
+    (Junction Mid [Top, Left] Sharp
     ,[Line (Point sx my, Point mx my)
      ,Line (Point mx my, Point mx sy)
      ]
     )
     ,
-    (CrossIntersection
+    (Junction Mid [Top, Left, Bottom, Right] Sharp
     ,[Line (Point sx my, Point ex my)
      ,Line (Point mx sy, Point mx ey)
+     ]
+    )
+    ,(Junction Mid 
+        [Top, Left, Bottom, Right
+        ,TopLeft, TopRight, BottomLeft, BottomRight
+        ] Sharp
+    ,[Line (Point sx my, Point ex my)
+     ,Line (Point mx sy, Point mx ey)
+     ,Line (Point sx sy, Point ex ey)
+     ,Line (Point sx ey, Point ex sy)
      ]
     )
     {--
        .-
        |
     --}
-    ,(RoundCorner TopLeft
+    ,
+    (Junction Mid [Bottom, Right] Smooth
      ,[ Arc  (Point ex my, Point mx q3y, arcRadius)
        ,Line (Point mx q3y, Point mx ey)
       ]
@@ -306,16 +263,17 @@ elementPaths x y =
        .-
        |
     --}
-    ,(RoundCorner TopRight
+    ,(Junction Mid [Bottom, Left] Smooth
      ,[ Arc  (Point mx q3y, Point sx my, arcRadius)
        ,Line (Point mx q3y, Point mx ey)
       ]
      )
+    ,
     {--
       |  
       '- 
     --}
-    ,(RoundCorner BottomLeft
+     (Junction Mid [Top, Right] Smooth
      ,[ Arc  (Point mx qy, Point ex my, arcRadius)
        ,Line (Point mx sy, Point mx qy)
       ]
@@ -324,38 +282,15 @@ elementPaths x y =
         |
        -' 
     --}
-    ,(RoundCorner BottomRight
+    ,(Junction Mid [Top, Left] Smooth
      ,[ Arc  (Point sx my, Point mx qy, arcRadius)
        ,Line (Point mx sy, Point mx qy)
       ]
      )
     ]
+    
 
--- get the correspoding drawing elements for each component
-componentElements: List (Component, DrawElement)
-componentElements =
-    [
-        (Piece Mid Vertical Solid, LineMidVertical)
-       ,(Piece Mid Vertical Dashed, LineMidVerticalDashed)
-       ,(Piece Mid Horizontal Solid, LineMidHorizontal)
-       ,(Piece Mid Horizontal Dashed, LineMidHorizontalDashed)
-       ,(Piece Low Horizontal Solid, LineLowHorizontal)
-       ,(Piece Low Horizontal Dashed, LineLowHorizontalDashed)
-       ,(Piece Mid SlantLeft Solid, LineSlantLeft)
-       ,(Piece Mid SlantRight Solid, LineSlantRight)
-        --cross intersection
-       ,(Junction Mid [Top, Left, Bottom, Right] Sharp, CrossIntersection)
-       --sharp corners
-       ,(Junction Mid [Top, Left] Sharp, SharpCorner BottomRight)
-       ,(Junction Mid [Top, Right] Sharp, SharpCorner BottomLeft)
-       ,(Junction Mid [Bottom, Left] Sharp, SharpCorner TopRight)
-       ,(Junction Mid [Bottom, Right] Sharp, SharpCorner TopLeft)
-       --smooth corners
-       ,(Junction Mid [Top, Left] Smooth, RoundCorner BottomRight)
-       ,(Junction Mid [Top, Right] Smooth, RoundCorner BottomLeft)
-       ,(Junction Mid [Bottom, Left] Smooth, RoundCorner TopRight)
-       ,(Junction Mid [Bottom, Right] Smooth, RoundCorner TopLeft)
-    ]
+
 
 canMerged: Path -> Path -> Bool
 canMerged elem1 elem2 =
@@ -384,6 +319,8 @@ canMerged elem1 elem2 =
                     s == s2 || e == e2
                 _ ->
                     False
+        ArrowLine (s, e) ->
+            False  --arrow line can't merge
 
                         
 
@@ -394,6 +331,7 @@ horizontal = ['-']
 horizontalDashed = ['=']
 lowHorizontal = ['_']
 intersection = ['+']
+asterisk = ['*']
 round = ['.','\'']
 arrowRight = ['>']
 arrowDown = ['V','v']
@@ -450,6 +388,9 @@ isLowHorizontal char =
 
 isIntersection char =
     List.member char intersection
+
+isAsterisk char =
+    List.member char asterisk
 
 isLine char =
     isVertical char || isHorizontal char || isLowHorizontal char
@@ -517,6 +458,8 @@ isNeighbor neighbor check =
             False
 
 -- conditions to match and the corresponding component
+-- arrange from simple to most complex
+-- low priority to higher priority, the list is reveres before using for matching
 componentMatchList: Int -> Int -> Model -> List (Bool, Component)
 componentMatchList x y model =
     let
@@ -572,6 +515,57 @@ componentMatchList x y model =
              --}
             (isChar char isHorizontalDashed
             ,Piece Mid Horizontal Dashed
+            )
+            ,
+            {--
+             |_
+             --}
+            (isChar char isLowHorizontal
+             && isNeighbor left isVertical
+            ,Action Low Horizontal Extend Left Half
+            )
+            ,
+            {--
+                ^
+                |
+            --}
+            (isChar char isArrowUp
+             &&isNeighbor bottom isVertical
+            ,Arrow Top
+            )
+            ,
+            {--
+                <-
+            --}
+            (isChar char isArrowLeft
+             &&isNeighbor right isHorizontal
+            ,Arrow Left
+            )
+            ,
+            {--
+                ->
+            --}
+            (isChar char isArrowRight
+             &&isNeighbor left isHorizontal
+            ,Arrow Right
+            )
+            ,
+            {--
+                |
+                V
+            --}
+            (isChar char isArrowDown
+             &&isNeighbor top isVertical
+            ,Arrow Bottom
+            )
+            ,
+            {--
+                ^
+                |
+            --}
+            (isChar char isArrowUp
+             &&isNeighbor bottomRight isSlantLeft
+            ,Arrow TopLeft
             )
             ,
             {--
@@ -658,6 +652,23 @@ componentMatchList x y model =
              && isNeighbor top isVertical
             ,Junction Mid [Top, Left] Smooth
             )
+            ,
+            {--
+               \|/  \|/  \|/ 
+               -+-  -*-  -.-
+               /|\  /|\  /|\ 
+            --}
+            ((isChar char isIntersection || isChar char isRound || isChar char isAsterisk)
+             && isNeighbor top isVertical
+             && isNeighbor left isHorizontal
+             && isNeighbor bottom isVertical
+             && isNeighbor right isHorizontal
+             && isNeighbor topLeft isSlantLeft
+             && isNeighbor topRight isSlantRight
+             && isNeighbor bottomLeft isSlantRight
+             && isNeighbor bottomRight isSlantLeft
+            ,Junction Mid [Top, Left, Bottom, Right, TopLeft, TopRight, BottomLeft, BottomRight] Sharp
+            )
 
         ]
 
@@ -676,22 +687,6 @@ matchComponent x y model =
 
 
 
-getElement: Int -> Int -> Model -> List DrawElement
-getElement x y model =
-    let
-        component = matchComponent x y model
-    in
-        case component of
-            Just component ->
-                 List.filterMap (
-                    \ (comp, elem) ->
-                    if component == comp then
-                        Just elem
-                    else 
-                        Nothing
-                 ) componentElements
-            Nothing ->
-                []
                                 
 
 getSvg model =
@@ -700,9 +695,13 @@ getSvg model =
         gheight = toString <| (measureY model.rows)
     in
     svg [height gheight, width gwidth]
-        (gridFill
-        ++drawPaths model
+        ([
+         gridFill
+        ,[defs [] [arrowMarker]]
+        ,drawPaths model
+        ] |> List.concat
         )
+        
 
 
 drawPaths: Model -> List (Svg a)
@@ -711,7 +710,7 @@ drawPaths model =
     (\y line ->
        Array.indexedMap
         (\ x char->
-            elementSvg x y model
+            componentSvg x y model
         ) line
         |> Array.toList
     ) model.lines
@@ -719,18 +718,17 @@ drawPaths model =
     |> List.concat
     |> List.concat
 
-elementSvg: Int -> Int -> Model -> List (Svg a)
-elementSvg x y model =
-    let 
-        elements: List DrawElement
-        elements = getElement x y model 
 
-        paths: List Path
-        paths = List.map (
-            \ elem ->
-                drawElementPaths x y elem
-        ) elements
-            |> List.concat
+
+componentSvg: Int -> Int -> Model -> List (Svg a)
+componentSvg x y model =
+    let 
+        paths = 
+            case matchComponent x y model  of 
+                Just component ->
+                    getComponentPaths x y component
+                Nothing ->
+                    []
 
         svgPaths: List (Svg a)
         svgPaths = List.map (
@@ -740,30 +738,37 @@ elementSvg x y model =
      in
         svgPaths
 
-drawElementPaths: Int -> Int -> DrawElement -> List Path
-drawElementPaths x y elem =
+getComponentPaths: Int -> Int -> Component -> List Path
+getComponentPaths x y component =
     List.filterMap(
-        \ (delem, path) ->
-            if elem == delem then
+        \ (comp, path) ->
+            if component == comp then
                 Just path
             else
                 Nothing
-    ) (elementPaths x y)
-        |> List.concat
+    ) ( componentPaths x y)
+       |> List.head
+       |> Maybe.withDefault [] 
+
+type Feature 
+    = Arrowed
+    | None
 
 svgPath: Path -> Svg a
 svgPath elem =
     case elem of
         Line (s, e) ->
-            drawLine s e Solid
+            drawLine s e Solid None
+        ArrowLine (s, e) ->
+            drawLine s e Solid Arrowed
         Arc (s, e, r) ->
             drawArc s e r
         DashedLine (s, e) ->
-            drawLine s e Dashed
+            drawLine s e Dashed None
 
 
-drawLine: Point -> Point ->  Stroke -> Svg a
-drawLine start end lineStroke =
+drawLine: Point -> Point ->  Stroke -> Feature -> Svg a
+drawLine start end lineStroke feature =
     let 
         {red,green,blue,alpha} = Color.toRgb color
         colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
@@ -786,6 +791,12 @@ drawLine start end lineStroke =
                     strokeDasharray ""
                 Dashed ->
                     strokeDasharray "3 3"
+
+            ,case feature of
+                Arrowed -> 
+                    markerEnd "url(#triangle)"
+                None ->
+                    markerEnd ""
             ]
             []
 
@@ -821,3 +832,19 @@ gridFill =
         ]
     ,rect [width "100%", height "100%", fill "url(#grid)"] []
     ]
+
+
+arrowMarker: Svg a
+arrowMarker =
+    marker [id "triangle"
+           ,viewBox "0 0 14 14"
+           ,refX "0"
+           ,refY "5"
+           ,markerUnits "strokeWidth"
+           ,markerWidth "10"
+           ,markerHeight "10"
+           ,orient "auto"
+           ]
+        [path [d "M 0 0 L 10 5 L 0 10 z"]
+            []
+        ]
