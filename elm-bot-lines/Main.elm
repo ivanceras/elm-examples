@@ -3,7 +3,7 @@ import Html exposing (text,pre,div,button,textarea)
 import Html.Attributes exposing (class, style,contenteditable,id)
 import Html.Events exposing (onClick,on)
 import String
-import Grid
+import Diagram
 import Html.App as App
 import Json.Decode exposing (string)
 import Regex
@@ -15,7 +15,7 @@ also algorithmn to connect these lines
 --}
 
 type alias Model =
- {grid: Grid.Model
+ {grid: Diagram.Model
  }
 
 type Msg = Input String | Convert
@@ -23,7 +23,7 @@ type Msg = Input String | Convert
 
 init: (Model, Cmd Msg)
 init  =
-    ({grid = Grid.init arg
+    ({grid = Diagram.init arg
      }
     ,Cmd.batch[
         setAsciiText arg
@@ -52,7 +52,7 @@ view model =
                    ,("overflow", "auto")
                    ]
             ]
-            [Grid.getSvg model.grid
+            [Diagram.getSvg model.grid
             ]
         ]
 
@@ -83,7 +83,7 @@ view model =
                  ]
                  [text arg]
             ,div [style [("padding-left", "10px")]]
-                [Grid.getSvg model.grid
+                [Diagram.getSvg model.grid
                 ]
             ]
         ]
@@ -95,7 +95,7 @@ update msg model =
         Convert ->
             (model, getAsciiText () )
         Input asciiText ->
-            ({model | grid = Grid.init asciiText}
+            ({model | grid = Diagram.init asciiText}
             ,Cmd.none
             )
 
@@ -226,7 +226,12 @@ arg =
     |                        *C++
     +-----------------------------> Control
 
-
+    ^
+    :
+    :
+    :
+    :
+    +==============================>
 
 
 
