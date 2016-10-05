@@ -8755,26 +8755,25 @@ var _user$project$Diagram$isVertical = function ($char) {
 var _user$project$Diagram$isLine = function ($char) {
 	return _user$project$Diagram$isVertical($char) || (_user$project$Diagram$isHorizontal($char) || _user$project$Diagram$isLowHorizontal($char));
 };
-var _user$project$Diagram$canMerged = F2(
-	function (elem1, elem2) {
-		var _p3 = elem1;
+var _user$project$Diagram$canMergePath = F2(
+	function (path1, path2) {
+		var _p3 = path1;
 		switch (_p3.ctor) {
 			case 'Line':
-				var _p6 = _p3._0._0;
 				var _p5 = _p3._0._1;
-				var _p4 = elem2;
+				var _p4 = path2;
 				_v4_2:
 				do {
 					switch (_p4.ctor) {
 						case 'Line':
 							if (_p4._0.ctor === '_Tuple2') {
-								return _elm_lang$core$Native_Utils.eq(_p6, _p4._0._0) || _elm_lang$core$Native_Utils.eq(_p5, _p4._0._1);
+								return _elm_lang$core$Native_Utils.eq(_p5, _p4._0._0);
 							} else {
 								break _v4_2;
 							}
 						case 'Arc':
-							if (_p4._0.ctor === '_Tuple3') {
-								return _elm_lang$core$Native_Utils.eq(_p6, _p4._0._0) || _elm_lang$core$Native_Utils.eq(_p5, _p4._0._1);
+							if (_p4._0.ctor === '_Tuple4') {
+								return _elm_lang$core$Native_Utils.eq(_p5, _p4._0._0);
 							} else {
 								break _v4_2;
 							}
@@ -8784,21 +8783,20 @@ var _user$project$Diagram$canMerged = F2(
 				} while(false);
 				return false;
 			case 'Arc':
-				var _p9 = _p3._0._0;
-				var _p8 = _p3._0._1;
-				var _p7 = elem2;
+				var _p7 = _p3._0._1;
+				var _p6 = path2;
 				_v5_2:
 				do {
-					switch (_p7.ctor) {
+					switch (_p6.ctor) {
 						case 'Line':
-							if (_p7._0.ctor === '_Tuple2') {
-								return _elm_lang$core$Native_Utils.eq(_p9, _p7._0._0) || _elm_lang$core$Native_Utils.eq(_p8, _p7._0._1);
+							if (_p6._0.ctor === '_Tuple2') {
+								return _elm_lang$core$Native_Utils.eq(_p7, _p6._0._0);
 							} else {
 								break _v5_2;
 							}
 						case 'Arc':
-							if (_p7._0.ctor === '_Tuple3') {
-								return _elm_lang$core$Native_Utils.eq(_p9, _p7._0._0) || _elm_lang$core$Native_Utils.eq(_p8, _p7._0._1);
+							if (_p6._0.ctor === '_Tuple4') {
+								return _elm_lang$core$Native_Utils.eq(_p7, _p6._0._0);
 							} else {
 								break _v5_2;
 							}
@@ -8808,15 +8806,25 @@ var _user$project$Diagram$canMerged = F2(
 				} while(false);
 				return false;
 			case 'DashedLine':
-				var _p10 = elem2;
-				if ((_p10.ctor === 'DashedLine') && (_p10._0.ctor === '_Tuple2')) {
-					return _elm_lang$core$Native_Utils.eq(_p3._0._0, _p10._0._0) || _elm_lang$core$Native_Utils.eq(_p3._0._1, _p10._0._1);
+				var _p8 = path2;
+				if ((_p8.ctor === 'DashedLine') && (_p8._0.ctor === '_Tuple2')) {
+					return _elm_lang$core$Native_Utils.eq(_p3._0._1, _p8._0._0);
 				} else {
 					return false;
 				}
 			default:
 				return false;
 		}
+	});
+var _user$project$Diagram$collinear = F3(
+	function (p1, p2, p3) {
+		var cy = p3.y;
+		var cx = p3.x;
+		var by = p2.y;
+		var bx = p2.x;
+		var ay = p1.y;
+		var ax = p1.x;
+		return _elm_lang$core$Native_Utils.eq(((ax * (by - cy)) + (bx * (cy - ay))) + (cx * (ay - by)), 0);
 	});
 var _user$project$Diagram$color = A3(_elm_lang$core$Color$rgb, 0, 0, 0);
 var _user$project$Diagram$textHeight = 16.0;
@@ -8915,11 +8923,11 @@ var _user$project$Diagram$drawLine = F4(
 		var ex = end.x;
 		var sy = start.y;
 		var sx = start.x;
-		var _p11 = _elm_lang$core$Color$toRgb(_user$project$Diagram$color);
-		var red = _p11.red;
-		var green = _p11.green;
-		var blue = _p11.blue;
-		var alpha = _p11.alpha;
+		var _p9 = _elm_lang$core$Color$toRgb(_user$project$Diagram$color);
+		var red = _p9.red;
+		var green = _p9.green;
+		var blue = _p9.blue;
+		var alpha = _p9.alpha;
 		var colorText = A2(
 			_elm_lang$core$Basics_ops['++'],
 			'rgb(',
@@ -8957,16 +8965,16 @@ var _user$project$Diagram$drawLine = F4(
 					_elm_lang$svg$Svg_Attributes$strokeLinecap('round'),
 					_elm_lang$svg$Svg_Attributes$strokeLinejoin('mitter'),
 					function () {
-					var _p12 = lineStroke;
-					if (_p12.ctor === 'Solid') {
+					var _p10 = lineStroke;
+					if (_p10.ctor === 'Solid') {
 						return _elm_lang$svg$Svg_Attributes$strokeDasharray('');
 					} else {
 						return _elm_lang$svg$Svg_Attributes$strokeDasharray('3 3');
 					}
 				}(),
 					function () {
-					var _p13 = feature;
-					if (_p13.ctor === 'Arrowed') {
+					var _p11 = feature;
+					if (_p11.ctor === 'Arrowed') {
 						return _elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)');
 					} else {
 						return _elm_lang$svg$Svg_Attributes$markerEnd('');
@@ -8976,8 +8984,9 @@ var _user$project$Diagram$drawLine = F4(
 			_elm_lang$core$Native_List.fromArray(
 				[]));
 	});
-var _user$project$Diagram$drawArc = F3(
-	function (start, end, radius) {
+var _user$project$Diagram$drawArc = F4(
+	function (start, end, radius, sweep) {
+		var sweepFlag = sweep ? '1' : '0';
 		var ey = end.y;
 		var ex = end.x;
 		var sy = start.y;
@@ -8997,7 +9006,7 @@ var _user$project$Diagram$drawArc = F3(
 					_elm_lang$core$Basics$toString(ry),
 					'0',
 					'0',
-					'0',
+					sweepFlag,
 					_elm_lang$core$Basics$toString(ex),
 					_elm_lang$core$Basics$toString(ey)
 				]));
@@ -9283,9 +9292,9 @@ var _user$project$Diagram$matchComponent = F3(
 		return _elm_lang$core$List$head(
 			A2(
 				_elm_lang$core$List$filterMap,
-				function (_p14) {
-					var _p15 = _p14;
-					return _p15._0 ? _elm_lang$core$Maybe$Just(_p15._1) : _elm_lang$core$Maybe$Nothing;
+				function (_p12) {
+					var _p13 = _p12;
+					return _p13._0 ? _elm_lang$core$Maybe$Just(_p13._1) : _elm_lang$core$Maybe$Nothing;
 				},
 				_elm_lang$core$List$reverse(
 					A3(_user$project$Diagram$componentMatchList, x, y, model))));
@@ -9641,10 +9650,11 @@ var _user$project$Diagram$componentPaths = F2(
 					[
 						_user$project$Diagram$Arc(
 						{
-							ctor: '_Tuple3',
+							ctor: '_Tuple4',
 							_0: A2(_user$project$Diagram$Point, ex, my),
 							_1: A2(_user$project$Diagram$Point, mx, q3y),
-							_2: _user$project$Diagram$arcRadius
+							_2: _user$project$Diagram$arcRadius,
+							_3: false
 						}),
 						_user$project$Diagram$Line(
 						{
@@ -9666,10 +9676,11 @@ var _user$project$Diagram$componentPaths = F2(
 					[
 						_user$project$Diagram$Arc(
 						{
-							ctor: '_Tuple3',
+							ctor: '_Tuple4',
 							_0: A2(_user$project$Diagram$Point, mx, q3y),
 							_1: A2(_user$project$Diagram$Point, sx, my),
-							_2: _user$project$Diagram$arcRadius
+							_2: _user$project$Diagram$arcRadius,
+							_3: false
 						}),
 						_user$project$Diagram$Line(
 						{
@@ -9691,10 +9702,11 @@ var _user$project$Diagram$componentPaths = F2(
 					[
 						_user$project$Diagram$Arc(
 						{
-							ctor: '_Tuple3',
+							ctor: '_Tuple4',
 							_0: A2(_user$project$Diagram$Point, mx, qy),
 							_1: A2(_user$project$Diagram$Point, ex, my),
-							_2: _user$project$Diagram$arcRadius
+							_2: _user$project$Diagram$arcRadius,
+							_3: false
 						}),
 						_user$project$Diagram$Line(
 						{
@@ -9716,10 +9728,11 @@ var _user$project$Diagram$componentPaths = F2(
 					[
 						_user$project$Diagram$Arc(
 						{
-							ctor: '_Tuple3',
+							ctor: '_Tuple4',
 							_0: A2(_user$project$Diagram$Point, sx, my),
 							_1: A2(_user$project$Diagram$Point, mx, qy),
-							_2: _user$project$Diagram$arcRadius
+							_2: _user$project$Diagram$arcRadius,
+							_3: false
 						}),
 						_user$project$Diagram$Line(
 						{
@@ -9740,33 +9753,190 @@ var _user$project$Diagram$getComponentPaths = F3(
 			_elm_lang$core$List$head(
 				A2(
 					_elm_lang$core$List$filterMap,
-					function (_p16) {
-						var _p17 = _p16;
-						return _elm_lang$core$Native_Utils.eq(component, _p17._0) ? _elm_lang$core$Maybe$Just(_p17._1) : _elm_lang$core$Maybe$Nothing;
+					function (_p14) {
+						var _p15 = _p14;
+						return _elm_lang$core$Native_Utils.eq(component, _p15._0) ? _elm_lang$core$Maybe$Just(_p15._1) : _elm_lang$core$Maybe$Nothing;
 					},
 					A2(_user$project$Diagram$componentPaths, x, y))));
 	});
+var _user$project$Diagram$firstPathOnly = F3(
+	function (x, y, comp) {
+		var paths = A3(_user$project$Diagram$getComponentPaths, x, y, comp);
+		return _elm_lang$core$Native_Utils.eq(
+			_elm_lang$core$List$length(paths),
+			1) ? _elm_lang$core$List$head(paths) : _elm_lang$core$Maybe$Nothing;
+	});
+var _user$project$Diagram$eat = F2(
+	function (path1, path2) {
+		var _p16 = path1;
+		if ((_p16.ctor === 'Line') && (_p16._0.ctor === '_Tuple2')) {
+			var _p20 = _p16._0._0;
+			var _p19 = _p16._0._1;
+			var _p17 = path2;
+			if ((_p17.ctor === 'Line') && (_p17._0.ctor === '_Tuple2')) {
+				var _p18 = _p17._0._1;
+				return (_elm_lang$core$Native_Utils.eq(_p19, _p17._0._0) && A3(_user$project$Diagram$collinear, _p20, _p19, _p18)) ? _elm_lang$core$Maybe$Just(
+					_user$project$Diagram$Line(
+						{ctor: '_Tuple2', _0: _p20, _1: _p18})) : _elm_lang$core$Maybe$Nothing;
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _user$project$Diagram$reversePath = function (path) {
+	var _p21 = path;
+	switch (_p21.ctor) {
+		case 'Line':
+			return _user$project$Diagram$Line(
+				{ctor: '_Tuple2', _0: _p21._0._1, _1: _p21._0._0});
+		case 'ArrowLine':
+			return _user$project$Diagram$ArrowLine(
+				{ctor: '_Tuple2', _0: _p21._0._1, _1: _p21._0._0});
+		case 'Arc':
+			return _user$project$Diagram$Arc(
+				{
+					ctor: '_Tuple4',
+					_0: _p21._0._1,
+					_1: _p21._0._0,
+					_2: _p21._0._2,
+					_3: _elm_lang$core$Basics$not(_p21._0._3)
+				});
+		default:
+			return _user$project$Diagram$DashedLine(
+				{ctor: '_Tuple2', _0: _p21._0._1, _1: _p21._0._0});
+	}
+};
+var _user$project$Diagram$merge = F2(
+	function (path1, path2) {
+		var _p22 = A2(_user$project$Diagram$eat, path1, path2);
+		if (_p22.ctor === 'Just') {
+			return _elm_lang$core$Maybe$Just(_p22._0);
+		} else {
+			var _p23 = A2(
+				_user$project$Diagram$eat,
+				path1,
+				_user$project$Diagram$reversePath(path2));
+			if (_p23.ctor === 'Just') {
+				return _elm_lang$core$Maybe$Just(_p23._0);
+			} else {
+				var _p24 = A2(
+					_user$project$Diagram$eat,
+					_user$project$Diagram$reversePath(path1),
+					path2);
+				if (_p24.ctor === 'Just') {
+					return _elm_lang$core$Maybe$Just(_p24._0);
+				} else {
+					var _p25 = A2(
+						_user$project$Diagram$eat,
+						_user$project$Diagram$reversePath(path1),
+						_user$project$Diagram$reversePath(path2));
+					if (_p25.ctor === 'Just') {
+						return _elm_lang$core$Maybe$Just(_p25._0);
+					} else {
+						return _elm_lang$core$Maybe$Nothing;
+					}
+				}
+			}
+		}
+	});
+var _user$project$Diagram$tryMerge = F3(
+	function (_p27, _p26, model) {
+		var _p28 = _p27;
+		var _p37 = _p28._1;
+		var _p36 = _p28._0;
+		var _p29 = _p26;
+		var _p35 = _p29._1;
+		var _p34 = _p29._0;
+		var comp2 = A3(_user$project$Diagram$matchComponent, _p34, _p35, model);
+		var comp1 = A3(_user$project$Diagram$matchComponent, _p36, _p37, model);
+		var _p30 = comp1;
+		if (_p30.ctor === 'Just') {
+			var _p31 = comp2;
+			if (_p31.ctor === 'Just') {
+				var path2 = A3(_user$project$Diagram$firstPathOnly, _p34, _p35, _p31._0);
+				var path1 = A3(_user$project$Diagram$firstPathOnly, _p36, _p37, _p30._0);
+				var _p32 = path1;
+				if (_p32.ctor === 'Just') {
+					var _p33 = path2;
+					if (_p33.ctor === 'Just') {
+						return A2(_user$project$Diagram$merge, _p32._0, _p33._0);
+					} else {
+						return _elm_lang$core$Maybe$Nothing;
+					}
+				} else {
+					return _elm_lang$core$Maybe$Nothing;
+				}
+			} else {
+				return _elm_lang$core$Maybe$Nothing;
+			}
+		} else {
+			return _elm_lang$core$Maybe$Nothing;
+		}
+	});
+var _user$project$Diagram$canMerge = F3(
+	function (_p39, _p38, model) {
+		var _p40 = _p39;
+		var _p41 = _p38;
+		var _p42 = A3(
+			_user$project$Diagram$tryMerge,
+			{ctor: '_Tuple2', _0: _p40._0, _1: _p40._1},
+			{ctor: '_Tuple2', _0: _p41._0, _1: _p41._1},
+			model);
+		if (_p42.ctor === 'Just') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var _user$project$Diagram$edible = F3(
+	function (x, y, model) {
+		var bottomRight = {ctor: '_Tuple2', _0: x + 1, _1: y + 1};
+		var bottomLeft = {ctor: '_Tuple2', _0: x - 1, _1: y + 1};
+		var topRight = {ctor: '_Tuple2', _0: x + 1, _1: y - 1};
+		var topLeft = {ctor: '_Tuple2', _0: x - 1, _1: y - 1};
+		var right = {ctor: '_Tuple2', _0: x + 1, _1: y};
+		var left = {ctor: '_Tuple2', _0: x - 1, _1: y};
+		var bottom = {ctor: '_Tuple2', _0: x, _1: y + 1};
+		var top = {ctor: '_Tuple2', _0: x, _1: y - 1};
+		var center = {ctor: '_Tuple2', _0: x, _1: y};
+		var match = _elm_lang$core$Native_List.fromArray(
+			[
+				A3(_user$project$Diagram$canMerge, top, center, model) && A3(_user$project$Diagram$canMerge, center, bottom, model),
+				A3(_user$project$Diagram$canMerge, left, center, model) && A3(_user$project$Diagram$canMerge, center, right, model),
+				A3(_user$project$Diagram$canMerge, topLeft, center, model) && A3(_user$project$Diagram$canMerge, center, bottomRight, model),
+				A3(_user$project$Diagram$canMerge, bottomLeft, center, model) && A3(_user$project$Diagram$canMerge, center, topRight, model)
+			]);
+		return A2(
+			_elm_lang$core$List$any,
+			function (a) {
+				return a;
+			},
+			match);
+	});
 var _user$project$Diagram$None = {ctor: 'None'};
 var _user$project$Diagram$Arrowed = {ctor: 'Arrowed'};
-var _user$project$Diagram$svgPath = function (elem) {
-	var _p18 = elem;
-	switch (_p18.ctor) {
+var _user$project$Diagram$svgPath = function (path) {
+	var _p43 = path;
+	switch (_p43.ctor) {
 		case 'Line':
-			return A4(_user$project$Diagram$drawLine, _p18._0._0, _p18._0._1, _user$project$Diagram$Solid, _user$project$Diagram$None);
+			return A4(_user$project$Diagram$drawLine, _p43._0._0, _p43._0._1, _user$project$Diagram$Solid, _user$project$Diagram$None);
 		case 'ArrowLine':
-			return A4(_user$project$Diagram$drawLine, _p18._0._0, _p18._0._1, _user$project$Diagram$Solid, _user$project$Diagram$Arrowed);
+			return A4(_user$project$Diagram$drawLine, _p43._0._0, _p43._0._1, _user$project$Diagram$Solid, _user$project$Diagram$Arrowed);
 		case 'Arc':
-			return A3(_user$project$Diagram$drawArc, _p18._0._0, _p18._0._1, _p18._0._2);
+			return A4(_user$project$Diagram$drawArc, _p43._0._0, _p43._0._1, _p43._0._2, _p43._0._3);
 		default:
-			return A4(_user$project$Diagram$drawLine, _p18._0._0, _p18._0._1, _user$project$Diagram$Dashed, _user$project$Diagram$None);
+			return A4(_user$project$Diagram$drawLine, _p43._0._0, _p43._0._1, _user$project$Diagram$Dashed, _user$project$Diagram$None);
 	}
 };
 var _user$project$Diagram$componentSvg = F3(
 	function (x, y, model) {
 		var paths = function () {
-			var _p19 = A3(_user$project$Diagram$matchComponent, x, y, model);
-			if (_p19.ctor === 'Just') {
-				return A3(_user$project$Diagram$getComponentPaths, x, y, _p19._0);
+			var _p44 = A3(_user$project$Diagram$matchComponent, x, y, model);
+			if (_p44.ctor === 'Just') {
+				return A3(_user$project$Diagram$edible, x, y, model) ? _elm_lang$core$Native_List.fromArray(
+					[]) : A3(_user$project$Diagram$getComponentPaths, x, y, _p44._0);
 			} else {
 				return _elm_lang$core$Native_List.fromArray(
 					[]);
@@ -9926,7 +10096,12 @@ var _user$project$Main$view = function (model) {
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_user$project$Diagram$getSvg(model.grid)
+						function () {
+						var _p1 = A2(_elm_lang$core$Debug$log, 'end svg', '');
+						var svg = _user$project$Diagram$getSvg(model.grid);
+						var _p2 = A2(_elm_lang$core$Debug$log, 'start svg', '');
+						return svg;
+					}()
 					]))
 			]));
 };

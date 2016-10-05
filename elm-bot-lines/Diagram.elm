@@ -141,7 +141,7 @@ type alias Point =
 type Path
     = Line (Point, Point)
     | ArrowLine (Point, Point)
-    | Arc (Point, Point, Float)
+    | Arc (Point, Point, Float, Bool)
     | DashedLine (Point, Point)
 
 -- corresponding paths for each component
@@ -255,7 +255,7 @@ componentPaths x y =
     --}
     ,
     (Junction Mid [Bottom, Right] Smooth
-     ,[ Arc  (Point ex my, Point mx q3y, arcRadius)
+     ,[ Arc  (Point ex my, Point mx q3y, arcRadius, False)
        ,Line (Point mx q3y, Point mx ey)
       ]
      )
@@ -264,7 +264,7 @@ componentPaths x y =
        |
     --}
     ,(Junction Mid [Bottom, Left] Smooth
-     ,[ Arc  (Point mx q3y, Point sx my, arcRadius)
+     ,[ Arc  (Point mx q3y, Point sx my, arcRadius, False)
        ,Line (Point mx q3y, Point mx ey)
       ]
      )
@@ -274,7 +274,7 @@ componentPaths x y =
       '- 
     --}
      (Junction Mid [Top, Right] Smooth
-     ,[ Arc  (Point mx qy, Point ex my, arcRadius)
+     ,[ Arc  (Point mx qy, Point ex my, arcRadius, False)
        ,Line (Point mx sy, Point mx qy)
       ]
      )
@@ -283,46 +283,168 @@ componentPaths x y =
        -' 
     --}
     ,(Junction Mid [Top, Left] Smooth
-     ,[ Arc  (Point sx my, Point mx qy, arcRadius)
+     ,[ Arc  (Point sx my, Point mx qy, arcRadius, False)
        ,Line (Point mx sy, Point mx qy)
       ]
      )
     ]
     
 
+--check if the 3 points lie on the same line
+collinear: Point -> Point -> Point -> Bool
+collinear p1 p2 p3 =
+    let
+        ax = p1.x
+        ay = p1.y
+        bx = p2.x
+        by = p2.y
+        cx = p3.x
+        cy = p3.y
+    in
+    ax * (by - cy) + bx * (cy - ay) + cx * (ay - by) == 0
 
-
-canMerged: Path -> Path -> Bool
-canMerged elem1 elem2 =
-    case elem1 of
+-- simply check is path1 end == path2 start
+canMergePath: Path -> Path -> Bool
+canMergePath path1 path2 =
+    case path1 of
         Line (s, e) ->
-            case elem2 of
+            case path2 of
                 Line (s2, e2) ->
-                    s == s2 || e == e2
-                Arc (s2, e2, r2) ->
-                    s == s2 || e == e2
+                    e == s2
+                Arc (s2, e2, r2, sweep) ->
+                    e == s2
                 _ ->
                     False
 
-        Arc (s, e, r) ->
-            case elem2 of
+        Arc (s, e, r, sweep) ->
+            case path2 of
                 Line (s2, e2) ->
-                    s == s2 || e == e2
-                Arc (s2, e2, r2) ->
-                    s == s2 || e == e2
+                    e == s2
+                Arc (s2, e2, r2, sweep) ->
+                    e == s2
                 _ ->
                     False
         
         DashedLine (s, e) ->
-            case elem2 of
+            case path2 of
                 DashedLine (s2, e2) ->
-                    s == s2 || e == e2
+                    e == s2
                 _ ->
                     False
         ArrowLine (s, e) ->
-            False  --arrow line can't merge
+            False 
 
-                        
+
+-- only lines can eat another line
+-- can eat if path1 ends = path2 start and the lie on the same line
+-- returns a new Path with path1 start and path2 end
+eat: Path -> Path -> Maybe Path
+eat path1 path2 =
+    case path1 of
+        Line (s, e) ->
+            case path2 of
+                Line (s2, e2) ->
+                    if e == s2 && collinear s e e2 then
+                        Just <| Line (s, e2)
+                    else
+                        Nothing
+                _ ->
+                    Nothing
+        _ ->
+            Nothing 
+
+canMerge: (Int, Int) -> (Int, Int) -> Model -> Bool
+canMerge (x1, y1) (x2, y2) model =
+    case tryMerge (x1, y1) (x2, y2) model of
+        Just can ->
+            True
+        Nothing ->
+            False
+
+tryMerge: (Int, Int) -> (Int, Int) -> Model -> Maybe Path
+tryMerge (x1, y1) (x2, y2) model =
+    let
+        comp1 = matchComponent x1 y1 model
+        comp2 = matchComponent x2 y2 model
+    in
+    case comp1 of
+        Just comp1 ->
+            case comp2 of
+                Just comp2 ->
+                    let
+                        path1 = firstPathOnly x1 y1 comp1
+                        path2 = firstPathOnly x2 y2 comp2
+                    in
+                    case path1 of
+                        Just path1 ->
+                            case path2 of
+                                Just path2 ->
+                                    merge path1 path2
+                                Nothing ->
+                                    Nothing
+                        Nothing ->
+                            Nothing
+                Nothing ->
+                    Nothing
+        Nothing ->
+            Nothing
+
+
+merge: Path -> Path -> Maybe Path
+merge path1 path2 =
+    case eat path1 path2 of
+        Just path12 ->
+            Just path12
+        Nothing ->
+            case eat path1 (reversePath path2) of
+                Just path1Rev2 ->
+                    Just path1Rev2
+                Nothing ->
+                    case eat (reversePath path1) path2 of
+                        Just pathRev12  ->
+                            Just pathRev12
+                        Nothing ->
+                            case eat (reversePath path1) (reversePath path2) of
+                                Just pathRev1Rev2 ->
+                                    Just pathRev1Rev2
+                                Nothing ->
+                                   Nothing
+
+-- if has only 1 path return it
+firstPathOnly: Int -> Int -> Component -> Maybe Path
+firstPathOnly x y comp =
+    let paths = getComponentPaths x y comp
+    in
+    if List.length paths == 1 then
+        List.head paths
+    else
+        Nothing
+
+
+-- if this component is edible, then don't mind plotting it
+-- since it something would eat it along the way
+-- if it is in between component that could eat it
+-- deal only with simple elements
+edible: Int -> Int -> Model -> Bool
+edible x y model =
+    let
+        center = (x,y)
+        top = (x, y-1)
+        bottom = (x, y+1)
+        left = (x-1, y)
+        right = (x+1,y)
+        topLeft = (x-1, y-1)
+        topRight = (x+1, y-1)
+        bottomLeft = (x-1, y+1)
+        bottomRight = (x+1, y+1)
+        match =
+            [canMerge top center model && canMerge center bottom model
+            ,canMerge left center model && canMerge center right model
+            ,canMerge topLeft center model && canMerge center bottomRight model
+            ,canMerge bottomLeft center model && canMerge center topRight model
+            ]
+    in
+        List.any (\a -> a) match
 
 
 vertical = ['|']
@@ -726,13 +848,17 @@ componentSvg x y model =
         paths = 
             case matchComponent x y model  of 
                 Just component ->
-                    getComponentPaths x y component
+                    if edible x y model then
+                        []
+                    else
+                        getComponentPaths x y component
                 Nothing ->
                     []
 
         svgPaths: List (Svg a)
         svgPaths = List.map (
             \ p ->
+                --svgPath <| reversePath p
                 svgPath p
         ) paths
      in
@@ -755,17 +881,30 @@ type Feature
     | None
 
 svgPath: Path -> Svg a
-svgPath elem =
-    case elem of
+svgPath path =
+    case path of
         Line (s, e) ->
             drawLine s e Solid None
         ArrowLine (s, e) ->
             drawLine s e Solid Arrowed
-        Arc (s, e, r) ->
-            drawArc s e r
+        Arc (s, e, r, sweep) ->
+            drawArc s e r sweep
         DashedLine (s, e) ->
             drawLine s e Dashed None
 
+reversePath: Path -> Path
+reversePath path =
+    case path of
+        Line (s, e) ->
+            Line (e, s)
+        ArrowLine (s, e) ->
+            ArrowLine (e, s)
+        Arc (s, e, r, sweep) ->
+            Arc (e, s, r, not sweep)
+        DashedLine (s, e) ->
+            DashedLine (e, s)
+        
+    
 
 drawLine: Point -> Point ->  Stroke -> Feature -> Svg a
 drawLine start end lineStroke feature =
@@ -800,7 +939,7 @@ drawLine start end lineStroke feature =
             ]
             []
 
-drawArc start end radius =
+drawArc start end radius sweep =
     let
         rx = radius
         ry = radius
@@ -808,9 +947,15 @@ drawArc start end radius =
         sy = start.y
         ex = end.x
         ey = end.y
+        sweepFlag = 
+            if sweep then
+                "1"
+            else
+                "0"
+
         paths = 
             ["M", toString sx, toString sy
-            ,"A", toString rx, toString ry, "0" ,"0", "0"
+            ,"A", toString rx, toString ry, "0" ,"0", sweepFlag
             ,toString ex, toString ey
             ] |> String.join " "
     in

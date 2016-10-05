@@ -52,7 +52,11 @@ view model =
                    ,("overflow", "auto")
                    ]
             ]
-            [Diagram.getSvg model.grid
+            [
+            let _ = Debug.log "start svg" ""
+                svg =Diagram.getSvg model.grid
+                _ = Debug.log "end svg" ""
+            in svg
             ]
         ]
 
