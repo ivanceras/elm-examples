@@ -52,6 +52,7 @@ textWidth = 8.0
 textHeight = 16.0
 arcRadius = textWidth / 2
 color = Color.rgb 0 0 0
+optimizeSvg = True
 
 measureX: Int -> Float
 measureX x =
@@ -304,8 +305,8 @@ collinear p1 p2 p3 =
     ax * (by - cy) + bx * (cy - ay) + cx * (ay - by) == 0
 
 -- simply check is path1 end == path2 start
-canMergePath: Path -> Path -> Bool
-canMergePath path1 path2 =
+canConcat: Path -> Path -> Bool
+canConcat path1 path2 =
     case path1 of
         Line (s, e) ->
             case path2 of
@@ -350,19 +351,29 @@ eat path1 path2 =
                         Nothing
                 _ ->
                     Nothing
+
+        DashedLine (s, e) ->
+            case path2 of
+                DashedLine (s2, e2) ->
+                    if e == s2 && collinear s e e2 then
+                        Just <| DashedLine (s, e2)
+                    else
+                        Nothing
+                _ ->
+                    Nothing
         _ ->
             Nothing 
 
-canMerge: (Int, Int) -> (Int, Int) -> Model -> Bool
-canMerge (x1, y1) (x2, y2) model =
-    case tryMerge (x1, y1) (x2, y2) model of
+canReduce: (Int, Int) -> (Int, Int) -> Model -> Bool
+canReduce (x1, y1) (x2, y2) model =
+    case tryReduce (x1, y1) (x2, y2) model of
         Just can ->
             True
         Nothing ->
             False
 
-tryMerge: (Int, Int) -> (Int, Int) -> Model -> Maybe Path
-tryMerge (x1, y1) (x2, y2) model =
+tryReduce: (Int, Int) -> (Int, Int) -> Model -> Maybe Path
+tryReduce (x1, y1) (x2, y2) model =
     let
         comp1 = matchComponent x1 y1 model
         comp2 = matchComponent x2 y2 model
@@ -379,7 +390,7 @@ tryMerge (x1, y1) (x2, y2) model =
                         Just path1 ->
                             case path2 of
                                 Just path2 ->
-                                    merge path1 path2
+                                    reduce path1 path2
                                 Nothing ->
                                     Nothing
                         Nothing ->
@@ -389,9 +400,9 @@ tryMerge (x1, y1) (x2, y2) model =
         Nothing ->
             Nothing
 
-
-merge: Path -> Path -> Maybe Path
-merge path1 path2 =
+-- eat with trial on which arrangement
+reduce: Path -> Path -> Maybe Path
+reduce path1 path2 =
     case eat path1 path2 of
         Just path12 ->
             Just path12
@@ -400,15 +411,7 @@ merge path1 path2 =
                 Just path1Rev2 ->
                     Just path1Rev2
                 Nothing ->
-                    case eat (reversePath path1) path2 of
-                        Just pathRev12  ->
-                            Just pathRev12
-                        Nothing ->
-                            case eat (reversePath path1) (reversePath path2) of
-                                Just pathRev1Rev2 ->
-                                    Just pathRev1Rev2
-                                Nothing ->
-                                   Nothing
+                    Nothing
 
 -- if has only 1 path return it
 firstPathOnly: Int -> Int -> Component -> Maybe Path
@@ -432,16 +435,13 @@ edible x y model =
         top = (x, y-1)
         bottom = (x, y+1)
         left = (x-1, y)
-        right = (x+1,y)
         topLeft = (x-1, y-1)
-        topRight = (x+1, y-1)
         bottomLeft = (x-1, y+1)
-        bottomRight = (x+1, y+1)
         match =
-            [canMerge top center model && canMerge center bottom model
-            ,canMerge left center model && canMerge center right model
-            ,canMerge topLeft center model && canMerge center bottomRight model
-            ,canMerge bottomLeft center model && canMerge center topRight model
+            [canReduce top center model
+            ,canReduce left center model
+            ,canReduce topLeft center model
+            ,canReduce bottomLeft center model
             ]
     in
         List.any (\a -> a) match
@@ -840,7 +840,69 @@ drawPaths model =
     |> List.concat
     |> List.concat
 
+--reduce path to whatever is located in x y
+reduceTo: Path -> (Int, Int) -> Model -> Maybe Path
+reduceTo path (x, y) model =
+    case matchComponent x y model of
+        Just comp ->
+            case firstPathOnly x y comp of
+                Just firstPath ->
+                    reduce path firstPath
+                Nothing ->
+                    Nothing
+        Nothing ->
+            Nothing
 
+--trace a path starting at this point
+--and return the long eating path until a non-edible path is encoutered, and eat it as well
+-- reduce only from left to right, top to bottom, topLeft to bottomRight
+tracePath: Path -> (Int, Int) -> Model -> Maybe Path
+tracePath path (x,y) model =
+    let
+        top = (x, y-1)
+        bottom = (x, y+1)
+        left = (x-1, y)
+        right = (x+1,y)
+        topLeft = (x-1, y-1)
+        topRight = (x+1, y-1)
+        bottomLeft = (x-1, y+1)
+        bottomRight = (x+1, y+1)
+    in
+        case reduceTo path right model of
+            Just reducedRight ->
+                tracePath reducedRight right model
+            Nothing ->
+                case reduceTo path bottom model of
+                    Just reducedBottom ->
+                        tracePath reducedBottom bottom model
+                    Nothing ->
+                        case reduceTo path bottomRight model of
+                            Just reducedBottomRight ->
+                                tracePath reducedBottomRight bottomRight model
+                            Nothing ->
+                                case reduceTo path topRight model of
+                                    Just reducedTopRight ->
+                                        tracePath reducedTopRight topRight model
+                                    Nothing ->
+                                        Just path
+
+getOptimizedPath x y model =
+    if edible x y model then
+        []
+    else
+        case matchComponent x y model of
+            Just center ->
+                case firstPathOnly x y center of
+                    Just firstPath ->
+                        case tracePath firstPath (x, y) model of
+                            Just path ->
+                                [path]
+                            Nothing ->
+                                []
+                    Nothing ->
+                        []
+            Nothing ->
+                []
 
 componentSvg: Int -> Int -> Model -> List (Svg a)
 componentSvg x y model =
@@ -848,8 +910,8 @@ componentSvg x y model =
         paths = 
             case matchComponent x y model  of 
                 Just component ->
-                    if edible x y model then
-                        []
+                    if optimizeSvg then
+                        getOptimizedPath x y model
                     else
                         getComponentPaths x y component
                 Nothing ->
@@ -858,7 +920,6 @@ componentSvg x y model =
         svgPaths: List (Svg a)
         svgPaths = List.map (
             \ p ->
-                --svgPath <| reversePath p
                 svgPath p
         ) paths
      in
