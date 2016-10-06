@@ -45,6 +45,7 @@ init str =
     ,lines = lineChar
     }
 
+type Density = Compact | Medium | Expanded
 
 fontSize = 14.0
 lineWidth = 1.0
@@ -52,7 +53,9 @@ textWidth = 8.0
 textHeight = 16.0
 arcRadius = textWidth / 2
 color = Color.rgb 0 0 0
-optimizeSvg = True
+optimizeSvg = False
+onePath = False --one path for all or per component path
+density = Expanded
 
 measureX: Int -> Float
 measureX x =
@@ -146,14 +149,14 @@ type Path
     | DashedLine (Point, Point)
 
 -- corresponding paths for each component
-componentPaths: Int -> Int -> List (Component, List Path)
-componentPaths x y =
+componentPathList: Int -> Int -> List (Component, List Path)
+componentPathList x y =
     let
         -- block start/quarter/mid/quarter3/end x y
         sx = measureX x
         sy = measureY y
         qx = measureX x + textWidth / 4
-        qy = measureY y + textHeight / 3
+        qy = measureY y + textHeight / 4
         mx = measureX x + textWidth / 2
         my = measureY y + textHeight / 2
         q3x = measureX x + textWidth * 3 / 4
@@ -211,6 +214,21 @@ componentPaths x y =
     ,[ArrowLine (Point sx my, Point mx my)]
     )
     ,
+    (Arrow TopLeft
+    ,[ArrowLine (Point ex ey, Point qx qy)]
+    )
+    ,(Arrow TopRight
+    ,[ArrowLine (Point sx ey, Point q3x qy)]
+    )
+    ,
+    (Arrow BottomLeft
+    ,[ArrowLine (Point ex sy, Point qx q3y)]
+    )
+    ,
+    (Arrow BottomRight
+    ,[ArrowLine (Point sx sy, Point q3x q3y)]
+    )
+    ,
     (Junction Mid [Bottom, Right] Sharp
     ,[Line (Point mx my, Point ex my)
      ,Line (Point mx my, Point mx ey)
@@ -232,6 +250,78 @@ componentPaths x y =
     (Junction Mid [Top, Left] Sharp
     ,[Line (Point sx my, Point mx my)
      ,Line (Point mx my, Point mx sy)
+     ]
+    )
+    ,
+    (Junction Mid [Top, Bottom, Right] Sharp
+    ,[Line (Point mx sy, Point mx ey)
+     ,Line (Point mx my, Point ex my)
+     ]
+    )
+    ,
+    (Junction Mid [Top, Bottom, Left] Sharp
+    ,[Line (Point mx sy, Point mx ey)
+     ,Line (Point sx my, Point mx my)
+     ]
+    )
+    ,
+    (Junction Mid [Top, Left, Right] Sharp
+    ,[Line (Point mx sy, Point mx my)
+     ,Line (Point sx my, Point ex my)
+     ]
+    )
+    ,
+    (Junction Mid [Left, Right, Bottom] Sharp
+    ,[Line (Point sx my, Point ex my)
+     ,Line (Point mx my, Point mx ey)
+     ]
+    )
+    ,
+    (Junction Mid [Right, BottomLeft] Smooth
+    ,[Arc (Point ex my, Point qx q3y, arcRadius * 2, False)
+     ,Line (Point sx ey, Point qx q3y)
+     ]
+    )
+    ,
+    (Junction Mid [Left, BottomRight] Smooth
+    ,[Arc (Point q3x q3y, Point sx my, arcRadius * 2, False)
+     ,Line (Point ex ey, Point q3x q3y)
+     ]
+    )
+    ,
+    (Junction Mid [Right, TopLeft] Smooth
+    ,[Arc (Point qx qy, Point ex my, arcRadius * 2, False)
+     ,Line (Point sx sy, Point qx qy)
+     ]
+    )
+    ,
+            {--
+                   /
+                 -'
+            --}
+    (Junction Mid [Left, TopRight] Smooth
+    ,[Arc (Point sx my, Point q3x qy, arcRadius * 2, False)
+     ,Line (Point q3x qy, Point ex sy)
+     ]
+    )
+    ,
+    {--
+           /
+          '-
+    --}
+    (Junction Mid [Right, TopRight] Smooth
+    ,[Arc (Point q3x qy, Point ex my, arcRadius, False)
+     ,Line (Point q3x qy, Point ex sy)
+     ]
+    )
+    ,
+    {--
+           -.
+           /
+    --}
+    (Junction Mid [Left, BottomLeft] Smooth
+    ,[Arc (Point qx q3y, Point sx my, arcRadius, False)
+     ,Line (Point sx ey, Point qx q3y)
      ]
     )
     ,
@@ -288,6 +378,43 @@ componentPaths x y =
        ,Line (Point mx sy, Point mx qy)
       ]
      )
+     ,
+    {--
+        /
+       .-
+      /
+    --}
+    (Junction Mid [Right, TopRight, BottomLeft] Smooth
+    ,[ Line (Point sx ey, Point ex sy)
+      ,Arc (Point ex my, Point qx q3y, arcRadius * 2, False)
+     ]
+    )
+    ,
+    {--
+      \  
+       .-
+        \
+    --}
+    (Junction Mid [Right, TopLeft, BottomRight] Smooth
+    , [Line (Point sx sy, Point ex ey)
+      ,Line (Point ex my, Point q3x my)
+      ,Arc (Point qx qy, Point q3x my, arcRadius * 2, False)
+      ] 
+    )
+    ,
+    {--
+       | 
+       .
+      /|
+         
+    --}
+    (Junction Mid [Top, Bottom, BottomLeft] Smooth
+    ,[Line (Point mx sy, Point mx ey)
+     ,Line (Point sx ey, Point qx q3y)
+     ,Arc (Point qx q3y, Point mx qy, arcRadius * 4, False)
+     ]
+    )
+    
     ]
     
 
@@ -683,11 +810,38 @@ componentMatchList x y model =
             ,
             {--
                 ^
-                |
+                 \
             --}
             (isChar char isArrowUp
              &&isNeighbor bottomRight isSlantLeft
             ,Arrow TopLeft
+            )
+            ,
+            {--
+                /
+               v  
+            --}
+            (isChar char isArrowDown
+             &&isNeighbor topRight isSlantRight
+            ,Arrow BottomLeft
+            )
+            ,
+            {--
+                \
+                 v  
+            --}
+            (isChar char isArrowDown
+             &&isNeighbor topLeft isSlantLeft
+            ,Arrow BottomRight
+            )
+            ,
+            {--
+                ^
+               / 
+            --}
+            (isChar char isArrowUp
+             &&isNeighbor bottomLeft isSlantRight
+            ,Arrow TopRight
             )
             ,
             {--
@@ -731,16 +885,63 @@ componentMatchList x y model =
             )
             ,
             {--
-                |
-               -+-
-                |
+               .- 
+              /  
             --}
-            (isChar char isIntersection
-             && isNeighbor top isVertical
-             && isNeighbor left isHorizontal
-             && isNeighbor bottom isVertical
+            (isChar char isRound
              && isNeighbor right isHorizontal
-            ,Junction Mid [Top, Left, Bottom, Right] Sharp
+             && isNeighbor bottomLeft isSlantRight
+            ,Junction Mid [Right, BottomLeft] Smooth
+            )
+            ,
+            {--
+                -.
+                  \   
+            --}
+            (isChar char isRound
+             && isNeighbor left isHorizontal
+             && isNeighbor bottomRight isSlantLeft
+            ,Junction Mid [Left, BottomRight] Smooth
+            )
+            ,
+            {--
+               \ 
+                '- 
+            --}
+            (isChar char isRound
+             && isNeighbor right isHorizontal
+             && isNeighbor topLeft isSlantLeft
+            ,Junction Mid [Right, TopLeft] Smooth
+            )
+            ,
+            {--
+                   /
+                 -'
+            --}
+            (isChar char isRound
+             && isNeighbor left isHorizontal
+             && isNeighbor topRight isSlantRight
+            ,Junction Mid [Left, TopRight] Smooth
+            )
+            ,
+            {--
+                 / 
+                '- 
+            --}
+            (isChar char isRound
+             && isNeighbor right isHorizontal
+             && isNeighbor topRight isSlantRight
+            ,Junction Mid [Right, TopRight] Smooth
+            )
+            ,
+            {--
+                 -. 
+                 /   
+            --}
+            (isChar char isRound
+             && isNeighbor left isHorizontal
+             && isNeighbor bottomLeft isSlantRight
+            ,Junction Mid [Left, BottomLeft] Smooth
             )
             ,
             (isChar char isRound
@@ -773,6 +974,102 @@ componentMatchList x y model =
              && isNeighbor left isHorizontal
              && isNeighbor top isVertical
             ,Junction Mid [Top, Left] Smooth
+            )
+            ,
+            {--
+                |
+                +-
+                |
+            --}
+            (isChar char isIntersection
+             && isNeighbor right isHorizontal
+             && isNeighbor top isVertical
+             && isNeighbor bottom isVertical
+            ,Junction Mid [Top, Bottom, Right] Sharp
+            )
+            ,
+            {--
+                |
+               -+
+                |
+            --}
+            (isChar char isIntersection
+             && isNeighbor left isHorizontal
+             && isNeighbor top isVertical
+             && isNeighbor bottom isVertical
+            ,Junction Mid [Top, Bottom, Left] Sharp
+            )
+            ,
+            {--
+                |
+               -+-
+            --}
+            (isChar char isIntersection
+             && isNeighbor left isHorizontal
+             && isNeighbor top isVertical
+             && isNeighbor right isHorizontal
+            ,Junction Mid [Top, Left, Right] Sharp
+            )
+            ,
+            {--
+               -+-
+                |
+            --}
+            (isChar char isIntersection
+             && isNeighbor left isHorizontal
+             && isNeighbor right isHorizontal
+             && isNeighbor bottom isVertical
+            ,Junction Mid [Left, Right, Bottom] Sharp
+            )
+            ,
+            {--
+                /
+               .-
+              /
+            --}
+            (isChar char isRound
+             && isNeighbor topRight isSlantRight
+             && isNeighbor bottomLeft isSlantRight
+             && isNeighbor right isHorizontal
+            ,Junction Mid [Right, TopRight, BottomLeft] Smooth
+            )
+            ,
+            {--
+              \  
+               .-
+                \
+            --}
+            (isChar char isRound
+             && isNeighbor topLeft isSlantLeft
+             && isNeighbor bottomRight isSlantLeft
+             && isNeighbor right isHorizontal
+            ,Junction Mid [Right, TopLeft, BottomRight] Smooth
+            )
+            ,
+            {--
+               | 
+               .
+              /|
+                 
+            --}
+            (isChar char isRound
+             && isNeighbor top isVertical
+             && isNeighbor bottom isVertical
+             && isNeighbor bottomLeft isSlantRight
+            ,Junction Mid [Top, Bottom, BottomLeft] Smooth
+            )
+            ,
+            {--
+                |
+               -+-
+                |
+            --}
+            (isChar char isIntersection
+             && isNeighbor top isVertical
+             && isNeighbor left isHorizontal
+             && isNeighbor bottom isVertical
+             && isNeighbor right isHorizontal
+            ,Junction Mid [Top, Left, Bottom, Right] Sharp
             )
             ,
             {--
@@ -815,24 +1112,68 @@ getSvg model =
     let 
         gwidth = toString <| (measureX model.columns)
         gheight = toString <| (measureY model.rows)
+        svgPaths = 
+            case density of
+                Compact ->
+                    let
+                        pathDefs = allPathDefs model
+                        onePath = drawPathDef pathDefs Solid None
+                     in
+                        [onePath]
+                Medium ->
+                    perComponentPathDefs model
+                        |>List.map (
+                            \pathDefs ->
+                                if String.isEmpty pathDefs then
+                                    Nothing 
+                                else
+                                    Just <| drawPathDef pathDefs Solid None 
+                               
+                        ) 
+                        |> List.filterMap (\a -> a)
+                Expanded ->
+                    expandedPaths model
+                      |> List.map
+                      (\path ->
+                        svgPath path
+                      )
     in
     svg [height gheight, width gwidth]
         ([
          gridFill
         ,[defs [] [arrowMarker]]
-        ,drawPaths model
+        ,svgPaths
         ] |> List.concat
         )
         
 
 
-drawPaths: Model -> List (Svg a)
-drawPaths model =
+allPathDefs: Model -> String
+allPathDefs model =
+    perComponentPathDefs model
+    |> String.join " "
+
+perComponentPathDefs: Model -> List String
+perComponentPathDefs model =
     Array.indexedMap
     (\y line ->
        Array.indexedMap
         (\ x char->
-            componentSvg x y model
+            componentPathDefs x y model
+        ) line
+        |> Array.toList
+    ) model.lines
+    |> Array.toList
+    |> List.concat
+    |> List.filterMap (\a->a)
+
+expandedPaths: Model -> List Path
+expandedPaths model =
+    Array.indexedMap
+    (\y line ->
+       Array.indexedMap
+        (\ x char->
+            componentPaths x y model
         ) line
         |> Array.toList
     ) model.lines
@@ -856,8 +1197,8 @@ reduceTo path (x, y) model =
 --trace a path starting at this point
 --and return the long eating path until a non-edible path is encoutered, and eat it as well
 -- reduce only from left to right, top to bottom, topLeft to bottomRight
-tracePath: Path -> (Int, Int) -> Model -> Maybe Path
-tracePath path (x,y) model =
+traceEatEdiblePaths: Path -> (Int, Int) -> Model -> Maybe Path
+traceEatEdiblePaths path (x,y) model =
     let
         top = (x, y-1)
         bottom = (x, y+1)
@@ -870,60 +1211,145 @@ tracePath path (x,y) model =
     in
         case reduceTo path right model of
             Just reducedRight ->
-                tracePath reducedRight right model
+                traceEatEdiblePaths reducedRight right model
             Nothing ->
                 case reduceTo path bottom model of
                     Just reducedBottom ->
-                        tracePath reducedBottom bottom model
+                        traceEatEdiblePaths reducedBottom bottom model
                     Nothing ->
                         case reduceTo path bottomRight model of
                             Just reducedBottomRight ->
-                                tracePath reducedBottomRight bottomRight model
+                                traceEatEdiblePaths reducedBottomRight bottomRight model
                             Nothing ->
                                 case reduceTo path topRight model of
                                     Just reducedTopRight ->
-                                        tracePath reducedTopRight topRight model
+                                        traceEatEdiblePaths reducedTopRight topRight model
                                     Nothing ->
                                         Just path
-
+                                        
+-- check first if there is component before testing if edible
 getOptimizedPath x y model =
-    if edible x y model then
-        []
-    else
-        case matchComponent x y model of
-            Just center ->
+    let center =
+        matchComponent x y model
+    in
+    case center of
+        Just center ->
+            if edible x y model then
+                []
+            else
                 case firstPathOnly x y center of
                     Just firstPath ->
-                        case tracePath firstPath (x, y) model of
+                        case traceEatEdiblePaths firstPath (x, y) model of
                             Just path ->
                                 [path]
                             Nothing ->
                                 []
                     Nothing ->
-                        []
-            Nothing ->
-                []
+                         getComponentPaths x y center
+        Nothing ->
+            []
 
-componentSvg: Int -> Int -> Model -> List (Svg a)
-componentSvg x y model =
+startEnd: Path -> (Point, Point)
+startEnd path =
+    case path of
+        Line se -> se
+        Arc (s, e, r, sw) -> (s, e)
+        ArrowLine se -> se
+        DashedLine se -> se
+
+-- merge the paths into 1 path definition
+toPathDefs: List Path -> String
+toPathDefs paths =
+    let (prev', pathDefs') =
+        List.foldl 
+            (\next (prev, str) ->
+                let (start, end) = startEnd next
+                    continue =
+                        case next of
+                            Line (s,e) ->
+                                ["L", toString e.x, toString e.y]
+                            Arc (s,e,r,sw) ->
+                                let
+                                    sweep = if sw then "1" else "0"
+                                in
+                                ["A", toString r, toString r, "0" ,"0", sweep, toString e.x, toString e.y]
+                            DashedLine (s,e) ->
+                                ["L", toString e.x, toString e.y]
+                            ArrowLine (s,e) ->
+                                ["L", toString e.x, toString e.y]
+
+                    movePen = ["M", toString start.x, toString start.y]
+
+                    pathDefs =
+                        case prev of
+                            Just prev ->
+                                if canConcat prev next then
+                                    continue |> String.join " "
+                                else
+                                    (movePen ++ continue ) |> String.join " "
+                            Nothing ->
+                                (movePen ++ continue) |> String.join " "
+                        
+                in
+                (Just next
+                ,str ++ pathDefs
+                )
+            ) (Nothing, "")  paths
+     in
+        pathDefs'
+
+drawPathDef: String -> Stroke -> Feature -> Svg a
+drawPathDef pathDefs lineStroke feature =
     let 
-        paths = 
-            case matchComponent x y model  of 
-                Just component ->
+        {red,green,blue,alpha} = Color.toRgb color
+        colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
+        dashed =
+            case lineStroke of
+                Solid ->
+                    Svg.Attributes.string ""
+                Dashed ->
+                    strokeDasharray "3 3"
+        arrow =
+            case feature of
+                Arrowed -> 
+                    markerEnd "url(#triangle)"
+                None ->
+                    Svg.Attributes.string ""
+    in
+        path [d pathDefs, stroke colorText
+             ,strokeWidth <| toString lineWidth
+             ,fill "transparent"
+             ,dashed
+             ,arrow
+             ]
+             []
+
+
+componentPathDefs: Int -> Int -> Model -> Maybe String
+componentPathDefs x y model =
+    let
+        pathList = componentPaths x y model
+    in
+        if List.isEmpty pathList then
+            Nothing
+        else
+           Just <| toPathDefs pathList
+
+
+componentPaths: Int -> Int -> Model -> List Path
+componentPaths x y model =
+    case matchComponent x y model  of 
+        Just component ->
+            let
+                paths = 
                     if optimizeSvg then
                         getOptimizedPath x y model
                     else
                         getComponentPaths x y component
-                Nothing ->
-                    []
-
-        svgPaths: List (Svg a)
-        svgPaths = List.map (
-            \ p ->
-                svgPath p
-        ) paths
-     in
-        svgPaths
+             in
+                paths
+        Nothing ->
+           [] 
 
 getComponentPaths: Int -> Int -> Component -> List Path
 getComponentPaths x y component =
@@ -933,7 +1359,7 @@ getComponentPaths x y component =
                 Just path
             else
                 Nothing
-    ) ( componentPaths x y)
+    ) ( componentPathList x y)
        |> List.head
        |> Maybe.withDefault [] 
 
@@ -945,13 +1371,13 @@ svgPath: Path -> Svg a
 svgPath path =
     case path of
         Line (s, e) ->
-            drawLine s e Solid None
+            drawPathLine s e Solid None
         ArrowLine (s, e) ->
-            drawLine s e Solid Arrowed
+            drawPathLine s e Solid Arrowed
         Arc (s, e, r, sweep) ->
             drawArc s e r sweep
         DashedLine (s, e) ->
-            drawLine s e Dashed None
+            drawPathLine s e Dashed None
 
 reversePath: Path -> Path
 reversePath path =
@@ -999,6 +1425,40 @@ drawLine start end lineStroke feature =
                     markerEnd ""
             ]
             []
+
+drawPathLine start end lineStroke feature =
+    let 
+        {red,green,blue,alpha} = Color.toRgb color
+        colorText = "rgb("++(toString red)++","++(toString green)++","++(toString blue)++")"
+        sx = start.x
+        sy = start.y
+        ex = end.x
+        ey = end.y
+        paths =
+            ["M", toString sx, toString sy
+            ,"L", toString ex, toString ey
+            ] |> String.join " "
+
+        dashed =
+            case lineStroke of
+                Solid ->
+                    strokeDasharray ""
+                Dashed ->
+                    strokeDasharray "3 3"
+        arrow =
+            case feature of
+                Arrowed -> 
+                    markerEnd "url(#triangle)"
+                None ->
+                    markerEnd ""
+    in
+        path [d paths, stroke colorText
+             ,strokeWidth <| toString lineWidth
+             ,fill "transparent"
+             ,dashed
+             ,arrow
+             ]
+             []
 
 drawArc start end radius sweep =
     let

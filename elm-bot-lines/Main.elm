@@ -169,7 +169,7 @@ arg =
                                        /
                                       .----> Base::Class::Derived_B    
       Something -------.             /         \\
-                        \\           /           \\---> Base::Class::Derived
+                        \\           /           .---> Base::Class::Derived
       Something::else    \\         /             \\
             \\             \\       /               '--> Base::Class::Derived
              \\             \\     /
@@ -209,8 +209,18 @@ arg =
 
 
   TODO:
+        
+      ^ ^ ^
+       \\|/
+        . 
+       /|\\
+      v V v 
 
-   
+      ^ ^ ^
+       \\|/
+      <-.->
+       /|\\
+      v V v 
 
         |   \\/   
        -+-  /\\      
@@ -231,6 +241,13 @@ arg =
       \\      |    /  |
        .     '   '   .
        |    /    |    \\ 
+
+       .    .
+      /|    |\\
+
+      
+      \\|   |/
+       '   '
 
        \\
        /

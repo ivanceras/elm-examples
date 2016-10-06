@@ -8570,20 +8570,33 @@ var _user$project$Diagram$arrowMarker = A2(
 			_elm_lang$core$Native_List.fromArray(
 				[]))
 		]));
+var _user$project$Diagram$startEnd = function (path) {
+	var _p0 = path;
+	switch (_p0.ctor) {
+		case 'Line':
+			return _p0._0;
+		case 'Arc':
+			return {ctor: '_Tuple2', _0: _p0._0._0, _1: _p0._0._1};
+		case 'ArrowLine':
+			return _p0._0;
+		default:
+			return _p0._0;
+	}
+};
 var _user$project$Diagram$isNeighbor = F2(
 	function (neighbor, check) {
-		var _p0 = neighbor;
-		if (_p0.ctor === 'Just') {
-			return check(_p0._0);
+		var _p1 = neighbor;
+		if (_p1.ctor === 'Just') {
+			return check(_p1._0);
 		} else {
 			return false;
 		}
 	});
 var _user$project$Diagram$isChar = F2(
 	function ($char, check) {
-		var _p1 = $char;
-		if (_p1.ctor === 'Just') {
-			return check(_p1._0);
+		var _p2 = $char;
+		if (_p2.ctor === 'Just') {
+			return check(_p2._0);
 		} else {
 			return false;
 		}
@@ -8595,9 +8608,9 @@ var _user$project$Diagram$get = F3(
 	function (x, y, model) {
 		var line = A2(_elm_lang$core$Array$get, y, model.lines);
 		var $char = function () {
-			var _p2 = line;
-			if (_p2.ctor === 'Just') {
-				return A2(_elm_lang$core$Array$get, x, _p2._0);
+			var _p3 = line;
+			if (_p3.ctor === 'Just') {
+				return A2(_elm_lang$core$Array$get, x, _p3._0);
 			} else {
 				return _elm_lang$core$Maybe$Nothing;
 			}
@@ -8757,46 +8770,23 @@ var _user$project$Diagram$isLine = function ($char) {
 };
 var _user$project$Diagram$canConcat = F2(
 	function (path1, path2) {
-		var _p3 = path1;
-		switch (_p3.ctor) {
+		var _p4 = path1;
+		switch (_p4.ctor) {
 			case 'Line':
-				var _p5 = _p3._0._1;
-				var _p4 = path2;
-				_v4_2:
-				do {
-					switch (_p4.ctor) {
-						case 'Line':
-							if (_p4._0.ctor === '_Tuple2') {
-								return _elm_lang$core$Native_Utils.eq(_p5, _p4._0._0);
-							} else {
-								break _v4_2;
-							}
-						case 'Arc':
-							if (_p4._0.ctor === '_Tuple4') {
-								return _elm_lang$core$Native_Utils.eq(_p5, _p4._0._0);
-							} else {
-								break _v4_2;
-							}
-						default:
-							break _v4_2;
-					}
-				} while(false);
-				return false;
-			case 'Arc':
-				var _p7 = _p3._0._1;
-				var _p6 = path2;
+				var _p6 = _p4._0._1;
+				var _p5 = path2;
 				_v5_2:
 				do {
-					switch (_p6.ctor) {
+					switch (_p5.ctor) {
 						case 'Line':
-							if (_p6._0.ctor === '_Tuple2') {
-								return _elm_lang$core$Native_Utils.eq(_p7, _p6._0._0);
+							if (_p5._0.ctor === '_Tuple2') {
+								return _elm_lang$core$Native_Utils.eq(_p6, _p5._0._0);
 							} else {
 								break _v5_2;
 							}
 						case 'Arc':
-							if (_p6._0.ctor === '_Tuple4') {
-								return _elm_lang$core$Native_Utils.eq(_p7, _p6._0._0);
+							if (_p5._0.ctor === '_Tuple4') {
+								return _elm_lang$core$Native_Utils.eq(_p6, _p5._0._0);
 							} else {
 								break _v5_2;
 							}
@@ -8805,10 +8795,33 @@ var _user$project$Diagram$canConcat = F2(
 					}
 				} while(false);
 				return false;
+			case 'Arc':
+				var _p8 = _p4._0._1;
+				var _p7 = path2;
+				_v6_2:
+				do {
+					switch (_p7.ctor) {
+						case 'Line':
+							if (_p7._0.ctor === '_Tuple2') {
+								return _elm_lang$core$Native_Utils.eq(_p8, _p7._0._0);
+							} else {
+								break _v6_2;
+							}
+						case 'Arc':
+							if (_p7._0.ctor === '_Tuple4') {
+								return _elm_lang$core$Native_Utils.eq(_p8, _p7._0._0);
+							} else {
+								break _v6_2;
+							}
+						default:
+							break _v6_2;
+					}
+				} while(false);
+				return false;
 			case 'DashedLine':
-				var _p8 = path2;
-				if ((_p8.ctor === 'DashedLine') && (_p8._0.ctor === '_Tuple2')) {
-					return _elm_lang$core$Native_Utils.eq(_p3._0._1, _p8._0._0);
+				var _p9 = path2;
+				if ((_p9.ctor === 'DashedLine') && (_p9._0.ctor === '_Tuple2')) {
+					return _elm_lang$core$Native_Utils.eq(_p4._0._1, _p9._0._0);
 				} else {
 					return false;
 				}
@@ -8816,6 +8829,91 @@ var _user$project$Diagram$canConcat = F2(
 				return false;
 		}
 	});
+var _user$project$Diagram$toPathDefs = function (paths) {
+	var _p10 = A3(
+		_elm_lang$core$List$foldl,
+		F2(
+			function (next, _p11) {
+				var _p12 = _p11;
+				var $continue = function () {
+					var _p13 = next;
+					switch (_p13.ctor) {
+						case 'Line':
+							var _p14 = _p13._0._1;
+							return _elm_lang$core$Native_List.fromArray(
+								[
+									'L',
+									_elm_lang$core$Basics$toString(_p14.x),
+									_elm_lang$core$Basics$toString(_p14.y)
+								]);
+						case 'Arc':
+							var _p16 = _p13._0._2;
+							var _p15 = _p13._0._1;
+							var sweep = _p13._0._3 ? '1' : '0';
+							return _elm_lang$core$Native_List.fromArray(
+								[
+									'A',
+									_elm_lang$core$Basics$toString(_p16),
+									_elm_lang$core$Basics$toString(_p16),
+									'0',
+									'0',
+									sweep,
+									_elm_lang$core$Basics$toString(_p15.x),
+									_elm_lang$core$Basics$toString(_p15.y)
+								]);
+						case 'DashedLine':
+							var _p17 = _p13._0._1;
+							return _elm_lang$core$Native_List.fromArray(
+								[
+									'L',
+									_elm_lang$core$Basics$toString(_p17.x),
+									_elm_lang$core$Basics$toString(_p17.y)
+								]);
+						default:
+							var _p18 = _p13._0._1;
+							return _elm_lang$core$Native_List.fromArray(
+								[
+									'L',
+									_elm_lang$core$Basics$toString(_p18.x),
+									_elm_lang$core$Basics$toString(_p18.y)
+								]);
+					}
+				}();
+				var _p19 = _user$project$Diagram$startEnd(next);
+				var start = _p19._0;
+				var end = _p19._1;
+				var movePen = _elm_lang$core$Native_List.fromArray(
+					[
+						'M',
+						_elm_lang$core$Basics$toString(start.x),
+						_elm_lang$core$Basics$toString(start.y)
+					]);
+				var pathDefs = function () {
+					var _p20 = _p12._0;
+					if (_p20.ctor === 'Just') {
+						return A2(_user$project$Diagram$canConcat, _p20._0, next) ? A2(_elm_lang$core$String$join, ' ', $continue) : A2(
+							_elm_lang$core$String$join,
+							' ',
+							A2(_elm_lang$core$Basics_ops['++'], movePen, $continue));
+					} else {
+						return A2(
+							_elm_lang$core$String$join,
+							' ',
+							A2(_elm_lang$core$Basics_ops['++'], movePen, $continue));
+					}
+				}();
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Maybe$Just(next),
+					_1: A2(_elm_lang$core$Basics_ops['++'], _p12._1, pathDefs)
+				};
+			}),
+		{ctor: '_Tuple2', _0: _elm_lang$core$Maybe$Nothing, _1: ''},
+		paths);
+	var prev$ = _p10._0;
+	var pathDefs$ = _p10._1;
+	return pathDefs$;
+};
 var _user$project$Diagram$collinear = F3(
 	function (p1, p2, p3) {
 		var cy = p3.y;
@@ -8826,7 +8924,8 @@ var _user$project$Diagram$collinear = F3(
 		var ax = p1.x;
 		return _elm_lang$core$Native_Utils.eq(((ax * (by - cy)) + (bx * (cy - ay))) + (cx * (ay - by)), 0);
 	});
-var _user$project$Diagram$optimizeSvg = true;
+var _user$project$Diagram$onePath = false;
+var _user$project$Diagram$optimizeSvg = false;
 var _user$project$Diagram$color = A3(_elm_lang$core$Color$rgb, 0, 0, 0);
 var _user$project$Diagram$textHeight = 16.0;
 var _user$project$Diagram$measureY = function (y) {
@@ -8918,17 +9017,74 @@ var _user$project$Diagram$gridFill = _elm_lang$core$Native_List.fromArray(
 			[]))
 	]);
 var _user$project$Diagram$lineWidth = 1.0;
+var _user$project$Diagram$drawPathDef = F3(
+	function (pathDefs, lineStroke, feature) {
+		var arrow = function () {
+			var _p21 = feature;
+			if (_p21.ctor === 'Arrowed') {
+				return _elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)');
+			} else {
+				return _elm_lang$svg$Svg_Attributes$string('');
+			}
+		}();
+		var dashed = function () {
+			var _p22 = lineStroke;
+			if (_p22.ctor === 'Solid') {
+				return _elm_lang$svg$Svg_Attributes$string('');
+			} else {
+				return _elm_lang$svg$Svg_Attributes$strokeDasharray('3 3');
+			}
+		}();
+		var _p23 = _elm_lang$core$Color$toRgb(_user$project$Diagram$color);
+		var red = _p23.red;
+		var green = _p23.green;
+		var blue = _p23.blue;
+		var alpha = _p23.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		return A2(
+			_elm_lang$svg$Svg$path,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$d(pathDefs),
+					_elm_lang$svg$Svg_Attributes$stroke(colorText),
+					_elm_lang$svg$Svg_Attributes$strokeWidth(
+					_elm_lang$core$Basics$toString(_user$project$Diagram$lineWidth)),
+					_elm_lang$svg$Svg_Attributes$fill('transparent'),
+					dashed,
+					arrow
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
 var _user$project$Diagram$drawLine = F4(
 	function (start, end, lineStroke, feature) {
 		var ey = end.y;
 		var ex = end.x;
 		var sy = start.y;
 		var sx = start.x;
-		var _p9 = _elm_lang$core$Color$toRgb(_user$project$Diagram$color);
-		var red = _p9.red;
-		var green = _p9.green;
-		var blue = _p9.blue;
-		var alpha = _p9.alpha;
+		var _p24 = _elm_lang$core$Color$toRgb(_user$project$Diagram$color);
+		var red = _p24.red;
+		var green = _p24.green;
+		var blue = _p24.blue;
+		var alpha = _p24.alpha;
 		var colorText = A2(
 			_elm_lang$core$Basics_ops['++'],
 			'rgb(',
@@ -8966,21 +9122,94 @@ var _user$project$Diagram$drawLine = F4(
 					_elm_lang$svg$Svg_Attributes$strokeLinecap('round'),
 					_elm_lang$svg$Svg_Attributes$strokeLinejoin('mitter'),
 					function () {
-					var _p10 = lineStroke;
-					if (_p10.ctor === 'Solid') {
+					var _p25 = lineStroke;
+					if (_p25.ctor === 'Solid') {
 						return _elm_lang$svg$Svg_Attributes$strokeDasharray('');
 					} else {
 						return _elm_lang$svg$Svg_Attributes$strokeDasharray('3 3');
 					}
 				}(),
 					function () {
-					var _p11 = feature;
-					if (_p11.ctor === 'Arrowed') {
+					var _p26 = feature;
+					if (_p26.ctor === 'Arrowed') {
 						return _elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)');
 					} else {
 						return _elm_lang$svg$Svg_Attributes$markerEnd('');
 					}
 				}()
+				]),
+			_elm_lang$core$Native_List.fromArray(
+				[]));
+	});
+var _user$project$Diagram$drawPathLine = F4(
+	function (start, end, lineStroke, feature) {
+		var arrow = function () {
+			var _p27 = feature;
+			if (_p27.ctor === 'Arrowed') {
+				return _elm_lang$svg$Svg_Attributes$markerEnd('url(#triangle)');
+			} else {
+				return _elm_lang$svg$Svg_Attributes$markerEnd('');
+			}
+		}();
+		var dashed = function () {
+			var _p28 = lineStroke;
+			if (_p28.ctor === 'Solid') {
+				return _elm_lang$svg$Svg_Attributes$strokeDasharray('');
+			} else {
+				return _elm_lang$svg$Svg_Attributes$strokeDasharray('3 3');
+			}
+		}();
+		var ey = end.y;
+		var ex = end.x;
+		var sy = start.y;
+		var sx = start.x;
+		var paths = A2(
+			_elm_lang$core$String$join,
+			' ',
+			_elm_lang$core$Native_List.fromArray(
+				[
+					'M',
+					_elm_lang$core$Basics$toString(sx),
+					_elm_lang$core$Basics$toString(sy),
+					'L',
+					_elm_lang$core$Basics$toString(ex),
+					_elm_lang$core$Basics$toString(ey)
+				]));
+		var _p29 = _elm_lang$core$Color$toRgb(_user$project$Diagram$color);
+		var red = _p29.red;
+		var green = _p29.green;
+		var blue = _p29.blue;
+		var alpha = _p29.alpha;
+		var colorText = A2(
+			_elm_lang$core$Basics_ops['++'],
+			'rgb(',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(red),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					',',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(green),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							',',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(blue),
+								')'))))));
+		return A2(
+			_elm_lang$svg$Svg$path,
+			_elm_lang$core$Native_List.fromArray(
+				[
+					_elm_lang$svg$Svg_Attributes$d(paths),
+					_elm_lang$svg$Svg_Attributes$stroke(colorText),
+					_elm_lang$svg$Svg_Attributes$strokeWidth(
+					_elm_lang$core$Basics$toString(_user$project$Diagram$lineWidth)),
+					_elm_lang$svg$Svg_Attributes$fill('transparent'),
+					dashed,
+					arrow
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[]));
@@ -9057,6 +9286,10 @@ var _user$project$Diagram$Point = F2(
 	function (a, b) {
 		return {x: a, y: b};
 	});
+var _user$project$Diagram$Expanded = {ctor: 'Expanded'};
+var _user$project$Diagram$density = _user$project$Diagram$Expanded;
+var _user$project$Diagram$Medium = {ctor: 'Medium'};
+var _user$project$Diagram$Compact = {ctor: 'Compact'};
 var _user$project$Diagram$BottomRight = {ctor: 'BottomRight'};
 var _user$project$Diagram$BottomLeft = {ctor: 'BottomLeft'};
 var _user$project$Diagram$TopRight = {ctor: 'TopRight'};
@@ -9188,6 +9421,21 @@ var _user$project$Diagram$componentMatchList = F3(
 			},
 				{
 				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isArrowDown) && A2(_user$project$Diagram$isNeighbor, topRight, _user$project$Diagram$isSlantRight),
+				_1: _user$project$Diagram$Arrow(_user$project$Diagram$BottomLeft)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isArrowDown) && A2(_user$project$Diagram$isNeighbor, topLeft, _user$project$Diagram$isSlantLeft),
+				_1: _user$project$Diagram$Arrow(_user$project$Diagram$BottomRight)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isArrowUp) && A2(_user$project$Diagram$isNeighbor, bottomLeft, _user$project$Diagram$isSlantRight),
+				_1: _user$project$Diagram$Arrow(_user$project$Diagram$TopRight)
+			},
+				{
+				ctor: '_Tuple2',
 				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isIntersection) && (A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal) && A2(_user$project$Diagram$isNeighbor, bottom, _user$project$Diagram$isVertical)),
 				_1: A3(
 					_user$project$Diagram$Junction,
@@ -9228,13 +9476,63 @@ var _user$project$Diagram$componentMatchList = F3(
 			},
 				{
 				ctor: '_Tuple2',
-				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isIntersection) && (A2(_user$project$Diagram$isNeighbor, top, _user$project$Diagram$isVertical) && (A2(_user$project$Diagram$isNeighbor, left, _user$project$Diagram$isHorizontal) && (A2(_user$project$Diagram$isNeighbor, bottom, _user$project$Diagram$isVertical) && A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal)))),
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal) && A2(_user$project$Diagram$isNeighbor, bottomLeft, _user$project$Diagram$isSlantRight)),
 				_1: A3(
 					_user$project$Diagram$Junction,
 					_user$project$Diagram$Mid,
 					_elm_lang$core$Native_List.fromArray(
-						[_user$project$Diagram$Top, _user$project$Diagram$Left, _user$project$Diagram$Bottom, _user$project$Diagram$Right]),
-					_user$project$Diagram$Sharp)
+						[_user$project$Diagram$Right, _user$project$Diagram$BottomLeft]),
+					_user$project$Diagram$Smooth)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, left, _user$project$Diagram$isHorizontal) && A2(_user$project$Diagram$isNeighbor, bottomRight, _user$project$Diagram$isSlantLeft)),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Left, _user$project$Diagram$BottomRight]),
+					_user$project$Diagram$Smooth)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal) && A2(_user$project$Diagram$isNeighbor, topLeft, _user$project$Diagram$isSlantLeft)),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Right, _user$project$Diagram$TopLeft]),
+					_user$project$Diagram$Smooth)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, left, _user$project$Diagram$isHorizontal) && A2(_user$project$Diagram$isNeighbor, topRight, _user$project$Diagram$isSlantRight)),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Left, _user$project$Diagram$TopRight]),
+					_user$project$Diagram$Smooth)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal) && A2(_user$project$Diagram$isNeighbor, topRight, _user$project$Diagram$isSlantRight)),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Right, _user$project$Diagram$TopRight]),
+					_user$project$Diagram$Smooth)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, left, _user$project$Diagram$isHorizontal) && A2(_user$project$Diagram$isNeighbor, bottomLeft, _user$project$Diagram$isSlantRight)),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Left, _user$project$Diagram$BottomLeft]),
+					_user$project$Diagram$Smooth)
 			},
 				{
 				ctor: '_Tuple2',
@@ -9278,6 +9576,86 @@ var _user$project$Diagram$componentMatchList = F3(
 			},
 				{
 				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isIntersection) && (A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal) && (A2(_user$project$Diagram$isNeighbor, top, _user$project$Diagram$isVertical) && A2(_user$project$Diagram$isNeighbor, bottom, _user$project$Diagram$isVertical))),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Top, _user$project$Diagram$Bottom, _user$project$Diagram$Right]),
+					_user$project$Diagram$Sharp)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isIntersection) && (A2(_user$project$Diagram$isNeighbor, left, _user$project$Diagram$isHorizontal) && (A2(_user$project$Diagram$isNeighbor, top, _user$project$Diagram$isVertical) && A2(_user$project$Diagram$isNeighbor, bottom, _user$project$Diagram$isVertical))),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Top, _user$project$Diagram$Bottom, _user$project$Diagram$Left]),
+					_user$project$Diagram$Sharp)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isIntersection) && (A2(_user$project$Diagram$isNeighbor, left, _user$project$Diagram$isHorizontal) && (A2(_user$project$Diagram$isNeighbor, top, _user$project$Diagram$isVertical) && A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal))),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Top, _user$project$Diagram$Left, _user$project$Diagram$Right]),
+					_user$project$Diagram$Sharp)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isIntersection) && (A2(_user$project$Diagram$isNeighbor, left, _user$project$Diagram$isHorizontal) && (A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal) && A2(_user$project$Diagram$isNeighbor, bottom, _user$project$Diagram$isVertical))),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Left, _user$project$Diagram$Right, _user$project$Diagram$Bottom]),
+					_user$project$Diagram$Sharp)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, topRight, _user$project$Diagram$isSlantRight) && (A2(_user$project$Diagram$isNeighbor, bottomLeft, _user$project$Diagram$isSlantRight) && A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal))),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Right, _user$project$Diagram$TopRight, _user$project$Diagram$BottomLeft]),
+					_user$project$Diagram$Smooth)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, topLeft, _user$project$Diagram$isSlantLeft) && (A2(_user$project$Diagram$isNeighbor, bottomRight, _user$project$Diagram$isSlantLeft) && A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal))),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Right, _user$project$Diagram$TopLeft, _user$project$Diagram$BottomRight]),
+					_user$project$Diagram$Smooth)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) && (A2(_user$project$Diagram$isNeighbor, top, _user$project$Diagram$isVertical) && (A2(_user$project$Diagram$isNeighbor, bottom, _user$project$Diagram$isVertical) && A2(_user$project$Diagram$isNeighbor, bottomLeft, _user$project$Diagram$isSlantRight))),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Top, _user$project$Diagram$Bottom, _user$project$Diagram$BottomLeft]),
+					_user$project$Diagram$Smooth)
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isIntersection) && (A2(_user$project$Diagram$isNeighbor, top, _user$project$Diagram$isVertical) && (A2(_user$project$Diagram$isNeighbor, left, _user$project$Diagram$isHorizontal) && (A2(_user$project$Diagram$isNeighbor, bottom, _user$project$Diagram$isVertical) && A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal)))),
+				_1: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Top, _user$project$Diagram$Left, _user$project$Diagram$Bottom, _user$project$Diagram$Right]),
+					_user$project$Diagram$Sharp)
+			},
+				{
+				ctor: '_Tuple2',
 				_0: (A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isIntersection) || (A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isRound) || A2(_user$project$Diagram$isChar, $char, _user$project$Diagram$isAsterisk))) && (A2(_user$project$Diagram$isNeighbor, top, _user$project$Diagram$isVertical) && (A2(_user$project$Diagram$isNeighbor, left, _user$project$Diagram$isHorizontal) && (A2(_user$project$Diagram$isNeighbor, bottom, _user$project$Diagram$isVertical) && (A2(_user$project$Diagram$isNeighbor, right, _user$project$Diagram$isHorizontal) && (A2(_user$project$Diagram$isNeighbor, topLeft, _user$project$Diagram$isSlantLeft) && (A2(_user$project$Diagram$isNeighbor, topRight, _user$project$Diagram$isSlantRight) && (A2(_user$project$Diagram$isNeighbor, bottomLeft, _user$project$Diagram$isSlantRight) && A2(_user$project$Diagram$isNeighbor, bottomRight, _user$project$Diagram$isSlantLeft)))))))),
 				_1: A3(
 					_user$project$Diagram$Junction,
@@ -9293,9 +9671,9 @@ var _user$project$Diagram$matchComponent = F3(
 		return _elm_lang$core$List$head(
 			A2(
 				_elm_lang$core$List$filterMap,
-				function (_p12) {
-					var _p13 = _p12;
-					return _p13._0 ? _elm_lang$core$Maybe$Just(_p13._1) : _elm_lang$core$Maybe$Nothing;
+				function (_p30) {
+					var _p31 = _p30;
+					return _p31._0 ? _elm_lang$core$Maybe$Just(_p31._1) : _elm_lang$core$Maybe$Nothing;
 				},
 				_elm_lang$core$List$reverse(
 					A3(_user$project$Diagram$componentMatchList, x, y, model))));
@@ -9313,7 +9691,7 @@ var _user$project$Diagram$ArrowLine = function (a) {
 var _user$project$Diagram$Line = function (a) {
 	return {ctor: 'Line', _0: a};
 };
-var _user$project$Diagram$componentPaths = F2(
+var _user$project$Diagram$componentPathList = F2(
 	function (x, y) {
 		var ey = _user$project$Diagram$measureY(y) + _user$project$Diagram$textHeight;
 		var ex = _user$project$Diagram$measureX(x) + _user$project$Diagram$textWidth;
@@ -9321,7 +9699,7 @@ var _user$project$Diagram$componentPaths = F2(
 		var q3x = _user$project$Diagram$measureX(x) + ((_user$project$Diagram$textWidth * 3) / 4);
 		var my = _user$project$Diagram$measureY(y) + (_user$project$Diagram$textHeight / 2);
 		var mx = _user$project$Diagram$measureX(x) + (_user$project$Diagram$textWidth / 2);
-		var qy = _user$project$Diagram$measureY(y) + (_user$project$Diagram$textHeight / 3);
+		var qy = _user$project$Diagram$measureY(y) + (_user$project$Diagram$textHeight / 4);
 		var qx = _user$project$Diagram$measureX(x) + (_user$project$Diagram$textWidth / 4);
 		var sy = _user$project$Diagram$measureY(y);
 		var sx = _user$project$Diagram$measureX(x);
@@ -9485,6 +9863,58 @@ var _user$project$Diagram$componentPaths = F2(
 			},
 				{
 				ctor: '_Tuple2',
+				_0: _user$project$Diagram$Arrow(_user$project$Diagram$TopLeft),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$ArrowLine(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, ex, ey),
+							_1: A2(_user$project$Diagram$Point, qx, qy)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: _user$project$Diagram$Arrow(_user$project$Diagram$TopRight),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$ArrowLine(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, ey),
+							_1: A2(_user$project$Diagram$Point, q3x, qy)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: _user$project$Diagram$Arrow(_user$project$Diagram$BottomLeft),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$ArrowLine(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, ex, sy),
+							_1: A2(_user$project$Diagram$Point, qx, q3y)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: _user$project$Diagram$Arrow(_user$project$Diagram$BottomRight),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$ArrowLine(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, sy),
+							_1: A2(_user$project$Diagram$Point, q3x, q3y)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
 				_0: A3(
 					_user$project$Diagram$Junction,
 					_user$project$Diagram$Mid,
@@ -9576,6 +10006,258 @@ var _user$project$Diagram$componentPaths = F2(
 							ctor: '_Tuple2',
 							_0: A2(_user$project$Diagram$Point, mx, my),
 							_1: A2(_user$project$Diagram$Point, mx, sy)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Top, _user$project$Diagram$Bottom, _user$project$Diagram$Right]),
+					_user$project$Diagram$Sharp),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, mx, sy),
+							_1: A2(_user$project$Diagram$Point, mx, ey)
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, mx, my),
+							_1: A2(_user$project$Diagram$Point, ex, my)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Top, _user$project$Diagram$Bottom, _user$project$Diagram$Left]),
+					_user$project$Diagram$Sharp),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, mx, sy),
+							_1: A2(_user$project$Diagram$Point, mx, ey)
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, my),
+							_1: A2(_user$project$Diagram$Point, mx, my)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Top, _user$project$Diagram$Left, _user$project$Diagram$Right]),
+					_user$project$Diagram$Sharp),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, mx, sy),
+							_1: A2(_user$project$Diagram$Point, mx, my)
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, my),
+							_1: A2(_user$project$Diagram$Point, ex, my)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Left, _user$project$Diagram$Right, _user$project$Diagram$Bottom]),
+					_user$project$Diagram$Sharp),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, my),
+							_1: A2(_user$project$Diagram$Point, ex, my)
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, mx, my),
+							_1: A2(_user$project$Diagram$Point, mx, ey)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Right, _user$project$Diagram$BottomLeft]),
+					_user$project$Diagram$Smooth),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Arc(
+						{
+							ctor: '_Tuple4',
+							_0: A2(_user$project$Diagram$Point, ex, my),
+							_1: A2(_user$project$Diagram$Point, qx, q3y),
+							_2: _user$project$Diagram$arcRadius * 2,
+							_3: false
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, ey),
+							_1: A2(_user$project$Diagram$Point, qx, q3y)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Left, _user$project$Diagram$BottomRight]),
+					_user$project$Diagram$Smooth),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Arc(
+						{
+							ctor: '_Tuple4',
+							_0: A2(_user$project$Diagram$Point, q3x, q3y),
+							_1: A2(_user$project$Diagram$Point, sx, my),
+							_2: _user$project$Diagram$arcRadius * 2,
+							_3: false
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, ex, ey),
+							_1: A2(_user$project$Diagram$Point, q3x, q3y)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Right, _user$project$Diagram$TopLeft]),
+					_user$project$Diagram$Smooth),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Arc(
+						{
+							ctor: '_Tuple4',
+							_0: A2(_user$project$Diagram$Point, qx, qy),
+							_1: A2(_user$project$Diagram$Point, ex, my),
+							_2: _user$project$Diagram$arcRadius * 2,
+							_3: false
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, sy),
+							_1: A2(_user$project$Diagram$Point, qx, qy)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Left, _user$project$Diagram$TopRight]),
+					_user$project$Diagram$Smooth),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Arc(
+						{
+							ctor: '_Tuple4',
+							_0: A2(_user$project$Diagram$Point, sx, my),
+							_1: A2(_user$project$Diagram$Point, q3x, qy),
+							_2: _user$project$Diagram$arcRadius * 2,
+							_3: false
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, q3x, qy),
+							_1: A2(_user$project$Diagram$Point, ex, sy)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Right, _user$project$Diagram$TopRight]),
+					_user$project$Diagram$Smooth),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Arc(
+						{
+							ctor: '_Tuple4',
+							_0: A2(_user$project$Diagram$Point, q3x, qy),
+							_1: A2(_user$project$Diagram$Point, ex, my),
+							_2: _user$project$Diagram$arcRadius,
+							_3: false
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, q3x, qy),
+							_1: A2(_user$project$Diagram$Point, ex, sy)
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Left, _user$project$Diagram$BottomLeft]),
+					_user$project$Diagram$Smooth),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Arc(
+						{
+							ctor: '_Tuple4',
+							_0: A2(_user$project$Diagram$Point, qx, q3y),
+							_1: A2(_user$project$Diagram$Point, sx, my),
+							_2: _user$project$Diagram$arcRadius,
+							_3: false
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, ey),
+							_1: A2(_user$project$Diagram$Point, qx, q3y)
 						})
 					])
 			},
@@ -9742,6 +10424,96 @@ var _user$project$Diagram$componentPaths = F2(
 							_1: A2(_user$project$Diagram$Point, mx, qy)
 						})
 					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Right, _user$project$Diagram$TopRight, _user$project$Diagram$BottomLeft]),
+					_user$project$Diagram$Smooth),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, ey),
+							_1: A2(_user$project$Diagram$Point, ex, sy)
+						}),
+						_user$project$Diagram$Arc(
+						{
+							ctor: '_Tuple4',
+							_0: A2(_user$project$Diagram$Point, ex, my),
+							_1: A2(_user$project$Diagram$Point, qx, q3y),
+							_2: _user$project$Diagram$arcRadius * 2,
+							_3: false
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Right, _user$project$Diagram$TopLeft, _user$project$Diagram$BottomRight]),
+					_user$project$Diagram$Smooth),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, sy),
+							_1: A2(_user$project$Diagram$Point, ex, ey)
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, ex, my),
+							_1: A2(_user$project$Diagram$Point, q3x, my)
+						}),
+						_user$project$Diagram$Arc(
+						{
+							ctor: '_Tuple4',
+							_0: A2(_user$project$Diagram$Point, qx, qy),
+							_1: A2(_user$project$Diagram$Point, q3x, my),
+							_2: _user$project$Diagram$arcRadius * 2,
+							_3: false
+						})
+					])
+			},
+				{
+				ctor: '_Tuple2',
+				_0: A3(
+					_user$project$Diagram$Junction,
+					_user$project$Diagram$Mid,
+					_elm_lang$core$Native_List.fromArray(
+						[_user$project$Diagram$Top, _user$project$Diagram$Bottom, _user$project$Diagram$BottomLeft]),
+					_user$project$Diagram$Smooth),
+				_1: _elm_lang$core$Native_List.fromArray(
+					[
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, mx, sy),
+							_1: A2(_user$project$Diagram$Point, mx, ey)
+						}),
+						_user$project$Diagram$Line(
+						{
+							ctor: '_Tuple2',
+							_0: A2(_user$project$Diagram$Point, sx, ey),
+							_1: A2(_user$project$Diagram$Point, qx, q3y)
+						}),
+						_user$project$Diagram$Arc(
+						{
+							ctor: '_Tuple4',
+							_0: A2(_user$project$Diagram$Point, qx, q3y),
+							_1: A2(_user$project$Diagram$Point, mx, qy),
+							_2: _user$project$Diagram$arcRadius * 4,
+							_3: false
+						})
+					])
 			}
 			]);
 	});
@@ -9754,11 +10526,11 @@ var _user$project$Diagram$getComponentPaths = F3(
 			_elm_lang$core$List$head(
 				A2(
 					_elm_lang$core$List$filterMap,
-					function (_p14) {
-						var _p15 = _p14;
-						return _elm_lang$core$Native_Utils.eq(component, _p15._0) ? _elm_lang$core$Maybe$Just(_p15._1) : _elm_lang$core$Maybe$Nothing;
+					function (_p32) {
+						var _p33 = _p32;
+						return _elm_lang$core$Native_Utils.eq(component, _p33._0) ? _elm_lang$core$Maybe$Just(_p33._1) : _elm_lang$core$Maybe$Nothing;
 					},
-					A2(_user$project$Diagram$componentPaths, x, y))));
+					A2(_user$project$Diagram$componentPathList, x, y))));
 	});
 var _user$project$Diagram$firstPathOnly = F3(
 	function (x, y, comp) {
@@ -9769,109 +10541,109 @@ var _user$project$Diagram$firstPathOnly = F3(
 	});
 var _user$project$Diagram$eat = F2(
 	function (path1, path2) {
-		var _p16 = path1;
-		_v11_2:
+		var _p34 = path1;
+		_v19_2:
 		do {
-			switch (_p16.ctor) {
+			switch (_p34.ctor) {
 				case 'Line':
-					if (_p16._0.ctor === '_Tuple2') {
-						var _p20 = _p16._0._0;
-						var _p19 = _p16._0._1;
-						var _p17 = path2;
-						if ((_p17.ctor === 'Line') && (_p17._0.ctor === '_Tuple2')) {
-							var _p18 = _p17._0._1;
-							return (_elm_lang$core$Native_Utils.eq(_p19, _p17._0._0) && A3(_user$project$Diagram$collinear, _p20, _p19, _p18)) ? _elm_lang$core$Maybe$Just(
+					if (_p34._0.ctor === '_Tuple2') {
+						var _p38 = _p34._0._0;
+						var _p37 = _p34._0._1;
+						var _p35 = path2;
+						if ((_p35.ctor === 'Line') && (_p35._0.ctor === '_Tuple2')) {
+							var _p36 = _p35._0._1;
+							return (_elm_lang$core$Native_Utils.eq(_p37, _p35._0._0) && A3(_user$project$Diagram$collinear, _p38, _p37, _p36)) ? _elm_lang$core$Maybe$Just(
 								_user$project$Diagram$Line(
-									{ctor: '_Tuple2', _0: _p20, _1: _p18})) : _elm_lang$core$Maybe$Nothing;
+									{ctor: '_Tuple2', _0: _p38, _1: _p36})) : _elm_lang$core$Maybe$Nothing;
 						} else {
 							return _elm_lang$core$Maybe$Nothing;
 						}
 					} else {
-						break _v11_2;
+						break _v19_2;
 					}
 				case 'DashedLine':
-					if (_p16._0.ctor === '_Tuple2') {
-						var _p24 = _p16._0._0;
-						var _p23 = _p16._0._1;
-						var _p21 = path2;
-						if ((_p21.ctor === 'DashedLine') && (_p21._0.ctor === '_Tuple2')) {
-							var _p22 = _p21._0._1;
-							return (_elm_lang$core$Native_Utils.eq(_p23, _p21._0._0) && A3(_user$project$Diagram$collinear, _p24, _p23, _p22)) ? _elm_lang$core$Maybe$Just(
+					if (_p34._0.ctor === '_Tuple2') {
+						var _p42 = _p34._0._0;
+						var _p41 = _p34._0._1;
+						var _p39 = path2;
+						if ((_p39.ctor === 'DashedLine') && (_p39._0.ctor === '_Tuple2')) {
+							var _p40 = _p39._0._1;
+							return (_elm_lang$core$Native_Utils.eq(_p41, _p39._0._0) && A3(_user$project$Diagram$collinear, _p42, _p41, _p40)) ? _elm_lang$core$Maybe$Just(
 								_user$project$Diagram$DashedLine(
-									{ctor: '_Tuple2', _0: _p24, _1: _p22})) : _elm_lang$core$Maybe$Nothing;
+									{ctor: '_Tuple2', _0: _p42, _1: _p40})) : _elm_lang$core$Maybe$Nothing;
 						} else {
 							return _elm_lang$core$Maybe$Nothing;
 						}
 					} else {
-						break _v11_2;
+						break _v19_2;
 					}
 				default:
-					break _v11_2;
+					break _v19_2;
 			}
 		} while(false);
 		return _elm_lang$core$Maybe$Nothing;
 	});
 var _user$project$Diagram$reversePath = function (path) {
-	var _p25 = path;
-	switch (_p25.ctor) {
+	var _p43 = path;
+	switch (_p43.ctor) {
 		case 'Line':
 			return _user$project$Diagram$Line(
-				{ctor: '_Tuple2', _0: _p25._0._1, _1: _p25._0._0});
+				{ctor: '_Tuple2', _0: _p43._0._1, _1: _p43._0._0});
 		case 'ArrowLine':
 			return _user$project$Diagram$ArrowLine(
-				{ctor: '_Tuple2', _0: _p25._0._1, _1: _p25._0._0});
+				{ctor: '_Tuple2', _0: _p43._0._1, _1: _p43._0._0});
 		case 'Arc':
 			return _user$project$Diagram$Arc(
 				{
 					ctor: '_Tuple4',
-					_0: _p25._0._1,
-					_1: _p25._0._0,
-					_2: _p25._0._2,
-					_3: _elm_lang$core$Basics$not(_p25._0._3)
+					_0: _p43._0._1,
+					_1: _p43._0._0,
+					_2: _p43._0._2,
+					_3: _elm_lang$core$Basics$not(_p43._0._3)
 				});
 		default:
 			return _user$project$Diagram$DashedLine(
-				{ctor: '_Tuple2', _0: _p25._0._1, _1: _p25._0._0});
+				{ctor: '_Tuple2', _0: _p43._0._1, _1: _p43._0._0});
 	}
 };
 var _user$project$Diagram$reduce = F2(
 	function (path1, path2) {
-		var _p26 = A2(_user$project$Diagram$eat, path1, path2);
-		if (_p26.ctor === 'Just') {
-			return _elm_lang$core$Maybe$Just(_p26._0);
+		var _p44 = A2(_user$project$Diagram$eat, path1, path2);
+		if (_p44.ctor === 'Just') {
+			return _elm_lang$core$Maybe$Just(_p44._0);
 		} else {
-			var _p27 = A2(
+			var _p45 = A2(
 				_user$project$Diagram$eat,
 				path1,
 				_user$project$Diagram$reversePath(path2));
-			if (_p27.ctor === 'Just') {
-				return _elm_lang$core$Maybe$Just(_p27._0);
+			if (_p45.ctor === 'Just') {
+				return _elm_lang$core$Maybe$Just(_p45._0);
 			} else {
 				return _elm_lang$core$Maybe$Nothing;
 			}
 		}
 	});
 var _user$project$Diagram$tryReduce = F3(
-	function (_p29, _p28, model) {
-		var _p30 = _p29;
-		var _p39 = _p30._1;
-		var _p38 = _p30._0;
-		var _p31 = _p28;
-		var _p37 = _p31._1;
-		var _p36 = _p31._0;
-		var comp2 = A3(_user$project$Diagram$matchComponent, _p36, _p37, model);
-		var comp1 = A3(_user$project$Diagram$matchComponent, _p38, _p39, model);
-		var _p32 = comp1;
-		if (_p32.ctor === 'Just') {
-			var _p33 = comp2;
-			if (_p33.ctor === 'Just') {
-				var path2 = A3(_user$project$Diagram$firstPathOnly, _p36, _p37, _p33._0);
-				var path1 = A3(_user$project$Diagram$firstPathOnly, _p38, _p39, _p32._0);
-				var _p34 = path1;
-				if (_p34.ctor === 'Just') {
-					var _p35 = path2;
-					if (_p35.ctor === 'Just') {
-						return A2(_user$project$Diagram$reduce, _p34._0, _p35._0);
+	function (_p47, _p46, model) {
+		var _p48 = _p47;
+		var _p57 = _p48._1;
+		var _p56 = _p48._0;
+		var _p49 = _p46;
+		var _p55 = _p49._1;
+		var _p54 = _p49._0;
+		var comp2 = A3(_user$project$Diagram$matchComponent, _p54, _p55, model);
+		var comp1 = A3(_user$project$Diagram$matchComponent, _p56, _p57, model);
+		var _p50 = comp1;
+		if (_p50.ctor === 'Just') {
+			var _p51 = comp2;
+			if (_p51.ctor === 'Just') {
+				var path2 = A3(_user$project$Diagram$firstPathOnly, _p54, _p55, _p51._0);
+				var path1 = A3(_user$project$Diagram$firstPathOnly, _p56, _p57, _p50._0);
+				var _p52 = path1;
+				if (_p52.ctor === 'Just') {
+					var _p53 = path2;
+					if (_p53.ctor === 'Just') {
+						return A2(_user$project$Diagram$reduce, _p52._0, _p53._0);
 					} else {
 						return _elm_lang$core$Maybe$Nothing;
 					}
@@ -9886,15 +10658,15 @@ var _user$project$Diagram$tryReduce = F3(
 		}
 	});
 var _user$project$Diagram$canReduce = F3(
-	function (_p41, _p40, model) {
-		var _p42 = _p41;
-		var _p43 = _p40;
-		var _p44 = A3(
+	function (_p59, _p58, model) {
+		var _p60 = _p59;
+		var _p61 = _p58;
+		var _p62 = A3(
 			_user$project$Diagram$tryReduce,
-			{ctor: '_Tuple2', _0: _p42._0, _1: _p42._1},
-			{ctor: '_Tuple2', _0: _p43._0, _1: _p43._1},
+			{ctor: '_Tuple2', _0: _p60._0, _1: _p60._1},
+			{ctor: '_Tuple2', _0: _p61._0, _1: _p61._1},
 			model);
-		if (_p44.ctor === 'Just') {
+		if (_p62.ctor === 'Just') {
 			return true;
 		} else {
 			return false;
@@ -9923,15 +10695,15 @@ var _user$project$Diagram$edible = F3(
 			match);
 	});
 var _user$project$Diagram$reduceTo = F3(
-	function (path, _p45, model) {
-		var _p46 = _p45;
-		var _p50 = _p46._1;
-		var _p49 = _p46._0;
-		var _p47 = A3(_user$project$Diagram$matchComponent, _p49, _p50, model);
-		if (_p47.ctor === 'Just') {
-			var _p48 = A3(_user$project$Diagram$firstPathOnly, _p49, _p50, _p47._0);
-			if (_p48.ctor === 'Just') {
-				return A2(_user$project$Diagram$reduce, path, _p48._0);
+	function (path, _p63, model) {
+		var _p64 = _p63;
+		var _p68 = _p64._1;
+		var _p67 = _p64._0;
+		var _p65 = A3(_user$project$Diagram$matchComponent, _p67, _p68, model);
+		if (_p65.ctor === 'Just') {
+			var _p66 = A3(_user$project$Diagram$firstPathOnly, _p67, _p68, _p65._0);
+			if (_p66.ctor === 'Just') {
+				return A2(_user$project$Diagram$reduce, path, _p66._0);
 			} else {
 				return _elm_lang$core$Maybe$Nothing;
 			}
@@ -9939,60 +10711,60 @@ var _user$project$Diagram$reduceTo = F3(
 			return _elm_lang$core$Maybe$Nothing;
 		}
 	});
-var _user$project$Diagram$tracePath = F3(
-	function (path, _p51, model) {
-		tracePath:
+var _user$project$Diagram$traceEatEdiblePaths = F3(
+	function (path, _p69, model) {
+		traceEatEdiblePaths:
 		while (true) {
-			var _p52 = _p51;
-			var _p58 = _p52._1;
-			var _p57 = _p52._0;
-			var bottomRight = {ctor: '_Tuple2', _0: _p57 + 1, _1: _p58 + 1};
-			var bottomLeft = {ctor: '_Tuple2', _0: _p57 - 1, _1: _p58 + 1};
-			var topRight = {ctor: '_Tuple2', _0: _p57 + 1, _1: _p58 - 1};
-			var topLeft = {ctor: '_Tuple2', _0: _p57 - 1, _1: _p58 - 1};
-			var right = {ctor: '_Tuple2', _0: _p57 + 1, _1: _p58};
-			var left = {ctor: '_Tuple2', _0: _p57 - 1, _1: _p58};
-			var bottom = {ctor: '_Tuple2', _0: _p57, _1: _p58 + 1};
-			var top = {ctor: '_Tuple2', _0: _p57, _1: _p58 - 1};
-			var _p53 = A3(_user$project$Diagram$reduceTo, path, right, model);
-			if (_p53.ctor === 'Just') {
-				var _v31 = _p53._0,
-					_v32 = right,
-					_v33 = model;
-				path = _v31;
-				_p51 = _v32;
-				model = _v33;
-				continue tracePath;
+			var _p70 = _p69;
+			var _p76 = _p70._1;
+			var _p75 = _p70._0;
+			var bottomRight = {ctor: '_Tuple2', _0: _p75 + 1, _1: _p76 + 1};
+			var bottomLeft = {ctor: '_Tuple2', _0: _p75 - 1, _1: _p76 + 1};
+			var topRight = {ctor: '_Tuple2', _0: _p75 + 1, _1: _p76 - 1};
+			var topLeft = {ctor: '_Tuple2', _0: _p75 - 1, _1: _p76 - 1};
+			var right = {ctor: '_Tuple2', _0: _p75 + 1, _1: _p76};
+			var left = {ctor: '_Tuple2', _0: _p75 - 1, _1: _p76};
+			var bottom = {ctor: '_Tuple2', _0: _p75, _1: _p76 + 1};
+			var top = {ctor: '_Tuple2', _0: _p75, _1: _p76 - 1};
+			var _p71 = A3(_user$project$Diagram$reduceTo, path, right, model);
+			if (_p71.ctor === 'Just') {
+				var _v39 = _p71._0,
+					_v40 = right,
+					_v41 = model;
+				path = _v39;
+				_p69 = _v40;
+				model = _v41;
+				continue traceEatEdiblePaths;
 			} else {
-				var _p54 = A3(_user$project$Diagram$reduceTo, path, bottom, model);
-				if (_p54.ctor === 'Just') {
-					var _v35 = _p54._0,
-						_v36 = bottom,
-						_v37 = model;
-					path = _v35;
-					_p51 = _v36;
-					model = _v37;
-					continue tracePath;
+				var _p72 = A3(_user$project$Diagram$reduceTo, path, bottom, model);
+				if (_p72.ctor === 'Just') {
+					var _v43 = _p72._0,
+						_v44 = bottom,
+						_v45 = model;
+					path = _v43;
+					_p69 = _v44;
+					model = _v45;
+					continue traceEatEdiblePaths;
 				} else {
-					var _p55 = A3(_user$project$Diagram$reduceTo, path, bottomRight, model);
-					if (_p55.ctor === 'Just') {
-						var _v39 = _p55._0,
-							_v40 = bottomRight,
-							_v41 = model;
-						path = _v39;
-						_p51 = _v40;
-						model = _v41;
-						continue tracePath;
+					var _p73 = A3(_user$project$Diagram$reduceTo, path, bottomRight, model);
+					if (_p73.ctor === 'Just') {
+						var _v47 = _p73._0,
+							_v48 = bottomRight,
+							_v49 = model;
+						path = _v47;
+						_p69 = _v48;
+						model = _v49;
+						continue traceEatEdiblePaths;
 					} else {
-						var _p56 = A3(_user$project$Diagram$reduceTo, path, topRight, model);
-						if (_p56.ctor === 'Just') {
-							var _v43 = _p56._0,
-								_v44 = topRight,
-								_v45 = model;
-							path = _v43;
-							_p51 = _v44;
-							model = _v45;
-							continue tracePath;
+						var _p74 = A3(_user$project$Diagram$reduceTo, path, topRight, model);
+						if (_p74.ctor === 'Just') {
+							var _v51 = _p74._0,
+								_v52 = topRight,
+								_v53 = model;
+							path = _v51;
+							_p69 = _v52;
+							model = _v53;
+							continue traceEatEdiblePaths;
 						} else {
 							return _elm_lang$core$Maybe$Just(path);
 						}
@@ -10003,71 +10775,49 @@ var _user$project$Diagram$tracePath = F3(
 	});
 var _user$project$Diagram$getOptimizedPath = F3(
 	function (x, y, model) {
-		if (A3(_user$project$Diagram$edible, x, y, model)) {
-			return _elm_lang$core$Native_List.fromArray(
-				[]);
-		} else {
-			var _p59 = A3(_user$project$Diagram$matchComponent, x, y, model);
-			if (_p59.ctor === 'Just') {
-				var _p60 = A3(_user$project$Diagram$firstPathOnly, x, y, _p59._0);
-				if (_p60.ctor === 'Just') {
-					var _p61 = A3(
-						_user$project$Diagram$tracePath,
-						_p60._0,
+		var center = A3(_user$project$Diagram$matchComponent, x, y, model);
+		var _p77 = center;
+		if (_p77.ctor === 'Just') {
+			var _p80 = _p77._0;
+			if (A3(_user$project$Diagram$edible, x, y, model)) {
+				return _elm_lang$core$Native_List.fromArray(
+					[]);
+			} else {
+				var _p78 = A3(_user$project$Diagram$firstPathOnly, x, y, _p80);
+				if (_p78.ctor === 'Just') {
+					var _p79 = A3(
+						_user$project$Diagram$traceEatEdiblePaths,
+						_p78._0,
 						{ctor: '_Tuple2', _0: x, _1: y},
 						model);
-					if (_p61.ctor === 'Just') {
+					if (_p79.ctor === 'Just') {
 						return _elm_lang$core$Native_List.fromArray(
-							[_p61._0]);
+							[_p79._0]);
 					} else {
 						return _elm_lang$core$Native_List.fromArray(
 							[]);
 					}
 				} else {
-					return _elm_lang$core$Native_List.fromArray(
-						[]);
+					return A3(_user$project$Diagram$getComponentPaths, x, y, _p80);
 				}
-			} else {
-				return _elm_lang$core$Native_List.fromArray(
-					[]);
 			}
+		} else {
+			return _elm_lang$core$Native_List.fromArray(
+				[]);
 		}
 	});
-var _user$project$Diagram$None = {ctor: 'None'};
-var _user$project$Diagram$Arrowed = {ctor: 'Arrowed'};
-var _user$project$Diagram$svgPath = function (path) {
-	var _p62 = path;
-	switch (_p62.ctor) {
-		case 'Line':
-			return A4(_user$project$Diagram$drawLine, _p62._0._0, _p62._0._1, _user$project$Diagram$Solid, _user$project$Diagram$None);
-		case 'ArrowLine':
-			return A4(_user$project$Diagram$drawLine, _p62._0._0, _p62._0._1, _user$project$Diagram$Solid, _user$project$Diagram$Arrowed);
-		case 'Arc':
-			return A4(_user$project$Diagram$drawArc, _p62._0._0, _p62._0._1, _p62._0._2, _p62._0._3);
-		default:
-			return A4(_user$project$Diagram$drawLine, _p62._0._0, _p62._0._1, _user$project$Diagram$Dashed, _user$project$Diagram$None);
-	}
-};
-var _user$project$Diagram$componentSvg = F3(
+var _user$project$Diagram$componentPaths = F3(
 	function (x, y, model) {
-		var paths = function () {
-			var _p63 = A3(_user$project$Diagram$matchComponent, x, y, model);
-			if (_p63.ctor === 'Just') {
-				return _user$project$Diagram$optimizeSvg ? A3(_user$project$Diagram$getOptimizedPath, x, y, model) : A3(_user$project$Diagram$getComponentPaths, x, y, _p63._0);
-			} else {
-				return _elm_lang$core$Native_List.fromArray(
-					[]);
-			}
-		}();
-		var svgPaths = A2(
-			_elm_lang$core$List$map,
-			function (p) {
-				return _user$project$Diagram$svgPath(p);
-			},
-			paths);
-		return svgPaths;
+		var _p81 = A3(_user$project$Diagram$matchComponent, x, y, model);
+		if (_p81.ctor === 'Just') {
+			var paths = _user$project$Diagram$optimizeSvg ? A3(_user$project$Diagram$getOptimizedPath, x, y, model) : A3(_user$project$Diagram$getComponentPaths, x, y, _p81._0);
+			return paths;
+		} else {
+			return _elm_lang$core$Native_List.fromArray(
+				[]);
+		}
 	});
-var _user$project$Diagram$drawPaths = function (model) {
+var _user$project$Diagram$expandedPaths = function (model) {
 	return _elm_lang$core$List$concat(
 		_elm_lang$core$List$concat(
 			_elm_lang$core$Array$toList(
@@ -10080,13 +10830,93 @@ var _user$project$Diagram$drawPaths = function (model) {
 									_elm_lang$core$Array$indexedMap,
 									F2(
 										function (x, $char) {
-											return A3(_user$project$Diagram$componentSvg, x, y, model);
+											return A3(_user$project$Diagram$componentPaths, x, y, model);
 										}),
 									line));
 						}),
 					model.lines))));
 };
+var _user$project$Diagram$componentPathDefs = F3(
+	function (x, y, model) {
+		var pathList = A3(_user$project$Diagram$componentPaths, x, y, model);
+		return _elm_lang$core$List$isEmpty(pathList) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(
+			_user$project$Diagram$toPathDefs(pathList));
+	});
+var _user$project$Diagram$perComponentPathDefs = function (model) {
+	return A2(
+		_elm_lang$core$List$filterMap,
+		function (a) {
+			return a;
+		},
+		_elm_lang$core$List$concat(
+			_elm_lang$core$Array$toList(
+				A2(
+					_elm_lang$core$Array$indexedMap,
+					F2(
+						function (y, line) {
+							return _elm_lang$core$Array$toList(
+								A2(
+									_elm_lang$core$Array$indexedMap,
+									F2(
+										function (x, $char) {
+											return A3(_user$project$Diagram$componentPathDefs, x, y, model);
+										}),
+									line));
+						}),
+					model.lines))));
+};
+var _user$project$Diagram$allPathDefs = function (model) {
+	return A2(
+		_elm_lang$core$String$join,
+		' ',
+		_user$project$Diagram$perComponentPathDefs(model));
+};
+var _user$project$Diagram$None = {ctor: 'None'};
+var _user$project$Diagram$Arrowed = {ctor: 'Arrowed'};
+var _user$project$Diagram$svgPath = function (path) {
+	var _p82 = path;
+	switch (_p82.ctor) {
+		case 'Line':
+			return A4(_user$project$Diagram$drawPathLine, _p82._0._0, _p82._0._1, _user$project$Diagram$Solid, _user$project$Diagram$None);
+		case 'ArrowLine':
+			return A4(_user$project$Diagram$drawPathLine, _p82._0._0, _p82._0._1, _user$project$Diagram$Solid, _user$project$Diagram$Arrowed);
+		case 'Arc':
+			return A4(_user$project$Diagram$drawArc, _p82._0._0, _p82._0._1, _p82._0._2, _p82._0._3);
+		default:
+			return A4(_user$project$Diagram$drawPathLine, _p82._0._0, _p82._0._1, _user$project$Diagram$Dashed, _user$project$Diagram$None);
+	}
+};
 var _user$project$Diagram$getSvg = function (model) {
+	var svgPaths = function () {
+		var _p83 = _user$project$Diagram$density;
+		switch (_p83.ctor) {
+			case 'Compact':
+				var pathDefs = _user$project$Diagram$allPathDefs(model);
+				var onePath = A3(_user$project$Diagram$drawPathDef, pathDefs, _user$project$Diagram$Solid, _user$project$Diagram$None);
+				return _elm_lang$core$Native_List.fromArray(
+					[onePath]);
+			case 'Medium':
+				return A2(
+					_elm_lang$core$List$filterMap,
+					function (a) {
+						return a;
+					},
+					A2(
+						_elm_lang$core$List$map,
+						function (pathDefs) {
+							return _elm_lang$core$String$isEmpty(pathDefs) ? _elm_lang$core$Maybe$Nothing : _elm_lang$core$Maybe$Just(
+								A3(_user$project$Diagram$drawPathDef, pathDefs, _user$project$Diagram$Solid, _user$project$Diagram$None));
+						},
+						_user$project$Diagram$perComponentPathDefs(model)));
+			default:
+				return A2(
+					_elm_lang$core$List$map,
+					function (path) {
+						return _user$project$Diagram$svgPath(path);
+					},
+					_user$project$Diagram$expandedPaths(model));
+		}
+	}();
 	var gheight = _elm_lang$core$Basics$toString(
 		_user$project$Diagram$measureY(model.rows));
 	var gwidth = _elm_lang$core$Basics$toString(
@@ -10111,11 +10941,11 @@ var _user$project$Diagram$getSvg = function (model) {
 						_elm_lang$core$Native_List.fromArray(
 							[_user$project$Diagram$arrowMarker]))
 					]),
-					_user$project$Diagram$drawPaths(model)
+					svgPaths
 				])));
 };
 
-var _user$project$Main$arg = '\n\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |----------------------------------------------------------.\n  | ooo |    |                          |                          |\n  | ooo |    |                          |                          |\n  \'_____\'    |                          |                          |\n             |                          |                          |\n             v                          v                          v\n   .-------------------.  .---------------------------.  .-------------------.\n   | Loadable module C |  |     Loadable module A     |  | Loadable module B |\n   \'-------------------\'  |---------------------------|  |   (instrumented)  |\n             |            |         .-----.           |  \'-------------------\'\n             \'------------+-------->| A.o |           |             |\n                 calls    |         \'-----\'           |             |\n                          |    .------------------.   |             |\n                          |   / A.instrumented.o /<---+-------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           \\---> Base::Class::Derived\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    ^\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\n    ^\n    :\n    :\n    :\n    :\n    +==============================>\n    \n    ..............................\n\n\n\n  TODO:\n\n   \n\n        |   \\/   \n       -+-  /\\      \n        |   \n        \n        |      |    |      |\n        +--  --+    +--  --+   +--  --+\n                    |      |   |      |\n\n                     |    |  |     |\n             .- -.   .-  -.  ._   _.\n             |   |\n\n        .-   -.  .-.       \n        \'-   -\'  | |  | |  \n                      \'-\'\n\n      \\      |    /  |\n       .     \'   \'   .\n       |    /    |    \\ \n\n       \\\n       /\n\n       /\n       \\\n\n\n       /      \\\n      \'--    --\'\n     /          \\\n\n       /   \\\n    --\'     \'--\n     /       \\\n\n                       \\         /\n       --.--  --.--   --.--   --.--\n        /        \\     \n\n\n        |   |\n        .   .\n       /|   |\\ \n\n        |\n        .\n       / \\\n\n       \\|/\n        .\n       /|\\\n\n       \n       \\|/\n      --.--\n       /|\\\n\n       \\|/\n      --+--\n       /|\\\n        \n        |/  \\|\n        .    .\n        |    |\n\n\n       -.  -.\n       /     \\\n\n        .-  .-\n       /     \\\n\n      \n       /   /     \\    \\\n      \'-  \'_     _\'   -\'\n       \n\n       .-.\n      (   )\n       \'-\'\n\n       ..\n      (  )\n       \'\'\n\n\n       .------.\n      (        )\n       \'------\'\n\n        ________  \n       /       /\n      /       /\n     /_______/\n\n\n        ________  \n        \\       \\\n         \\       \\\n          \\_______\\\n\n       ________ \n      |________|\n\n\n       ________ \n      |        |\n      |________|\n\n      .-.\n      \'-\'\n\n        ________  \n        \\_______\\\n\n       /\\\n      /  \\\n     /____\\\n\n       /\\\n      /  \\\n     /    \\\n    \'------\'\n\n       ___\n      /   \\\n      \\___/\n\n      ______\n     /      \\\n    /        \\\n    \\        /\n     \\______/\n        \n\n        +---------+\n        |         |                        +--------------+\n        |   NFS   |--+                     |              |\n        |         |  |                 +-->|   CacheFS    |\n        +---------+  |   +----------+  |   |  /dev/hda5   |\n                     |   |          |  |   +--------------+\n        +---------+  +-->|          |  |\n        |         |      |          |--+\n        |   AFS   |----->| FS-Cache |\n        |         |      |          |--+\n        +---------+  +-->|          |  |\n                     |   |          |  |   +--------------+\n        +---------+  |   +----------+  |   |              |\n        |         |  |                 +-->|  CacheFiles  |\n        |  ISOFS  |--+                     |  /var/cache  |\n        |         |                        +--------------+\n        +---------+\n    ';
+var _user$project$Main$arg = '\n\n+------+   +-----+   +-----+   +-----+\n|      |   |     |   |     |   |     |\n| Foo  +-->| Bar +---+ Baz |<--+ Moo |\n|      |   |     |   |     |   |     |\n+------+   +-----+   +--+--+   +-----+\n              ^         |\n              |         V\n.-------------+-----------------------.\n| Hello here and there and everywhere |\n\'-------------------------------------\'\n\n\n                        ____________\n   .--------------.     \\           \\\n  / a == b         \\     \\           \\     __________\n (    &&            )     ) process   )    \\         \\\n  \\ \'string\' ne \'\' /     /           /     / process /\n   \'--------------\'     /___________/     /_________/\n\n  User code  ^               ^ OS code\n              \\             /\n               \\        .--\'\n                \\      /\n  User code  <--- Mode ----> OS code\n                /      \\\n            .--\'        \\___\n           /                \\\n          v                  v \n       User code            OS code\n\n             .---.  .---. .---.  .---.    .---.  .---.\n    OS API   \'---\'  \'---\' \'---\'  \'---\'    \'---\'  \'---\'\n               |      |     |      |        |      |\n               v      v     |      v        |      v\n             .------------. | .-----------. |  .-----.\n             | Filesystem | | | Scheduler | |  | MMU |\n             \'------------\' | \'-----------\' |  \'-----\'\n                    |       |      |        |\n                    v       |      |        v\n                 .----.     |      |    .---------.\n                 | IO |<----\'      |    | Network |\n                 \'----\'            |    \'---------\'\n                    |              |         |\n                    v              v         v\n             .---------------------------------------.\n             |                  HAL                  |\n             \'---------------------------------------\'\n             \n\n   ____[]\n  | ___ |\n  ||   ||  device\n  ||___||  loads\n  | ooo |----------------------------------------------------------.\n  | ooo |    |                          |                          |\n  | ooo |    |                          |                          |\n  \'_____\'    |                          |                          |\n             |                          |                          |\n             v                          v                          v\n   .-------------------.  .---------------------------.  .-------------------.\n   | Loadable module C |  |     Loadable module A     |  | Loadable module B |\n   \'-------------------\'  |---------------------------|  |   (instrumented)  |\n             |            |         .-----.           |  \'-------------------\'\n             \'------------+-------->| A.o |           |             |\n                 calls    |         \'-----\'           |             |\n                          |    .------------------.   |             |\n                          |   / A.instrumented.o /<---+-------------\'\n                          |  \'------------------\'     |    calls\n                          \'---------------------------\'   \n\n\n                                        .--> Base::Class::Derived_A\n                                       /\n                                      .----> Base::Class::Derived_B    \n      Something -------.             /         \\\n                        \\           /           .---> Base::Class::Derived\n      Something::else    \\         /             \\\n            \\             \\       /               \'--> Base::Class::Derived\n             \\             \\     /\n              \\             \\   .-----------> Base::Class::Derived_C \n               \\             \\ /\n                \'------ Base::Class\n                       /  \\ \\ \\\n                      \'    \\ \\ \\  \n                      |     \\ \\ \\\n                      .      \\ \\ \'--- The::Latest\n                     /|       \\ \\      \\\n With::Some::fantasy  \'        \\ \\      \'---- The::Latest::Greatest\n                     /|         \\ \\\n         More::Stuff  \'          \\ \'- I::Am::Running::Out::Of::Ideas\n                     /|           \\\n         More::Stuff  \'            \\\n                     /              \'--- Last::One\n         More::Stuff \n\n  Safety\n    ^\n    |                       *Rust\n    |           *Java\n    | *Python\n    |                        *C++\n    +-----------------------------> Control\n\n    ^\n    :\n    :\n    :\n    :\n    +==============================>\n    \n    ..............................\n\n\n\n  TODO:\n        \n      ^ ^ ^\n       \\|/\n        . \n       /|\\\n      v V v \n\n      ^ ^ ^\n       \\|/\n      <-.->\n       /|\\\n      v V v \n\n        |   \\/   \n       -+-  /\\      \n        |   \n        \n        |      |    |      |\n        +--  --+    +--  --+   +--  --+\n                    |      |   |      |\n\n                     |    |  |     |\n             .- -.   .-  -.  ._   _.\n             |   |\n\n        .-   -.  .-.       \n        \'-   -\'  | |  | |  \n                      \'-\'\n\n      \\      |    /  |\n       .     \'   \'   .\n       |    /    |    \\ \n\n       .    .\n      /|    |\\\n\n      \n      \\|   |/\n       \'   \'\n\n       \\\n       /\n\n       /\n       \\\n\n\n       /      \\\n      \'--    --\'\n     /          \\\n\n       /   \\\n    --\'     \'--\n     /       \\\n\n                       \\         /\n       --.--  --.--   --.--   --.--\n        /        \\     \n\n\n        |   |\n        .   .\n       /|   |\\ \n\n        |\n        .\n       / \\\n\n       \\|/\n        .\n       /|\\\n\n       \n       \\|/\n      --.--\n       /|\\\n\n       \\|/\n      --+--\n       /|\\\n        \n        |/  \\|\n        .    .\n        |    |\n\n\n       -.  -.\n       /     \\\n\n        .-  .-\n       /     \\\n\n      \n       /   /     \\    \\\n      \'-  \'_     _\'   -\'\n       \n\n       .-.\n      (   )\n       \'-\'\n\n       ..\n      (  )\n       \'\'\n\n\n       .------.\n      (        )\n       \'------\'\n\n        ________  \n       /       /\n      /       /\n     /_______/\n\n\n        ________  \n        \\       \\\n         \\       \\\n          \\_______\\\n\n       ________ \n      |________|\n\n\n       ________ \n      |        |\n      |________|\n\n      .-.\n      \'-\'\n\n        ________  \n        \\_______\\\n\n       /\\\n      /  \\\n     /____\\\n\n       /\\\n      /  \\\n     /    \\\n    \'------\'\n\n       ___\n      /   \\\n      \\___/\n\n      ______\n     /      \\\n    /        \\\n    \\        /\n     \\______/\n        \n\n        +---------+\n        |         |                        +--------------+\n        |   NFS   |--+                     |              |\n        |         |  |                 +-->|   CacheFS    |\n        +---------+  |   +----------+  |   |  /dev/hda5   |\n                     |   |          |  |   +--------------+\n        +---------+  +-->|          |  |\n        |         |      |          |--+\n        |   AFS   |----->| FS-Cache |\n        |         |      |          |--+\n        +---------+  +-->|          |  |\n                     |   |          |  |   +--------------+\n        +---------+  |   +----------+  |   |              |\n        |         |  |                 +-->|  CacheFiles  |\n        |  ISOFS  |--+                     |  /var/cache  |\n        |         |                        +--------------+\n        +---------+\n    ';
 var _user$project$Main$textContentDecoder = A2(
 	_elm_lang$core$Json_Decode$at,
 	_elm_lang$core$Native_List.fromArray(
