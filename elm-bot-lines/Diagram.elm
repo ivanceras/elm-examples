@@ -153,6 +153,10 @@ componentPathList: Int -> Int -> List (Component, List Path)
 componentPathList x y =
     let
         -- block start/quarter/mid/quarter3/end x y
+        tw2 = textWidth / 2
+        tw4 = textWidth / 4
+        th2 = textHeight / 2
+        th4 = textHeight / 4
         sx = measureX x
         sy = measureY y
         qx = measureX x + textWidth / 4
@@ -163,6 +167,12 @@ componentPathList x y =
         q3y = measureY y + textHeight * 3 /4
         ex = measureX x + textWidth
         ey = measureY y + textHeight
+
+        verticalPath = Line (Point mx sy, Point mx ey)
+        horizontalPath = Line (Point sx my, Point ex my)
+        slantLeftPath = Line (Point sx sy, Point ex ey)
+        slantRightPath = Line (Point sx ey, Point ex sy)
+        
     in
 
     [
@@ -324,6 +334,19 @@ componentPathList x y =
      ,Line (Point sx ey, Point qx q3y)
      ]
     )
+
+    ,
+    {--
+         \  
+          .
+          |   
+    --}
+    (Junction Mid [Bottom, TopLeft] Smooth
+    ,[Line (Point mx ey, Point mx q3y)
+     ,Arc (Point mx q3y, Point qx qy, arcRadius * 4, False)
+     ,Line (Point qx qy, Point sx sy)
+     ]
+    )
     ,
     (Junction Mid [Top, Left, Bottom, Right] Sharp
     ,[Line (Point sx my, Point ex my)
@@ -378,6 +401,66 @@ componentPathList x y =
        ,Line (Point mx sy, Point mx qy)
       ]
      )
+    ,
+    {--
+       |
+       ._
+    --}
+    (Junction Low [Top, Right] Smooth
+    , [Line (Point mx sy, Point mx q3y)
+      ,Arc (Point mx q3y, Point ex ey, arcRadius, False)
+      ]
+    )
+    ,
+    {--
+        |
+       _.
+    --}
+    (Junction Low [Top, Left] Smooth
+    , [
+        Arc (Point sx ey, Point mx q3y, arcRadius, False)
+       ,Line (Point mx q3y, Point mx sy)
+      ]
+    )
+    ,
+    {--
+       _ 
+      | 
+
+    --}
+    (Action Low LowHorizontal Extend Left Half
+    ,[Line (Point ex ey, Point (sx - tw2) ey)
+     ]
+    )
+    ,
+    {--
+         
+      /_ 
+
+    --}
+    (Action Low LowHorizontal Extend Left Full
+    ,[Line (Point ex ey, Point (sx - textWidth) ey)
+     ]
+    )
+    ,
+    {--
+         
+       _\
+
+    --}
+    (Action Low LowHorizontal Extend Right Full
+    ,[Line (Point sx ey, Point (ex + textWidth) ey)
+     ]
+    )
+    ,
+    {--
+       _ 
+        |
+
+    --}
+    (Action Low LowHorizontal Extend Right Half
+    , [Line (Point sx ey, Point (ex + tw2) ey) ]
+    )
      ,
     {--
         /
@@ -414,7 +497,165 @@ componentPathList x y =
      ,Arc (Point qx q3y, Point mx qy, arcRadius * 4, False)
      ]
     )
-    
+    ,
+    {--
+           /
+          .
+          |   
+    --}
+    (Junction Mid [Bottom, TopRight] Smooth
+    , [Line (Point ex sy, Point q3x qy)
+      ,Arc (Point q3x qy, Point mx q3y, arcRadius * 4, False)
+      ,Line (Point mx ey, Point mx q3y)
+      ]
+    )
+    ,
+    {--
+          |
+          .
+         /    
+    --}
+    (Junction Mid [Top, BottomLeft] Smooth
+    , [
+       Line (Point sx ey, Point qx q3y)
+      ,Arc (Point qx q3y, Point mx qy, arcRadius * 4, False)
+      ,Line (Point mx sy, Point mx qy)
+      ]
+    )
+    ,
+    {--
+         \ 
+          .
+         /    
+    --}
+    (Junction Mid [TopLeft, BottomLeft] Smooth
+    , [Line (Point sx sy, Point qx qy)
+      ,Arc (Point qx q3y, Point qx qy, arcRadius * 2, False)
+      ,Line (Point sx ey, Point qx q3y)
+      ]
+    )
+    ,
+    {--
+           / 
+          .
+           \  
+    --}
+    (Junction Mid [TopRight, BottomRight] Smooth
+    , [ Line (Point ex sy, Point q3x qy)
+      , Arc  (Point q3x qy, Point q3x q3y, arcRadius * 2, False)
+      , Line (Point q3x q3y,  Point ex ey) 
+      ]
+    )
+    ,
+    {--
+           / 
+          (
+           \  
+    --}
+    (Curve Left Mid Quarter
+    ,[Arc (Point ex sy, Point ex ey, arcRadius * 4, False)]
+    )
+
+    ,
+    {--
+       \ 
+        ) 
+       /  
+    --}
+    (Curve Right Mid Quarter
+    , [Arc (Point sx ey, Point sx sy, arcRadius * 4, False)]
+    )
+    ,
+    {--
+       .-.
+
+    --}
+    (Curve Top Mid Half
+    , [Arc (Point ex my, Point sx my, arcRadius * 4, False)
+      ]
+    )
+    ,
+    {--
+       .  
+      (
+       '
+
+    --}
+    (Curve Left Mid Half
+    , [Arc (Point q3x sy, Point q3x ey, arcRadius * 4, False)
+      ]
+    )
+    ,
+    {--
+       .  
+      (
+       '
+
+    --}
+    (Curve Right Mid Half
+    , [Arc (Point qx sy, Point qx ey, arcRadius * 4, True)
+      ]
+    )
+    ,
+    {--
+       '-'
+
+    --}
+    (Curve Bottom Mid Half
+    , [Arc (Point sx my, Point ex my, arcRadius * 4, False)
+      ]
+    )
+    , 
+    {---
+        .-
+       (     
+
+    --}
+    (Curve TopLeft Mid Half
+    ,[Arc (Point ex my, Point (sx-tw4) ey, arcRadius * 4, False)]
+    )
+
+    , 
+    {---
+         -.
+           )  
+
+    --}
+    (Curve TopRight Mid Half
+    ,[Arc (Point sx my, Point (ex+tw4) ey, arcRadius * 4, True)]
+    )
+    ,
+    {---
+       (     
+        '-      
+
+    --}
+    (Curve BottomLeft Mid Half
+    , [Arc (Point (sx-tw4) sy, Point ex my, arcRadius * 4, False)
+      ]
+    )
+    , 
+    {---
+           )  
+         -'
+
+    --}
+    (Curve BottomRight Mid Half
+    , [Arc (Point sx my, Point (ex+tw4) sy, arcRadius * 4, False)
+      ]
+    )
+    ,
+    {--
+       \|/  \|/  \|/ 
+        +    *    . 
+       /|\  /|\  /|\ 
+    --}
+    (Junction Mid [Top, Bottom, TopLeft, TopRight, BottomLeft, BottomRight] Sharp
+    ,[verticalPath
+     ,slantLeftPath
+     ,slantRightPath
+     ]
+    )
     ]
     
 
@@ -499,33 +740,51 @@ canReduce (x1, y1) (x2, y2) model =
         Nothing ->
             False
 
+--arrow lines can not b reduce
+isReduceable: Maybe Component -> Bool
+isReduceable comp =
+    case comp of
+        Just comp ->
+            case comp of
+                Arrow _ ->
+                    False
+                _ ->
+                    True
+        Nothing ->
+            False
+                    
+
 tryReduce: (Int, Int) -> (Int, Int) -> Model -> Maybe Path
 tryReduce (x1, y1) (x2, y2) model =
     let
         comp1 = matchComponent x1 y1 model
         comp2 = matchComponent x2 y2 model
     in
-    case comp1 of
-        Just comp1 ->
-            case comp2 of
-                Just comp2 ->
-                    let
-                        path1 = firstPathOnly x1 y1 comp1
-                        path2 = firstPathOnly x2 y2 comp2
-                    in
-                    case path1 of
-                        Just path1 ->
-                            case path2 of
-                                Just path2 ->
-                                    reduce path1 path2
-                                Nothing ->
-                                    Nothing
-                        Nothing ->
-                            Nothing
-                Nothing ->
-                    Nothing
-        Nothing ->
-            Nothing
+    -- can not reduce arrow lines
+    if isReduceable comp2 then 
+        case comp1 of
+            Just comp1 ->
+                case comp2 of
+                    Just comp2 ->
+                        let
+                            path1 = firstPathOnly x1 y1 comp1
+                            path2 = firstPathOnly x2 y2 comp2
+                        in
+                        case path1 of
+                            Just path1 ->
+                                case path2 of
+                                    Just path2 ->
+                                        reduce path1 path2
+                                    Nothing ->
+                                        Nothing
+                            Nothing ->
+                                Nothing
+                    Nothing ->
+                        Nothing
+            Nothing ->
+                Nothing
+     else
+        Nothing
 
 -- eat with trial on which arrangement
 reduce: Path -> Path -> Maybe Path
@@ -551,12 +810,12 @@ firstPathOnly x y comp =
         Nothing
 
 
--- if this component is edible, then don't mind plotting it
+-- if this component is isEdible, then don't mind plotting it
 -- since it something would eat it along the way
 -- if it is in between component that could eat it
 -- deal only with simple elements
-edible: Int -> Int -> Model -> Bool
-edible x y model =
+isEdible: Int -> Int -> Model -> Bool
+isEdible x y model =
     let
         center = (x,y)
         top = (x, y-1)
@@ -582,6 +841,8 @@ lowHorizontal = ['_']
 intersection = ['+']
 asterisk = ['*']
 round = ['.','\'']
+roundLow = ['.']
+roundHigh= ['\'']
 arrowRight = ['>']
 arrowDown = ['V','v']
 arrowLeft = ['<']
@@ -646,6 +907,12 @@ isLine char =
 
 isRound char =
     List.member char round
+
+isRoundLow char =
+    List.member char roundLow
+
+isRoundHigh char =
+    List.member char roundHigh
 
 isChar: Maybe Char -> (Char -> Bool) -> Bool
 isChar char check =
@@ -764,14 +1031,6 @@ componentMatchList x y model =
              --}
             (isChar char isHorizontalDashed
             ,Piece Mid Horizontal Dashed
-            )
-            ,
-            {--
-             |_
-             --}
-            (isChar char isLowHorizontal
-             && isNeighbor left isVertical
-            ,Action Low Horizontal Extend Left Half
             )
             ,
             {--
@@ -944,6 +1203,171 @@ componentMatchList x y model =
             ,Junction Mid [Left, BottomLeft] Smooth
             )
             ,
+            {--
+                   /
+                  .
+                  |   
+            --}
+            (isChar char isRound
+             && isNeighbor bottom isVertical
+             && isNeighbor topRight isSlantRight
+            ,Junction Mid [Bottom, TopRight] Smooth
+            )
+            ,
+            {--
+                 \  
+                  .
+                  |   
+            --}
+            (isChar char isRound
+             && isNeighbor bottom isVertical
+             && isNeighbor topLeft isSlantLeft
+            ,Junction Mid [Bottom, TopLeft] Smooth
+            )
+            ,
+            {--
+                  |
+                  .
+                 /    
+            --}
+            (isChar char isRound
+             && isNeighbor top isVertical
+             && isNeighbor bottomLeft isSlantRight
+            ,Junction Mid [Top, BottomLeft] Smooth
+            )
+            ,
+            {--
+                 \ 
+                  .
+                 /    
+            --}
+            (isChar char isRound
+             && isNeighbor topLeft isSlantLeft
+             && isNeighbor bottomLeft isSlantRight
+            ,Junction Mid [TopLeft, BottomLeft] Smooth
+            )
+            ,
+            {--
+                   / 
+                  .
+                   \  
+            --}
+            (isChar char isRound
+             && isNeighbor topRight isSlantRight
+             && isNeighbor bottomRight isSlantLeft
+            ,Junction Mid [TopRight, BottomRight] Smooth
+            )
+            ,
+            {--
+                   / 
+                  (
+                   \  
+            --}
+            (isChar char isOpenCurve
+             && isNeighbor topRight isSlantRight
+             && isNeighbor bottomRight isSlantLeft
+            ,Curve Left Mid Quarter
+            )
+            ,
+            {--
+               \ 
+                ) 
+               /  
+            --}
+            (isChar char isCloseCurve
+             && isNeighbor topLeft isSlantLeft
+             && isNeighbor bottomLeft isSlantRight
+            ,Curve Right Mid Quarter
+            )
+            , 
+            {---
+            
+                .-.
+
+            --}
+            (isChar char isHorizontal
+            && isNeighbor left isRoundLow
+            && isNeighbor right isRoundLow
+            ,Curve Top Mid Half
+            )
+            , 
+            {---
+            
+                '-'
+
+            --}
+            (isChar char isHorizontal
+            && isNeighbor left isRoundHigh
+            && isNeighbor right isRoundHigh
+            ,Curve Bottom Mid Half
+            )
+            , 
+            {---
+                . 
+               ( 
+                '
+            --}
+            (isChar char isOpenCurve
+            && isNeighbor topRight isRound
+            && isNeighbor bottomRight isRound
+            ,Curve Left Mid Half
+            )
+            , 
+            {---
+                . 
+                 )  
+                '
+            --}
+            (isChar char isCloseCurve
+            && isNeighbor topLeft isRound
+            && isNeighbor bottomLeft isRound
+            ,Curve Right Mid Half
+            )
+            , 
+            {---
+                .-
+               (     
+
+            --}
+            (isChar char isRoundLow
+            && isNeighbor right isHorizontal
+            && isNeighbor bottomLeft isOpenCurve
+            ,Curve TopLeft Mid Half
+            )
+            , 
+            {---
+                 -.
+                   ) 
+
+            --}
+            (isChar char isRoundLow
+            && isNeighbor left isHorizontal
+            && isNeighbor bottomRight isCloseCurve
+            ,Curve TopRight Mid Half
+            )
+            , 
+            {---
+               (     
+                '-      
+
+            --}
+            (isChar char isRoundHigh
+            && isNeighbor right isHorizontal
+            && isNeighbor topLeft isOpenCurve
+            ,Curve BottomLeft Mid Half
+            )
+            , 
+            {---
+                   )  
+                 -'
+
+            --}
+            (isChar char isRoundHigh
+            && isNeighbor left isHorizontal
+            && isNeighbor topRight isCloseCurve
+            ,Curve BottomRight Mid Half
+            )
+            ,
             (isChar char isRound
              && isNeighbor right isHorizontal
              && isNeighbor bottom isVertical
@@ -955,11 +1379,11 @@ componentMatchList x y model =
              && isNeighbor bottom isVertical
             ,Junction Mid [Bottom, Left] Smooth
             )
+            ,
             {--
                |
-               ._
+               '-
             --}
-            ,
             (isChar char isRound
              && isNeighbor right isHorizontal
              && isNeighbor top isVertical
@@ -974,6 +1398,82 @@ componentMatchList x y model =
              && isNeighbor left isHorizontal
              && isNeighbor top isVertical
             ,Junction Mid [Top, Left] Smooth
+            )
+            ,
+            {--
+               |
+               ._
+            --}
+            (isChar char isRound
+             && isNeighbor right isLowHorizontal
+             && isNeighbor top isVertical
+            ,Junction Low [Top, Right] Smooth
+            )
+            ,
+            {--
+                |
+               _.
+            --}
+            (isChar char isRound
+             && isNeighbor left isLowHorizontal
+             && isNeighbor top isVertical
+            ,Junction Low [Top, Left] Smooth
+            )
+            ,
+            {--
+               _ 
+              | 
+
+            --}
+            (isChar char isLowHorizontal
+             && isNeighbor bottomLeft isVertical
+            ,Action Low LowHorizontal Extend Left Half
+            )
+            ,
+            {--
+               _ 
+                |
+
+            --}
+            (isChar char isLowHorizontal
+             && isNeighbor bottomRight isVertical
+            ,Action Low LowHorizontal Extend Right Half
+            )
+            ,
+            {--
+               _|
+
+            --}
+            (isChar char isLowHorizontal
+             && isNeighbor right isVertical
+            ,Action Low LowHorizontal Extend Right Half
+            )
+            ,
+            {--
+                 |_
+
+             --}
+            (isChar char isLowHorizontal
+             && isNeighbor left isVertical
+            ,Action Low LowHorizontal Extend Left Half
+            )
+            ,
+            {--
+                 /_
+
+             --}
+            (isChar char isLowHorizontal
+             && isNeighbor left isSlantRight
+            ,Action Low LowHorizontal Extend Left Full
+            )
+            ,
+            {--
+                  _\
+
+             --}
+            (isChar char isLowHorizontal
+             && isNeighbor right isSlantLeft
+            ,Action Low LowHorizontal Extend Right Full
             )
             ,
             {--
@@ -1074,6 +1574,21 @@ componentMatchList x y model =
             ,
             {--
                \|/  \|/  \|/ 
+                +    *    . 
+               /|\  /|\  /|\ 
+            --}
+            ((isChar char isIntersection || isChar char isRound || isChar char isAsterisk)
+             && isNeighbor top isVertical
+             && isNeighbor bottom isVertical
+             && isNeighbor topLeft isSlantLeft
+             && isNeighbor topRight isSlantRight
+             && isNeighbor bottomLeft isSlantRight
+             && isNeighbor bottomRight isSlantLeft
+            ,Junction Mid [Top, Bottom, TopLeft, TopRight, BottomLeft, BottomRight] Sharp
+            )
+            ,
+            {--
+               \|/  \|/  \|/ 
                -+-  -*-  -.-
                /|\  /|\  /|\ 
             --}
@@ -1137,15 +1652,33 @@ getSvg model =
                       (\path ->
                         svgPath path
                       )
+        svgTexts = getTexts model
+                |> List.map
+                 (\(x, y, chars) ->
+                    svgText x y chars
+                 )
     in
     svg [height gheight, width gwidth]
         ([
          gridFill
         ,[defs [] [arrowMarker]]
         ,svgPaths
+        ,svgTexts
         ] |> List.concat
         )
         
+svgText: Int -> Int -> String -> Svg a
+svgText xloc yloc chars =
+    let sx = measureX xloc - textWidth / 4
+        sy = measureY yloc + textHeight * 3 / 4
+    in
+    Svg.text'
+        [x (toString sx)
+        ,y (toString sy)
+        ,Svg.Attributes.style ("font-size:"++toString fontSize++"px;font-family:monospace")
+        ]
+        [Svg.text chars
+        ]
 
 
 allPathDefs: Model -> String
@@ -1181,6 +1714,74 @@ expandedPaths model =
     |> List.concat
     |> List.concat
 
+
+getTexts: Model -> List (Int,Int,String)
+getTexts model =
+    Array.indexedMap
+    (\y line ->
+       Array.indexedMap
+        (\ x char->
+            if isPartOfText x y model then
+                Nothing
+            else
+               let traced = traceText x y model ""
+               in
+               if String.isEmpty traced then
+                    Nothing
+               else
+                    Just (x, y, traced)
+
+        ) line
+        |> Array.toList
+    ) model.lines
+    |> Array.toList
+    |> List.concat
+    |> List.filterMap(\a -> a)
+
+-- if this text is part of text, ignore it
+isPartOfText: Int -> Int -> Model -> Bool
+isPartOfText x y model =
+    let
+        char = get x y model 
+        left = get (x-1) y model
+    in
+    isChar char isAlphaNumeric
+    && isNeighbor left isAlphaNumeric
+
+mergeText: String -> Maybe Char -> String
+mergeText text char = 
+    case char of
+        Just char ->
+            text ++ (String.fromChar char)
+        Nothing ->
+            text
+
+--v V
+usedAsArrow x y model =
+   let char = get x y model
+       top = get x (y-1) model
+       topLeft = get (x-1) (y-1) model
+       topRight = get (x+1) (y-1) model
+   in
+       isChar char isArrowDown
+        &&
+        (  isNeighbor top isVertical
+        || isNeighbor topLeft isSlantLeft
+        || isNeighbor topRight isSlantRight
+        ) 
+          
+
+traceText: Int -> Int -> Model -> String -> String
+traceText x y model prevChars =
+    let
+        char = get x y model
+    in
+        if isChar char isAlphaNumeric 
+            && not (usedAsArrow x y model) then --v V used as arrows
+            traceText (x+1) y model (mergeText prevChars char)
+        else
+            prevChars
+
 --reduce path to whatever is located in x y
 reduceTo: Path -> (Int, Int) -> Model -> Maybe Path
 reduceTo path (x, y) model =
@@ -1195,7 +1796,7 @@ reduceTo path (x, y) model =
             Nothing
 
 --trace a path starting at this point
---and return the long eating path until a non-edible path is encoutered, and eat it as well
+--and return the long eating path until a non-isEdible path is encoutered, and eat it as well
 -- reduce only from left to right, top to bottom, topLeft to bottomRight
 traceEatEdiblePaths: Path -> (Int, Int) -> Model -> Maybe Path
 traceEatEdiblePaths path (x,y) model =
@@ -1227,14 +1828,14 @@ traceEatEdiblePaths path (x,y) model =
                                     Nothing ->
                                         Just path
                                         
--- check first if there is component before testing if edible
+-- check first if there is component before testing if isEdible
 getOptimizedPath x y model =
     let center =
         matchComponent x y model
     in
     case center of
         Just center ->
-            if edible x y model then
+            if isEdible x y model then
                 []
             else
                 case firstPathOnly x y center of
