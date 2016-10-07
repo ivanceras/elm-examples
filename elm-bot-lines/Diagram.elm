@@ -53,9 +53,9 @@ textWidth = 8.0
 textHeight = 16.0
 arcRadius = textWidth / 2
 color = Color.rgb 0 0 0
-optimizeSvg = False
-onePath = False --one path for all or per component path
-density = Expanded
+optimizeSvg = True
+density = Compact
+gridOn = False
 
 measureX: Int -> Float
 measureX x =
@@ -1631,21 +1631,41 @@ getSvg model =
             case density of
                 Compact ->
                     let
-                        pathDefs = allPathDefs model
+                        (pathDefs,unmerged) = allPathDefs model
                         onePath = drawPathDef pathDefs Solid None
+                        unmergedPaths = 
+                            List.map (
+                                \um ->
+                                    svgPath um
+                            ) unmerged
                      in
-                        [onePath]
+                        onePath::unmergedPaths
                 Medium ->
-                    perComponentPathDefs model
-                        |>List.map (
-                            \pathDefs ->
-                                if String.isEmpty pathDefs then
-                                    Nothing 
-                                else
-                                    Just <| drawPathDef pathDefs Solid None 
-                               
-                        ) 
-                        |> List.filterMap (\a -> a)
+                    let
+                        (pathDefs, unmerged) =
+                            perComponentPathDefs model
+                                |> List.unzip
+                        
+                        svgPathDefs = 
+                            pathDefs
+                             |> List.map (
+                                \(defs) ->
+                                    if String.isEmpty defs then
+                                        Nothing 
+                                    else
+                                        Just <| drawPathDef defs Solid None 
+                                   
+                            ) 
+                            |> List.filterMap (\a -> a)
+
+                        unmergedPaths = 
+                            List.concat unmerged
+                               |> List.map (
+                                    \um ->
+                                        svgPath um
+                                )
+                      in
+                        svgPathDefs ++ unmergedPaths
                 Expanded ->
                     expandedPaths model
                       |> List.map
@@ -1660,7 +1680,10 @@ getSvg model =
     in
     svg [height gheight, width gwidth]
         ([
-         gridFill
+         if gridOn then
+            gridFill
+         else
+           [] 
         ,[defs [] [arrowMarker]]
         ,svgPaths
         ,svgTexts
@@ -1681,12 +1704,16 @@ svgText xloc yloc chars =
         ]
 
 
-allPathDefs: Model -> String
+allPathDefs: Model -> (String, List Path)
 allPathDefs model =
-    perComponentPathDefs model
-    |> String.join " "
+    let (pathDefs, unmerged) = 
+        List.unzip <| perComponentPathDefs model
+    in 
+    (String.join " " pathDefs
+    ,List.concat unmerged
+    )
 
-perComponentPathDefs: Model -> List String
+perComponentPathDefs: Model -> List (String, List Path)
 perComponentPathDefs model =
     Array.indexedMap
     (\y line ->
@@ -1738,15 +1765,6 @@ getTexts model =
     |> List.concat
     |> List.filterMap(\a -> a)
 
--- if this text is part of text, ignore it
-isPartOfText: Int -> Int -> Model -> Bool
-isPartOfText x y model =
-    let
-        char = get x y model 
-        left = get (x-1) y model
-    in
-    isChar char isAlphaNumeric
-    && isNeighbor left isAlphaNumeric
 
 mergeText: String -> Maybe Char -> String
 mergeText text char = 
@@ -1770,14 +1788,36 @@ usedAsArrow x y model =
         || isNeighbor topRight isSlantRight
         ) 
           
+-- if this text is part of text, ignore it
+isPartOfText: Int -> Int -> Model -> Bool
+isPartOfText x y model =
+    let
+        char = get x y model 
+        right = get (x+1) y model
+        left = get (x-1) y model
+        wordSpace = 
+            isChar char (\a -> a == ' ')
+                && isChar right isAlphaNumeric
+                && isChar left isAlphaNumeric
+    in
+    (isChar char isAlphaNumeric
+    && isNeighbor left isAlphaNumeric
+    )
 
 traceText: Int -> Int -> Model -> String -> String
 traceText x y model prevChars =
     let
         char = get x y model
+        right = get (x+1) y model
+        left = get (x-1) y model
+        wordSpace = 
+            isChar char (\a -> a == ' ')
+                && isChar right isAlphaNumeric
+                && isChar left isAlphaNumeric
     in
-        if isChar char isAlphaNumeric 
-            && not (usedAsArrow x y model) then --v V used as arrows
+        if (isChar char isAlphaNumeric 
+            && not (usedAsArrow x y model) --v V used as arrows
+           ) then 
             traceText (x+1) y model (mergeText prevChars char)
         else
             prevChars
@@ -1859,11 +1899,11 @@ startEnd path =
         DashedLine se -> se
 
 -- merge the paths into 1 path definition
-toPathDefs: List Path -> String
+toPathDefs: List Path -> (String, List Path)
 toPathDefs paths =
-    let (prev', pathDefs') =
+    let (prev', pathDefs', unmergedPaths') =
         List.foldl 
-            (\next (prev, str) ->
+            (\next (prev, str, unmergedPaths) ->
                 let (start, end) = startEnd next
                     continue =
                         case next of
@@ -1874,10 +1914,16 @@ toPathDefs paths =
                                     sweep = if sw then "1" else "0"
                                 in
                                 ["A", toString r, toString r, "0" ,"0", sweep, toString e.x, toString e.y]
+                            _ ->
+                                []
+                    notMerged = 
+                        case next of
+                            ArrowLine _ ->
+                                [next]
                             DashedLine (s,e) ->
-                                ["L", toString e.x, toString e.y]
-                            ArrowLine (s,e) ->
-                                ["L", toString e.x, toString e.y]
+                                [next]
+                            _ ->
+                                []
 
                     movePen = ["M", toString start.x, toString start.y]
 
@@ -1894,10 +1940,11 @@ toPathDefs paths =
                 in
                 (Just next
                 ,str ++ pathDefs
+                ,unmergedPaths ++ notMerged
                 )
-            ) (Nothing, "")  paths
+            ) (Nothing, "", [])  paths
      in
-        pathDefs'
+        (pathDefs', unmergedPaths')
 
 drawPathDef: String -> Stroke -> Feature -> Svg a
 drawPathDef pathDefs lineStroke feature =
@@ -1926,7 +1973,7 @@ drawPathDef pathDefs lineStroke feature =
              []
 
 
-componentPathDefs: Int -> Int -> Model -> Maybe String
+componentPathDefs: Int -> Int -> Model -> Maybe (String, List Path)
 componentPathDefs x y model =
     let
         pathList = componentPaths x y model
