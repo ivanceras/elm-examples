@@ -1,9 +1,6 @@
-# elm-examples
-Elm examples and snippets
+## This are list of my example code using elm-lang.
 
-I'll be moving the AsciiToSvg project in another repository.
+AsciiToSVG is now moved into a different project https://github.com/ivanceras/svgbob
 
-new name:
-* svgbob
-* svgponge
-* svgible
+It is being heavily rewritten for optimizing the generated SVG.
+
